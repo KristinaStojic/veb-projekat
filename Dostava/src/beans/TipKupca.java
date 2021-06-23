@@ -2,16 +2,16 @@ package beans;
 
 import java.io.Serializable;
 
-enum ImeTipa {
-	ZLATNI, SREBRNI, BRONZANI
-}
-
 public class TipKupca implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4671856578499819260L;
+
+	public enum ImeTipa {
+		ZLATNI, SREBRNI, BRONZANI
+	}
 
 	private ImeTipa imeTipa;
 	private Double popust;

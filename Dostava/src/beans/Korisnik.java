@@ -1,15 +1,7 @@
 package beans;
 
 import java.io.Serializable;
-import java.sql.Date;
-
-enum Pol {
-	ZENSKI, MUSKI
-}
-
-enum Uloga {
-	ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC
-}
+import java.util.Date;
 
 public class Korisnik implements Serializable {
 
@@ -17,6 +9,15 @@ public class Korisnik implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5180637883120284129L;
+	
+	public enum Pol {
+		ZENSKI, MUSKI
+	}
+
+	public enum Uloga {
+		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC
+	}
+	
 	private String korisnickoIme;
 	private String lozinka;
 	private String ime;
@@ -28,6 +29,21 @@ public class Korisnik implements Serializable {
 	public Korisnik() {
 		super();
 	}
+	
+
+	public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja,
+			Uloga uloga) {
+		super();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+	}
+
+
 
 	public String getKorisnickoIme() {
 		return korisnickoIme;

@@ -3,10 +3,6 @@ package beans;
 import java.awt.Image;
 import java.io.Serializable;
 
-enum TipArtikla {
-	JELO, PICE
-}
-
 public class Artikal implements Serializable {
 
 	/**
@@ -14,11 +10,15 @@ public class Artikal implements Serializable {
 	 */
 	private static final long serialVersionUID = 1917732993380397288L;
 
+	public enum TipArtikla {
+		JELO, PICE
+	}
+
 	private String naziv;
 	private Double cena;
 	private TipArtikla tipArtikla;
 	private Restoran restoran;
-	private Double kolicina; //grami ili milimetri
+	private Double kolicina; // grami ili milimetri
 	private String opis;
 	private Image slika;
 

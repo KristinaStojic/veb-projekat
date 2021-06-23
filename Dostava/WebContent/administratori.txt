@@ -1,2 +1,0 @@
-admin1;admin1;Kristina;Stojic;ZENSKI;05/03/1999 00:00:00 AM;ADMINISTRATOR
-admin3;admin3;Jelena;Hrnjak;ZENSKI;21/08/1999 02:10:00 PM;ADMINISTRATOR

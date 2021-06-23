@@ -4,16 +4,16 @@ import java.awt.Image;
 import java.io.Serializable;
 import java.util.List;
 
-enum TipRestorana {
-	ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA
-}
-
 public class Restoran implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7705934003444955722L;
+
+	public enum TipRestorana {
+		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA
+	}
 
 	private String naziv;
 	private TipRestorana tipRestorana;
@@ -26,6 +26,11 @@ public class Restoran implements Serializable {
 		super();
 	}
 
+	public Restoran(String naziv) {
+		super();
+		this.naziv = naziv;
+	}
+	
 	public String getNaziv() {
 		return naziv;
 	}

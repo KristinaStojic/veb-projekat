@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-enum Status {
-	OBRADA, PRIPREMA, CEKA_DOSTAVU, TRANSPORT, DOSTAVLJENA, OTKAZANA
-}
-
 public class Porudzbina implements Serializable {
 
 	/**
@@ -15,10 +11,14 @@ public class Porudzbina implements Serializable {
 	 */
 	private static final long serialVersionUID = 4902721773673381758L;
 
+	public enum Status {
+		OBRADA, PRIPREMA, CEKA_DOSTAVU, TRANSPORT, DOSTAVLJENA, OTKAZANA
+	}
+
 	private String id;
 	private List<Artikal> poruceniArtikli;
 	private Restoran restoran;
-	private Date datumVreme; 
+	private Date datumVreme;
 	private Double cena;
 	private Kupac kupac;
 	private Status status;
@@ -33,7 +33,7 @@ public class Porudzbina implements Serializable {
 
 	public void setId(String id) {
 		int idLimit = 10;
-		this.id = id.substring(0,idLimit);
+		this.id = id.substring(0, idLimit);
 	}
 
 	public List<Artikal> getPoruceniArtikli() {
