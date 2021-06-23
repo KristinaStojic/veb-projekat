@@ -8,6 +8,7 @@ public class Korpa implements Serializable {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = -3592653701792075085L;
 
 	private List<ArtikalKorpa> artikli;
 	private Korisnik korisnik;
