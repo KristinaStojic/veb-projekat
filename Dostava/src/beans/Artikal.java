@@ -18,7 +18,7 @@ public class Artikal implements Serializable {
 	private Double cena;
 	private TipArtikla tipArtikla;
 	private Restoran restoran;
-	private Double kolicina; // da li ovako? posto je u gramima ili mililitrima
+	private Double kolicina; //grami ili milimetri
 	private String opis;
 	private Image slika;
 

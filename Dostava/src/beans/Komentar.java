@@ -12,7 +12,7 @@ public class Komentar implements Serializable {
 	private Kupac kupac;
 	private Restoran restoran;
 	private String tekst;
-	private Integer ocena;
+	private Integer ocena; //od 1 do 5
 
 	public Komentar() {
 		super();

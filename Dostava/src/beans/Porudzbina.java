@@ -15,7 +15,7 @@ public class Porudzbina implements Serializable {
 	 */
 	private static final long serialVersionUID = 4902721773673381758L;
 
-	private String id;// da li dodati ogranicenje duzine?
+	private String id;
 	private List<Artikal> poruceniArtikli;
 	private Restoran restoran;
 	private Date datumVreme; 
@@ -32,7 +32,8 @@ public class Porudzbina implements Serializable {
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		int idLimit = 10;
+		this.id = id.substring(0,idLimit);
 	}
 
 	public List<Artikal> getPoruceniArtikli() {
