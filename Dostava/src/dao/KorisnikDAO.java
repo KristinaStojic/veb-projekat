@@ -1,29 +1,36 @@
 package dao;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.text.SimpleDateFormat;
-import java.util.StringTokenizer;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Korisnik;
 
 public class KorisnikDAO {
 
 	private Map<String, Korisnik> korisnici = new HashMap<>();
+	private String putanja;
+
 
 	public KorisnikDAO() {
-
+		File folder = new File(System.getProperty("catalina.base") + File.separator + "podaci");
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+		this.putanja = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "korisnici.json";
 	}
 
-	public KorisnikDAO(String contextPath) {
-		ucitajKorisnike(contextPath);
-	}
-
+	
 	public Korisnik find(String korisnickoIme, String lozinka) {
 		if (!korisnici.containsKey(korisnickoIme)) {
 			return null;
@@ -39,43 +46,7 @@ public class KorisnikDAO {
 		return korisnici.values();
 	}
 
-	private void ucitajKorisnike(String contextPath) {
-		BufferedReader in = null;
-		try {
-			File file = new File(contextPath + "/korisnici.txt");
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					String korisnickoIme = st.nextToken().trim();
-					String lozinka = st.nextToken().trim();
-					String ime = st.nextToken().trim();
-					String prezime = st.nextToken().trim();
-					String pol = st.nextToken().trim();
-					String datumRodjenja = st.nextToken().trim();
-					String uloga = st.nextToken().trim();
-					Date datum = new SimpleDateFormat("dd/MM/yyyy").parse(datumRodjenja);
-					korisnici.put(korisnickoIme, new Korisnik(korisnickoIme, lozinka, ime, prezime, dobaviPol(pol),
-							datum, dobaviUlogu(uloga)));
-				}
-
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
-		}
-	}
+	
 
 	private Korisnik.Pol dobaviPol(String pol) {
 
@@ -98,4 +69,59 @@ public class KorisnikDAO {
 			return Korisnik.Uloga.DOSTAVLJAC;
 		}
 	}
+	
+	
+	public void ucitajKorisnike() {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		File file = new File(this.putanja);
+
+		List<Korisnik> ucitaniKorisnici = new ArrayList<Korisnik>();
+		try {
+
+			ucitaniKorisnici = objectMapper.readValue(file, new TypeReference<List<Korisnik>>() {
+			});
+
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		for (Korisnik k : ucitaniKorisnici) {
+			korisnici.put(k.getKorisnickoIme(), k);
+		}
+
+	}
+
+	public void saveUsersJSON() {
+
+		// Get all users
+		List<Korisnik> sviKorisnici = new ArrayList<Korisnik>();
+		for (Korisnik k : dobaviSve()) {
+			sviKorisnici.add(k);
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			// Write them to the file
+			objectMapper.writeValue(new FileOutputStream(this.putanja), sviKorisnici);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
+		if (korisnici.containsKey(korisnickoIme)) {
+			return korisnici.get(korisnickoIme);
+		}
+
+		return null;
+	}
+
+	
+	
 }
