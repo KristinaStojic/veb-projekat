@@ -14,11 +14,12 @@ Vue.component("pocetna", {
         </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
         <router-link to="/prijava" exact> Prijava </router-link>
         </li>
+        <li class="nav-item"></li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Registracija</a>
+        <router-link to="/registracija" exact> Registracija </router-link>
         </li>
       </ul>
     </div>

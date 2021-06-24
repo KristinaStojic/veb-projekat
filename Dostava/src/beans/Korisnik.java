@@ -9,7 +9,7 @@ public class Korisnik implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5180637883120284129L;
-	
+
 	public enum Pol {
 		ZENSKI, MUSKI
 	}
@@ -17,7 +17,9 @@ public class Korisnik implements Serializable {
 	public enum Uloga {
 		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC
 	}
-	
+
+	private Integer id;
+	private Integer logickoBrisanje; // 1 - obrisan, 0 - nije obrisan
 	private String korisnickoIme;
 	private String lozinka;
 	private String ime;
@@ -30,10 +32,24 @@ public class Korisnik implements Serializable {
 		super();
 	}
 	
-
-	public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja,
-			Uloga uloga) {
+	public Korisnik(Korisnik k) {
 		super();
+		this.id = k.id;
+		this.logickoBrisanje = k.logickoBrisanje;
+		this.korisnickoIme = k.korisnickoIme;
+		this.lozinka = k.lozinka;
+		this.ime = k.ime;
+		this.prezime = k.prezime;
+		this.pol = k.pol;
+		this.datumRodjenja = k.datumRodjenja;
+		this.uloga = k.uloga;
+	}
+
+	public Korisnik(Integer id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
+			String prezime, Pol pol, Date datumRodjenja, Uloga uloga) {
+		super();
+		this.id = id;
+		this.logickoBrisanje = logickoBrisanje;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
@@ -42,8 +58,6 @@ public class Korisnik implements Serializable {
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
 	}
-
-
 
 	public String getKorisnickoIme() {
 		return korisnickoIme;
@@ -99,6 +113,22 @@ public class Korisnik implements Serializable {
 
 	public void setUloga(Uloga uloga) {
 		this.uloga = uloga;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getLogickoBrisanje() {
+		return logickoBrisanje;
+	}
+
+	public void setLogickoBrisanje(Integer logickoBrisanje) {
+		this.logickoBrisanje = logickoBrisanje;
 	}
 
 }

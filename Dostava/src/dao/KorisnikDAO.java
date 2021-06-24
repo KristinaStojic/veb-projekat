@@ -1,27 +1,72 @@
 package dao;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.text.SimpleDateFormat;
-import java.util.StringTokenizer;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import beans.ArtikalKorpa;
 import beans.Korisnik;
+import beans.Korpa;
+import beans.Kupac;
+import beans.Porudzbina;
+import beans.TipKupca;
+import dto.KorisnikDTO;
 
 public class KorisnikDAO {
 
-	private Map<String, Korisnik> korisnici = new HashMap<>();
+	private Map<String, Korisnik> korisnici;
+	private List<Kupac> kupci;
+	private String putanja;
 
-	public KorisnikDAO() {
-
+	public KorisnikDAO(String putanjaDoFajla) {
+		korisnici = new HashMap<>();
+		kupci = new ArrayList<>();
+		this.putanja = putanjaDoFajla;
+		System.out.println(putanja);
+		ucitajPodatke();
 	}
 
-	public KorisnikDAO(String contextPath) {
-		ucitajKorisnike(contextPath);
+	public void ucitajPodatke() {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		File file;
+		
+		try {
+		 file = new File(this.putanja + "\\kupci.json");
+         if(!file.exists()) {
+             file.createNewFile();
+             FileWriter writer = new FileWriter(this.putanja + "\\kupci.json");
+             writer.write("[]");
+             writer.close();
+         } else {
+             List<Kupac> postojeciKupci = Arrays.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
+             for (Kupac k : postojeciKupci) {
+                 if (k.getLogickoBrisanje() == 0) {
+                     korisnici.put(k.getKorisnickoIme(), k);
+                 }
+                 kupci.add(k);
+             }
+         }
+         
+		}catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Korisnik find(String korisnickoIme, String lozinka) {
@@ -39,63 +84,68 @@ public class KorisnikDAO {
 		return korisnici.values();
 	}
 
-	private void ucitajKorisnike(String contextPath) {
-		BufferedReader in = null;
+//	public void upisiKorisnike() {
+//
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		try {
+//			// Write them to the file
+//			objectMapper.writeValue(new FileOutputStream(this.putanja), korisnici);
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+
+	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
+		System.out.println("dobio sam ovo korIme: " + korisnickoIme);
+		
+		System.out.println(korisnici);
+		
+		if (korisnici.containsKey(korisnickoIme)) {
+			return korisnici.get(korisnickoIme);
+		}
+
+		return null;
+	}
+
+	public Korisnik registrujKorisnika(KorisnikDTO korisnik) {
+		if (daLiPostojiKorIme(korisnik.korisnickoIme))
+			return null;
+
+		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0.0, 500.0);
+		Korisnik noviKorisnik = new Korisnik(dobaviSve().size() + 1, 0, korisnik.korisnickoIme, korisnik.lozinka,
+				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga);
+		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
+		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
+
+		korisnici.put(korisnik.korisnickoIme, noviKorisnik);
+		kupci.add(noviKupac);
+
+		ObjectMapper maper = new ObjectMapper();
 		try {
-			File file = new File(contextPath + "/korisnici.txt");
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					String korisnickoIme = st.nextToken().trim();
-					String lozinka = st.nextToken().trim();
-					String ime = st.nextToken().trim();
-					String prezime = st.nextToken().trim();
-					String pol = st.nextToken().trim();
-					String datumRodjenja = st.nextToken().trim();
-					String uloga = st.nextToken().trim();
-					Date datum = new SimpleDateFormat("dd/MM/yyyy").parse(datumRodjenja);
-					korisnici.put(korisnickoIme, new Korisnik(korisnickoIme, lozinka, ime, prezime, dobaviPol(pol),
-							datum, dobaviUlogu(uloga)));
-				}
+			maper.writeValue(Paths.get(this.putanja + "\\kupci.json").toFile(), kupci);
+		} catch (IOException e) {
+			System.out.println("Greska");
+			return null;
+		}
 
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
+		return noviKorisnik;
+	}
+
+	public void dodajKorisnika(Korisnik korisnik) {
+		if (!korisnici.containsValue(korisnik)) {
+			System.out.println("DODAO SAM: " + korisnik.getKorisnickoIme());
+			korisnici.put(korisnik.getKorisnickoIme(), korisnik);
 		}
 	}
 
-	private Korisnik.Pol dobaviPol(String pol) {
+	public boolean daLiPostojiKorIme(String korisnickoIme) {
 
-		if (pol.equals("ZENSKI")) {
-			return Korisnik.Pol.ZENSKI;
-		} else {
-			return Korisnik.Pol.MUSKI;
+		if (korisnici.containsKey(korisnickoIme)) {
+			System.out.println("postojii " + korisnickoIme);
+			return true;
 		}
+		return false;
 	}
 
-	private Korisnik.Uloga dobaviUlogu(String uloga) {
-
-		if (uloga.equals("ADMINISTRATOR")) {
-			return Korisnik.Uloga.ADMINISTRATOR;
-		} else if (uloga.equals("MENADZER")) {
-			return Korisnik.Uloga.MENADZER;
-		} else if (uloga.equals("KUPAC")) {
-			return Korisnik.Uloga.KUPAC;
-		} else {
-			return Korisnik.Uloga.DOSTAVLJAC;
-		}
-	}
 }

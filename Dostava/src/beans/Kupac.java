@@ -1,9 +1,10 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-public class Kupac extends Korisnik implements Serializable{
+public class Kupac extends Korisnik implements Serializable {
 
 	/**
 	 * 
@@ -17,6 +18,14 @@ public class Kupac extends Korisnik implements Serializable{
 
 	public Kupac() {
 		super();
+	}
+
+	public Kupac(Korisnik k, List<Porudzbina> svePorudzbine, Korpa korpa, Double sakupljeniBodovi, TipKupca tipKupca) {
+		super(k);
+		this.svePorudzbine = svePorudzbine;
+		this.korpa = korpa;
+		this.sakupljeniBodovi = sakupljeniBodovi;
+		this.tipKupca = tipKupca;
 	}
 
 	public List<Porudzbina> getSvePorudzbine() {

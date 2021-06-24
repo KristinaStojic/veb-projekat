@@ -1,0 +1,10 @@
+#pocetna-slika{
+	background-image: url('https://image.shutterstock.com/shutterstock/photos/466836764/display_1500/stock-photo-chinese-food-on-white-background-noodles-fried-rice-dumplings-stir-fry-chicken-dim-sum-spring-466836764.jpg');
+    height: 400px
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }

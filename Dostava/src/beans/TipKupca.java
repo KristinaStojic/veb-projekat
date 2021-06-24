@@ -21,6 +21,17 @@ public class TipKupca implements Serializable {
 		super();
 	}
 
+	
+	
+	public TipKupca(ImeTipa imeTipa, Double popust, Double trazeniBodovi) {
+		super();
+		this.imeTipa = imeTipa;
+		this.popust = popust;
+		this.trazeniBodovi = trazeniBodovi;
+	}
+
+
+
 	public ImeTipa getImeTipa() {
 		return imeTipa;
 	}
