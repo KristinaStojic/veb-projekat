@@ -9,11 +9,11 @@ Vue.component("prijava", {
 
     <div>
     <form @submit="proveriPodatke" method='post'>
-    <div class="mb-3">
+    <div class="col-md-4">
       <label for="korIme" class="form-label">Korisničko ime</label>
       <input v-model="noviKorisnik.korisnickoIme" type="text" class="form-control" id="korIme">
     </div>
-    <div class="mb-3">
+    <div class="col-md-4">
       <label for="lozinka" class="form-label">Lozinka</label>
       <input v-model="noviKorisnik.lozinka" type="password" class="form-control" id="lozinka">
     </div>
@@ -41,38 +41,25 @@ Vue.component("prijava", {
 
             if (!this.greske.length) {
                 axios
-                .post('rest/korisnici/prijava',{"korisnickoIme":''+ this.newUser.userName, "lozinka":''+this.newUser.password})
+                .post('rest/korisnici/prijava',{"korisnickoIme":''+ this.noviKorisnik.korisnickoIme, "lozinka":''+this.noviKorisnik.lozinka})
                 .then(response=>{
                     this.message = response.data;
                     console.log("\n\n ------- PODACI -------\n");
                     console.log(response.data);
-                    toastr["success"]("Let's go, travel around world !!", "Success log in!");
-                    console.log("\n\n ----------------------\n\n");
-                    //TODO 11: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na dashboard.
-                    /**
-                     * Isto kao i TODO 10 problem. 
-                     *
-                     * author: Vaxi
-                     */
-                    location.href = response.data; // we get from backend redirection to login with this
+                
+                    location.href = response.data; 
 
                     
                 })
                 .catch(err =>{ 
-                    console.log("\n\n ------- ERROR -------\n");
                     console.log(err);
-                    toastr["error"]("Password, username are incorrect, or your account is blocked!", "Fail");
-                    console.log("\n\n ----------------------\n\n");
                 })
                 return true;
             }
 
-            /**
-             * For each error, push notification to user, to inform him about it.
-             */
-            this.errors.forEach(element => {
+            
+            this.greske.forEach(element => {
                 console.log(element)
-                toastr["error"](element, "Fail")
             });
              
         }
