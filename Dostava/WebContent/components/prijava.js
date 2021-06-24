@@ -43,8 +43,18 @@ Vue.component("prijava", {
                   if(response.data.length == 0){
                     alert("Niste uneli ispravne podatke!");
                   }else{
-                    alert("Uspešna prijava!");
-                    this.$router.push("/uspesnaPrijava")
+                    if(response.data.uloga.localeCompare("KUPAC") == 0){
+                        this.$router.push("/pocetnaStranaKupac")
+                    }
+                    else if(response.data.uloga.localeCompare("MENADZER") == 0){
+                        this.$router.push("/pocetnaStranaMenadzer")
+                    }else if(response.data.uloga.localeCompare("DOSTAVLJAC") == 0){
+                        this.$router.push("/pocetnaStranaDostavljac")
+                    }
+                    else if(response.data.uloga.localeCompare("ADMINISTRATOR") == 0){
+                        this.$router.push("/pocetnaStranaAdministrator")
+                    }
+                    
                   }
                 })
                 .catch(err => {

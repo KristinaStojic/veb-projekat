@@ -1,4 +1,4 @@
-Vue.component("uspesnaPrijava", { 
+Vue.component("pocetnaStranaKupac", { 
 	data: function () {
 	    return {
             
@@ -6,7 +6,7 @@ Vue.component("uspesnaPrijava", {
 	},
 	    template: ` 
 
-        <h2>BRAVOOO ZA PRIJAVU</h2>
+        <h2>KUPAC</h2>
     	`
     	, 
 	methods : {
