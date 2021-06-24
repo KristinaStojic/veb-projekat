@@ -1,9 +1,11 @@
 package dao;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -14,24 +16,59 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.ArtikalKorpa;
 import beans.Korisnik;
+import beans.Korpa;
+import beans.Kupac;
+import beans.Porudzbina;
+import beans.TipKupca;
 import dto.KorisnikDTO;
 
 public class KorisnikDAO {
 
-	private Map<String, Korisnik> korisnici = new HashMap<>();
+	private Map<String, Korisnik> korisnici;
+	private List<Kupac> kupci;
 	private String putanja;
 
+	public KorisnikDAO(String putanjaDoFajla) {
+		korisnici = new HashMap<>();
+		kupci = new ArrayList<>();
+		this.putanja = putanjaDoFajla;
 
-	public KorisnikDAO() {
-		File folder = new File(System.getProperty("catalina.base") + File.separator + "podaci");
-		if (!folder.exists()) {
-			folder.mkdir();
-		}
-		this.putanja = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "korisnici.json";
+		ucitajPodatke();
 	}
 
-	
+	public void ucitajPodatke() {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		File file;
+		
+		try {
+		 file = new File(this.putanja + "\\kupci.json");
+         if(!file.exists()) {
+             file.createNewFile();
+             FileWriter writer = new FileWriter(this.putanja + "\\kupci.json");
+             writer.write("[]");
+             writer.close();
+         } else {
+             List<Kupac> postojeciKupci = Arrays.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
+             for (Kupac k : postojeciKupci) {
+                 if (k.getLogickoBrisanje() == 0) {
+                     korisnici.put(k.getKorisnickoIme(), k);
+                 }
+                 kupci.add(k);
+             }
+         }
+         
+		}catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public Korisnik find(String korisnickoIme, String lozinka) {
 		if (!korisnici.containsKey(korisnickoIme)) {
 			return null;
@@ -47,73 +84,18 @@ public class KorisnikDAO {
 		return korisnici.values();
 	}
 
-	
+//	public void upisiKorisnike() {
+//
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		try {
+//			// Write them to the file
+//			objectMapper.writeValue(new FileOutputStream(this.putanja), korisnici);
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
-	private Korisnik.Pol dobaviPol(String pol) {
-
-		if (pol.equals("ZENSKI")) {
-			return Korisnik.Pol.ZENSKI;
-		} else {
-			return Korisnik.Pol.MUSKI;
-		}
-	}
-
-	private Korisnik.Uloga dobaviUlogu(String uloga) {
-
-		if (uloga.equals("ADMINISTRATOR")) {
-			return Korisnik.Uloga.ADMINISTRATOR;
-		} else if (uloga.equals("MENADZER")) {
-			return Korisnik.Uloga.MENADZER;
-		} else if (uloga.equals("KUPAC")) {
-			return Korisnik.Uloga.KUPAC;
-		} else {
-			return Korisnik.Uloga.DOSTAVLJAC;
-		}
-	}
-	
-	
-	public void ucitajKorisnike() {
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		File file = new File(this.putanja);
-
-		List<Korisnik> ucitaniKorisnici = new ArrayList<Korisnik>();
-		try {
-
-			ucitaniKorisnici = objectMapper.readValue(file, new TypeReference<List<Korisnik>>() {
-			});
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		for (Korisnik k : ucitaniKorisnici) {
-			korisnici.put(k.getKorisnickoIme(), k);
-		}
-
-	}
-
-	public void upisiKorisnike() {
-
-		List<Korisnik> sviKorisnici = new ArrayList<Korisnik>();
-		for (Korisnik k : dobaviSve()) {
-			sviKorisnici.add(k);
-		}
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			// Write them to the file
-			objectMapper.writeValue(new FileOutputStream(this.putanja), sviKorisnici);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
 		if (korisnici.containsKey(korisnickoIme)) {
 			return korisnici.get(korisnickoIme);
@@ -122,19 +104,44 @@ public class KorisnikDAO {
 		return null;
 	}
 
-	public void dodajNovogKorisnika(KorisnikDTO korisnik) {
-		Korisnik noviKorisnik = new Korisnik(dobaviSve().size() + 1, 0, korisnik.korisnickoIme, korisnik.lozinka, korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga);		
-		//DODATI I U KUPCE
-		
-		dodajKorisnika(noviKorisnik);
-		upisiKorisnike();
+	public Korisnik registrujKorisnika(KorisnikDTO korisnik) {
+		if (daLiPostojiKorIme(korisnik.korisnickoIme))
+			return null;
+
+		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0.0, 500.0);
+		Korisnik noviKorisnik = new Korisnik(dobaviSve().size() + 1, 0, korisnik.korisnickoIme, korisnik.lozinka,
+				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga);
+		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
+		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
+
+		korisnici.put(korisnik.korisnickoIme, noviKorisnik);
+		kupci.add(noviKupac);
+
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\kupci.json").toFile(), kupci);
+		} catch (IOException e) {
+			System.out.println("Greska");
+			return null;
+		}
+
+		return noviKorisnik;
 	}
-	
+
 	public void dodajKorisnika(Korisnik korisnik) {
 		if (!korisnici.containsValue(korisnik)) {
 			System.out.println("DODAO SAM: " + korisnik.getKorisnickoIme());
 			korisnici.put(korisnik.getKorisnickoIme(), korisnik);
 		}
 	}
-	
+
+	public boolean daLiPostojiKorIme(String korisnickoIme) {
+
+		if (korisnici.containsKey(korisnickoIme)) {
+			System.out.println("postojii " + korisnickoIme);
+			return true;
+		}
+		return false;
+	}
+
 }

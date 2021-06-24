@@ -1,13 +1,20 @@
 Vue.component("registracija", {
   data: function () {
     return {
-      noviKorisnik: {},
-      greske: []
+      noviKorisnik: {
+        korisnickoIme: "",
+        lozinka: "",
+        ime: "",
+        prezime: "",
+        pol: 0,
+        datumRodjenja: "",
+        uloga: 3
+      },
+      lozinka2: ""
     }
   },
   template: ` 
 
-    <div>
     <form class="row g-3" @submit="proveriPodatke" method='post'>
   <div class="col-12">
     <label for="ime" class="form-label">Ime</label>
@@ -26,15 +33,20 @@ Vue.component("registracija", {
     <input type="password" class="form-control" id="lozinka" v-model="noviKorisnik.lozinka" required>
   </div>
   <div class="col-12">
+  <label for="lozinka2" class="form-label">Ponovite lozniku</label>
+  <input type="password" class="form-control" id="lozinka2" v-model="lozinka2" required>
+</div>
+  <div class="col-12">
     <label for="pol" class="form-label">Pol</label>
     <select id="pol" class="form-select" v-model="noviKorisnik.pol">
-      <option selected>ŽENSKI</option>
-      <option>MUŠKI</option>
+      <option selected>Izaberite pol</option>
+      <option value=0>Ženski</option>
+      <option value=1>Muški</option>
     </select>
   </div>
   <div class="col-12" style="width: 400px">
     <label for="datum" class="form-label">Datum rođenja</label>
-    <input type="date" id="datum" class="form-control" v-model="noviKorisnik.datumRodjenja" required>
+    <vuejs-datepicker id="datum" style="padding-left:35px;" v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker>
   </div>
   <div class="col-12">
     <button type="submit" class="btn btn-primary">Registruj se</button>
@@ -46,62 +58,41 @@ Vue.component("registracija", {
 
     	`
   ,
+  components:{
+    vuejsDatepicker
+  }
+  ,
   methods: {
     proveriPodatke: function (event) {
       event.preventDefault();
-      this.greske = [];
 
       if (!this.noviKorisnik.korisnickoIme) {
-        this.greske.push('Obavezno uneti korisničko ime!');
-      }
-
-      if (!this.noviKorisnik.lozinka) {
-        this.greske.push('Obavezno uneti lozinku!');
-      }
-
-      if (!this.noviKorisnik.ime) {
-        this.greske.push('Obavezno uneti ime!');
-      }
-
-      if (!this.noviKorisnik.prezime) {
-        this.greske.push('Obavezno uneti prezime!');
-      }
-
-      if (!this.greske.length) {
+        alert('Obavezno uneti korisničko ime!');
+      } else if (!this.noviKorisnik.lozinka) {
+        alert('Obavezno uneti lozinku!');
+      } else if (!this.noviKorisnik.ime) {
+        alert('Obavezno uneti ime!');
+      } else if (!this.noviKorisnik.prezime) {
+        alert('Obavezno uneti prezime!');
+      } else if (this.noviKorisnik.lozinka.localeCompare(this.lozinka2) != 0) {
+        alert('Lozinke se ne poklapaju!');
+      } else{
         axios
-          .post('rest/korisnici/registracija', {
-            "korisnickoIme": this.noviKorisnik.korisnickoIme,
-            "lozinka": this.noviKorisnik.lozinka,
-            "ime": this.noviKorisnik.ime,
-            "prezime": this.noviKorisnik.prezime,
-            "pol" : this.noviKorisnik.pol,
-            "datumRodjenja" : this.noviKorisnik.datumRodjenja,
-            "uloga": "KUPAC"
-          })
+          .post('/DostavaREST/rest/korisnici/registracija', this.noviKorisnik)
           .then(response => {
-            this.message = response.data;
-            console.log("\n\n ------- PODACI -------\n");
-            console.log(response.data);
-            console.log("\n\n ----------------------\n\n");
-            
-            location.href = response.data;
+            if(response.data.length == 0){
+              alert("Korisnik sa ovim korisničkim imenom već postoji!");
+            }else{
+              alert("Uspešna registracija!");
+              this.$router.push("/prijava")
+            }
           })
           .catch(err => {
-            console.log("\n\n ------- ERROR -------\n");
             console.log(err);
-            console.log("\n\n ----------------------\n\n");
           })
         return true;
       }
 
-      this.greske.forEach(element => {
-        console.log(element)
-        toastr["error"](element, "Fail")
-      });
-
     }
-  },
-  mounted() {
-    axios.get('rest/korisnici/noviKorisnik').then(response => (this.noviKorisnik = response.data));
   }
 });

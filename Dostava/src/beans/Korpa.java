@@ -18,6 +18,15 @@ public class Korpa implements Serializable {
 		super();
 	}
 
+	
+	public Korpa(List<ArtikalKorpa> artikli, Korisnik korisnik, Double cena) {
+		super();
+		this.artikli = artikli;
+		this.korisnik = korisnik;
+		this.cena = cena;
+	}
+
+
 	public List<ArtikalKorpa> getArtikli() {
 		return artikli;
 	}
