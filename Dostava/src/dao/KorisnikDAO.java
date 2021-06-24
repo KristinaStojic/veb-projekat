@@ -34,7 +34,7 @@ public class KorisnikDAO {
 		korisnici = new HashMap<>();
 		kupci = new ArrayList<>();
 		this.putanja = putanjaDoFajla;
-
+		System.out.println(putanja);
 		ucitajPodatke();
 	}
 
@@ -97,6 +97,10 @@ public class KorisnikDAO {
 //	}
 
 	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
+		System.out.println("dobio sam ovo korIme: " + korisnickoIme);
+		
+		System.out.println(korisnici);
+		
 		if (korisnici.containsKey(korisnickoIme)) {
 			return korisnici.get(korisnickoIme);
 		}

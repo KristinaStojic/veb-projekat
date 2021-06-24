@@ -16,45 +16,76 @@ Vue.component("registracija", {
   template: ` 
 
     <form class="row g-3" @submit="proveriPodatke" method='post'>
-  <div class="col-12">
-    <label for="ime" class="form-label">Ime</label>
-    <input type="text" class="form-control" id="ime" v-model="noviKorisnik.ime" required>
-  </div>
-  <div class="col-12">
-    <label for="prezime" class="form-label">Prezime</label>
-    <input type="text" class="form-control" id="prezime" v-model="noviKorisnik.prezime" required>
-  </div>
-  <div class="col-12">
-    <label for="korIme" class="form-label">Korisničko ime</label>
-    <input type="text" class="form-control" id="korIme" v-model="noviKorisnik.korisnickoIme" required>
-  </div>
-  <div class="col-12">
-    <label for="lozinka" class="form-label">Lozinka</label>
-    <input type="password" class="form-control" id="lozinka" v-model="noviKorisnik.lozinka" required>
-  </div>
-  <div class="col-12">
-  <label for="lozinka2" class="form-label">Ponovite lozniku</label>
-  <input type="password" class="form-control" id="lozinka2" v-model="lozinka2" required>
-</div>
-  <div class="col-12">
-    <label for="pol" class="form-label">Pol</label>
-    <select id="pol" class="form-select" v-model="noviKorisnik.pol">
-      <option selected>Izaberite pol</option>
-      <option value=0>Ženski</option>
-      <option value=1>Muški</option>
-    </select>
-  </div>
-  <div class="col-12" style="width: 400px">
-    <label for="datum" class="form-label">Datum rođenja</label>
-    <vuejs-datepicker id="datum" style="padding-left:35px;" v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker>
-  </div>
-  <div class="col-12">
-    <button type="submit" class="btn btn-primary">Registruj se</button>
-  </div>
 
+    <table align="center">
+    
+ 
+        <div class="col-12">
+        </tr>
+            <td><label for="ime" class="form-label">Ime</label></td>
+            <td><input type="text" class="form-control" id="ime" v-model="noviKorisnik.ime" required style="width:250px" align="center"></td>
+        </tr>
+        </div>
+        
+        <tr>
+        <div class="col-12">
+            <td><label for="prezime" class="form-label ">Prezime</label></td>
+            <td><input type="text" class="form-control" id="prezime" v-model="noviKorisnik.prezime" required style="width:250px" text-align: center></td>
+        </div>
+        </tr>
+
+        <tr>
+        <div class="col-12">
+            <td><label for="korIme" class="form-label ">Korisničko ime</label></td>
+            <td><input type="text" class="form-control" id="korIme" v-model="noviKorisnik.korisnickoIme" required style="width:250px"></td>
+        </div>
+        </tr>
+
+        <tr>
+        <div class="col-12">
+            <td><label for="lozinka" class="form-label ">Lozinka</label></td>
+            <td><input type="password" class="form-control" id="lozinka" v-model="noviKorisnik.lozinka" required style="width:250px"></td>
+        </div>
+        </tr>
+
+        <tr>
+        <div class="col-12">
+            <td><label for="lozinka2" class="form-label ">Ponovite lozniku</label></td>
+            <td><input type="password" class="form-control" id="lozinka2" v-model="lozinka2" required style="width:250px"></td>
+        </div>
+        </tr>
+
+        <tr>
+        <div class="col-12">
+            <td><label for="pol" class="form-label center" align="center">Pol</label></td>
+            <td><select id="pol" class="form-select center" v-model="noviKorisnik.pol" style="width:250px">
+            <option selected>Izaberite pol</option>
+            <option value=0>Ženski</option>
+            <option value=1>Muški</option>
+            </select></td>
+        </div>
+        </tr>
+
+        <tr>
+        <div class="col-12">
+            <td><label for="datum" class="form-label">Datum rođenja</label></td>
+            <td><vuejs-datepicker id="datum" style="width:250px"  v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker></td>
+            <br/>
+        </div>
+        </tr>
+
+        <tr>
+        <div class="col-12">
+            <br/>
+            <td></td>
+            <td><button type="submit" class="btn btn-primary">Registruj se</button></td>
+        </div>
+        </tr>
+        
+    </table>
   
-</form>
-  </div>
+    </form>
+  
 
     	`
   ,
