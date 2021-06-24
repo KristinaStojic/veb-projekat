@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Korisnik;
+import dto.KorisnikDTO;
 
 public class KorisnikDAO {
 
@@ -96,9 +97,8 @@ public class KorisnikDAO {
 
 	}
 
-	public void saveUsersJSON() {
+	public void upisiKorisnike() {
 
-		// Get all users
 		List<Korisnik> sviKorisnici = new ArrayList<Korisnik>();
 		for (Korisnik k : dobaviSve()) {
 			sviKorisnici.add(k);
@@ -122,6 +122,19 @@ public class KorisnikDAO {
 		return null;
 	}
 
+	public void dodajNovogKorisnika(KorisnikDTO korisnik) {
+		Korisnik noviKorisnik = new Korisnik(dobaviSve().size() + 1, 0, korisnik.korisnickoIme, korisnik.lozinka, korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga);		
+		//DODATI I U KUPCE
+		
+		dodajKorisnika(noviKorisnik);
+		upisiKorisnike();
+	}
 	
+	public void dodajKorisnika(Korisnik korisnik) {
+		if (!korisnici.containsValue(korisnik)) {
+			System.out.println("DODAO SAM: " + korisnik.getKorisnickoIme());
+			korisnici.put(korisnik.getKorisnickoIme(), korisnik);
+		}
+	}
 	
 }

@@ -3,6 +3,7 @@ package services;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import beans.Korisnik;
 import dao.KorisnikDAO;
+import dto.KorisnikDTO;
 import dto.KorisnikPrijavaDTO;
 
 @Path("/korisnici")
@@ -33,14 +35,14 @@ public class KorisniciService {
 		Korisnik noviKorisnik = sviKorisnici.dobaviPoKorisnickomImenu(korisnik.korisnickoIme);
 
 		if (noviKorisnik == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Ne postoji korisnik sa unesenim korisničkim imenom.")
+			return Response.status(Response.Status.BAD_REQUEST).entity("Ne postoji korisnik sa unesenim korisniÄ�kim imenom.")
 					.build();
 		}	
 		
 		
 		
 		if (!noviKorisnik.getLozinka().equals(korisnik.lozinka)) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Pogrešna lozinka.")
+			return Response.status(Response.Status.BAD_REQUEST).entity("PogreÅ¡na lozinka.")
 					.build();
 		}
 		
@@ -81,6 +83,38 @@ public class KorisniciService {
 		}
 
 		return korisnici;
+	}
+	
+	@POST
+	@Path("/registracija")
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response registracija(KorisnikDTO korisnik) {
+		
+		KorisnikDAO sviKorisnici = nadjiSveKorisnike();
+
+		if (sviKorisnici.dobaviPoKorisnickomImenu(korisnik.korisnickoIme) != null) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Korisničko ime je zauzeto!").build();
+		}
+
+		sviKorisnici.dodajNovogKorisnika(korisnik);
+
+		return Response.status(Response.Status.ACCEPTED).entity("/DostavaREST/#/").build(); //TODO 1: IZMENI																					// accepted
+	}
+	
+	@GET
+	@Path("/noviKorisnik")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Korisnik dobaviNovogKorisnika() {
+		Korisnik korisnik = new Korisnik();
+		KorisnikDAO sviKorisnici = nadjiSveKorisnike();
+		
+		Integer idKorisnika = sviKorisnici.dobaviSve().size() + 1;
+		korisnik.setId(idKorisnika);
+		
+		return korisnik;
+
 	}
 }
 
