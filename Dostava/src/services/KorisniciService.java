@@ -8,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import beans.Korisnik;
 import dao.KorisnikDAO;
@@ -55,39 +54,9 @@ public class KorisniciService {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		System.out.println(korisnik.korisnickoIme);
 		Korisnik prijavljeniKorisnik = korisnici.dobaviPoKorisnickomImenu(korisnik.korisnickoIme);
-
-		/*if (prijavljeniKorisnik == null) {
-			System.out.println("Nema takvog korisnika");
-			return Response.status(Response.Status.BAD_REQUEST).entity("Ne postoji korisnik!")
-					.build();
-		}	
-		
-		
-		
-		if (!prijavljeniKorisnik.getLozinka().equals(korisnik.lozinka)) {
-			System.out.println("SIFRE NISU JEDNAKE");
-			return Response.status(Response.Status.BAD_REQUEST).entity("Uneli ste pogresnu sifru!")
-					.build();
-		}
-		*/
-
 		request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik); 
 		
 		return prijavljeniKorisnik;
-		
-		/*if (userForLogin.getRole().equals("ADMINISTRATOR")) {
-			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/administratorDashboard.html").build();
-
-		} else if (userForLogin.getRole().equals("GUEST")) {
-			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/guestDashboard.html").build();
-
-		} else if (userForLogin.getRole().equals("HOST")) {
-			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/hostDashboard.html").build();
-
-		}*/
-
-		//return Response.status(Response.Status.ACCEPTED).entity("/DostavaREST/rest/korisnici/pocetna").build();
-																									
 		
 
 	}
