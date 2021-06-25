@@ -1,3 +1,45 @@
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 200px;
+  font-size: 17px;
+}
+
+.snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 200; opacity: 0;} 
+  to {bottom: 200px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 200; opacity: 0;}
+  to {bottom: 200px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 200px; opacity: 1;} 
+  to {bottom: 200; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 200px; opacity: 1;}
+  to {bottom: 200; opacity: 0;}
+}
+
 @font-face {
   font-family: "Poppins-Regular";
   src: url("../fonts/poppins/Poppins-Regular.ttf"); }
@@ -76,6 +118,28 @@ a:hover {
     font-family: "Poppins-SemiBold";
     text-align: center;
     margin-bottom: 28px; }
+
+.navigacija {
+  padding: 10px;
+  background: #fff;
+  max-width: 1300px;
+  margin: auto;
+  display: flex; }
+  .navigacija .image-holder {
+    width: 50%;
+     }
+  .navigacija form {
+    width: 75%;
+    padding-top: 70px;
+    padding-left: 45px;
+    padding-right: 45px; }
+  .navigacija h3 {
+    text-transform: uppercase;
+    font-size: 25px;
+    font-family: "Poppins-SemiBold";
+    text-align: center;
+    margin-bottom: 28px; }
+
 
 .form-group {
   display: flex; }
