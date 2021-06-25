@@ -54,6 +54,9 @@ public class KorisniciService {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		System.out.println(korisnik.korisnickoIme);
 		Korisnik prijavljeniKorisnik = korisnici.dobaviPoKorisnickomImenu(korisnik.korisnickoIme);
+		
+		System.out.println(prijavljeniKorisnik.getUloga());
+		
 		request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik); 
 		
 		return prijavljeniKorisnik;
