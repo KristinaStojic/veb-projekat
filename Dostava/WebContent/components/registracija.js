@@ -15,81 +15,50 @@ Vue.component("registracija", {
   },
   template: ` 
 
-    <form class="row g-3" @submit="proveriPodatke" method='post'>
-
-    <table align="center">
-    
- 
-        <div class="col-12">
-        </tr>
-            <td><label for="ime" class="form-label">Ime</label></td>
-            <td><input type="text" class="form-control" id="ime" v-model="noviKorisnik.ime" required style="width:250px" align="center"></td>
-        </tr>
-        </div>
-        
-        <tr>
-        <div class="col-12">
-            <td><label for="prezime" class="form-label ">Prezime</label></td>
-            <td><input type="text" class="form-control" id="prezime" v-model="noviKorisnik.prezime" required style="width:250px" text-align: center></td>
-        </div>
-        </tr>
-
-        <tr>
-        <div class="col-12">
-            <td><label for="korIme" class="form-label ">Korisničko ime</label></td>
-            <td><input type="text" class="form-control" id="korIme" v-model="noviKorisnik.korisnickoIme" required style="width:250px"></td>
-        </div>
-        </tr>
-
-        <tr>
-        <div class="col-12">
-            <td><label for="lozinka" class="form-label ">Lozinka</label></td>
-            <td><input type="password" class="form-control" id="lozinka" v-model="noviKorisnik.lozinka" required style="width:250px"></td>
-        </div>
-        </tr>
-
-        <tr>
-        <div class="col-12">
-            <td><label for="lozinka2" class="form-label ">Ponovite lozniku</label></td>
-            <td><input type="password" class="form-control" id="lozinka2" v-model="lozinka2" required style="width:250px"></td>
-        </div>
-        </tr>
-
-        <tr>
-        <div class="col-12">
-            <td><label for="pol" class="form-label center" align="center">Pol</label></td>
-            <td><select id="pol" class="form-select center" v-model="noviKorisnik.pol" style="width:250px">
-            <option selected>Izaberite pol</option>
-            <option value=0>Ženski</option>
-            <option value=1>Muški</option>
-            </select></td>
-        </div>
-        </tr>
-
-        <tr>
-        <div class="col-12">
-            <td><label for="datum" class="form-label">Datum rođenja</label></td>
-            <td><vuejs-datepicker id="datum" style="width:250px"  v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker></td>
-            <br/>
-        </div>
-        </tr>
-
-        <tr>
-        <div class="col-12">
-            <br/>
-            <td></td>
-            <td><button type="submit" class="btn btn-primary">Registruj se</button></td>
-        </div>
-        </tr>
-        
-    </table>
-  
-    </form>
-  
-
-    	`
+<div class="slika-registracija" >
+<div class="inner">
+  <div class="image-holder">
+    <div class="pica"></div>
+  </div>
+  <form @submit="proveriPodatke" method='post'>
+    <h3>Registracija</h3>
+    <div class="form-group">
+      <input type="text" placeholder="Ime" class="form-control" v-model="noviKorisnik.ime">
+      <input type="text" placeholder="Prezime" class="form-control" v-model="noviKorisnik.prezime">
+    </div>
+    <div class="form-wrapper">
+      <input type="text" placeholder="Korisničko ime" class="form-control" v-model="noviKorisnik.korisnickoIme">
+      <i class="zmdi zmdi-account"></i>
+    </div>
+    <div class="form-wrapper">
+      <vuejs-datepicker style="padding-center:35px;" v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker>
+      <i class="zmdi zmdi-assigment"></i>
+    </div>
+    <div class="form-wrapper">
+      <select name="" id="" class="form-control" v-model="noviKorisnik.pol">
+        <option value="" disabled selected>Pol</option>
+        <option value="0">Ženski</option>
+        <option value="1">Muški</option>
+      </select>
+      <i class="zmdi zmdi-caret-down" style="font-size: 13px"></i>
+    </div>
+    <div class="form-wrapper">
+      <input type="password" placeholder="Lozinka" class="form-control" v-model="noviKorisnik.lozinka">
+      <i class="zmdi zmdi-lock"></i>
+    </div>
+    <div class="form-wrapper">
+      <input type="password" placeholder="Potvrdite lozinku" class="form-control" v-model="lozinka2">
+      <i class="zmdi zmdi-lock"></i>
+    </div>
+    <button>Registracija
+      <i class="zmdi zmdi-arrow-right"></i>
+    </button>
+  </form>
+</div>
+</div>
+`
   ,
-  components:{
+  components: {
     vuejsDatepicker
   }
   ,
@@ -107,13 +76,13 @@ Vue.component("registracija", {
         alert('Obavezno uneti prezime!');
       } else if (this.noviKorisnik.lozinka.localeCompare(this.lozinka2) != 0) {
         alert('Lozinke se ne poklapaju!');
-      } else{
+      } else {
         axios
           .post('/DostavaREST/rest/korisnici/registracija', this.noviKorisnik)
           .then(response => {
-            if(response.data.length == 0){
+            if (response.data.length == 0) {
               alert("Korisnik sa ovim korisničkim imenom već postoji!");
-            }else{
+            } else {
               alert("Uspešna registracija!");
               this.$router.push("/prijava")
             }
