@@ -15,10 +15,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Administrator;
 import beans.ArtikalKorpa;
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Korpa;
 import beans.Kupac;
+import beans.Menadzer;
 import beans.Porudzbina;
 import beans.TipKupca;
 import dto.KorisnikDTO;
@@ -27,39 +30,101 @@ public class KorisnikDAO {
 
 	private Map<String, Korisnik> korisnici;
 	private List<Kupac> kupci;
+	private List<Menadzer> menadzeri;
+	private List<Administrator> administratori;
+	private List<Dostavljac> dostavljaci;
 	private String putanja;
 
 	public KorisnikDAO(String putanjaDoFajla) {
 		korisnici = new HashMap<>();
 		kupci = new ArrayList<>();
+		menadzeri = new ArrayList<>();
+		administratori = new ArrayList<>();
+		dostavljaci = new ArrayList<>();
+
 		this.putanja = putanjaDoFajla;
-		System.out.println(putanja);
+
 		ucitajPodatke();
 	}
 
 	public void ucitajPodatke() {
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		File file;
-		
+
 		try {
-		 file = new File(this.putanja + "\\kupci.json");
-         if(!file.exists()) {
-             file.createNewFile();
-             FileWriter writer = new FileWriter(this.putanja + "\\kupci.json");
-             writer.write("[]");
-             writer.close();
-         } else {
-             List<Kupac> postojeciKupci = Arrays.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
-             for (Kupac k : postojeciKupci) {
-                 if (k.getLogickoBrisanje() == 0) {
-                     korisnici.put(k.getKorisnickoIme(), k);
-                 }
-                 kupci.add(k);
-             }
-         }
-         
-		}catch (JsonParseException e) {
+			// kupci
+			file = new File(this.putanja + "\\kupci.json");
+			if (!file.exists()) {
+				file.createNewFile();
+				FileWriter writer = new FileWriter(this.putanja + "\\kupci.json");
+				writer.write("[]");
+				writer.close();
+			} else {
+				List<Kupac> postojeciKupci = Arrays
+						.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
+				for (Kupac k : postojeciKupci) {
+					if (k.getLogickoBrisanje() == 0) {
+						korisnici.put(k.getKorisnickoIme(), k);
+					}
+					kupci.add(k);
+				}
+			}
+			// dostavljaci
+			file = new File(this.putanja + "\\dostavljaci.json");
+			if (!file.exists()) {
+				file.createNewFile();
+				FileWriter writer = new FileWriter(this.putanja + "\\dostavljaci.json");
+				writer.write("[]");
+				writer.close();
+			} else {
+				List<Dostavljac> postojeciDostavljaci = Arrays.asList(
+						mapper.readValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), Dostavljac[].class));
+				for (Dostavljac d : postojeciDostavljaci) {
+					if (d.getLogickoBrisanje() == 0) {
+						korisnici.put(d.getKorisnickoIme(), d);
+					}
+					dostavljaci.add(d);
+				}
+			}
+			// menadzeri
+			file = new File(this.putanja + "\\menadzeri.json");
+			if (!file.exists()) {
+				file.createNewFile();
+				FileWriter writer = new FileWriter(this.putanja + "\\menadzeri.json");
+				writer.write("[]");
+				writer.close();
+			} else {
+				List<Menadzer> postojeciMenadzeri = Arrays.asList(
+						mapper.readValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), Menadzer[].class));
+				for (Menadzer m : postojeciMenadzeri) {
+					if (m.getLogickoBrisanje() == 0) {
+						korisnici.put(m.getKorisnickoIme(), m);
+					}
+					menadzeri.add(m);
+				}
+			}
+			// administratori
+			file = new File(this.putanja + "\\administratori.json");
+			if (!file.exists()) {
+				file.createNewFile();
+				FileWriter writer = new FileWriter(this.putanja + "\\administratori.json");
+				writer.write("[]");
+				writer.close();
+			} else {
+				List<Administrator> postojeciAdministratori = Arrays.asList(mapper
+						.readValue(Paths.get(this.putanja + "\\administratori.json").toFile(), Administrator[].class));
+				for (Administrator a : postojeciAdministratori) {
+					if (a.getLogickoBrisanje() == 0) {
+						korisnici.put(a.getKorisnickoIme(), a);
+					}
+					administratori.add(a);
+				}
+			}
+
+		} catch (
+
+		JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
@@ -83,23 +148,8 @@ public class KorisnikDAO {
 		return korisnici.values();
 	}
 
-//	public void upisiKorisnike() {
-//
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		try {
-//			// Write them to the file
-//			objectMapper.writeValue(new FileOutputStream(this.putanja), korisnici);
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
 	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
-		System.out.println("dobio sam ovo korIme: " + korisnickoIme);
-		
-		System.out.println(korisnici);
-		
+
 		if (korisnici.containsKey(korisnickoIme)) {
 			return korisnici.get(korisnickoIme);
 		}
@@ -133,7 +183,6 @@ public class KorisnikDAO {
 
 	public void dodajKorisnika(Korisnik korisnik) {
 		if (!korisnici.containsValue(korisnik)) {
-			System.out.println("DODAO SAM: " + korisnik.getKorisnickoIme());
 			korisnici.put(korisnik.getKorisnickoIme(), korisnik);
 		}
 	}
@@ -141,7 +190,6 @@ public class KorisnikDAO {
 	public boolean daLiPostojiKorIme(String korisnickoIme) {
 
 		if (korisnici.containsKey(korisnickoIme)) {
-			System.out.println("postojii " + korisnickoIme);
 			return true;
 		}
 		return false;

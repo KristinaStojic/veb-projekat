@@ -1,7 +1,6 @@
 const PocetnaStrana = { template: '<pocetna></pocetna>' }
 const Prijava = { template: '<prijava></prijava>' }
 const Registracija = { template: '<registracija></registracija>' }
-const UspesnaPrijava = { template: '<uspesnaPrijava></uspesnaPrijava>' }
 const PocetnaStranaKupac = { template: '<pocetnaStranaKupac></pocetnaStranaKupac>' }
 const PocetnaStranaAdministrator = { template: '<pocetnaStranaAdministrator></pocetnaStranaAdministrator>' }
 const PocetnaStranaMenadzer = { template: '<pocetnaStranaMenadzer></pocetnaStranaMenadzer>' }
@@ -16,7 +15,6 @@ const router = new VueRouter({
 		{ path: '/', name: 'glavna', component: PocetnaStrana},
 		{ path: '/prijava', component: Prijava},
 		{ path: '/registracija', component: Registracija},
-		{ path: '/uspesnaPrijava', component: UspesnaPrijava},
 		{ path: '/pocetnaStranaKupac', component: PocetnaStranaKupac},
 		{ path: '/pocetnaStranaAdministrator', component: PocetnaStranaAdministrator},
 		{ path: '/pocetnaStranaMenadzer', component: PocetnaStranaMenadzer},

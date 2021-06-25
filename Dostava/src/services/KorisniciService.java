@@ -28,7 +28,6 @@ public class KorisniciService {
 
 		if (korisnici == null) {
 			korisnici = new KorisnikDAO(sc.getRealPath("."));
-			System.out.println(sc.getRealPath("."));
 			sc.setAttribute("korisnici", korisnici);
 		}
 
@@ -41,28 +40,25 @@ public class KorisniciService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Korisnik registracija(KorisnikDTO korisnik) {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-        Korisnik noviKorisnik = korisnici.registrujKorisnika(korisnik);
-        return noviKorisnik;
-    }
-	
-	
+		Korisnik noviKorisnik = korisnici.registrujKorisnika(korisnik);
+		return noviKorisnik;
+	}
+
 	@POST
 	@Path("/prijava")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Korisnik login(KorisnikPrijavaDTO korisnik) {
+
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		System.out.println(korisnik.korisnickoIme);
 		Korisnik prijavljeniKorisnik = korisnici.dobaviPoKorisnickomImenu(korisnik.korisnickoIme);
-		
-		System.out.println(prijavljeniKorisnik.getUloga());
-		
-		request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik); 
-		
+
+		if (prijavljeniKorisnik != null) {
+			request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik);
+		}
+
 		return prijavljeniKorisnik;
-		
 
 	}
-
 
 }
