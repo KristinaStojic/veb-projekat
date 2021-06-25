@@ -31,16 +31,16 @@ Vue.component("registracija", {
       <i class="zmdi zmdi-account"></i>
     </div>
     <div class="form-wrapper">
-      <vuejs-datepicker style="padding-center:35px;" v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker>
-      <i class="zmdi zmdi-assigment"></i>
+      <vuejs-datepicker class="form-control" style="padding-center:35px;" placeholder="Datum" v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker>
+      <i class="zmdi zmdi-calendar"></i>
     </div>
     <div class="form-wrapper">
-      <select name="" id="" class="form-control" v-model="noviKorisnik.pol">
+      <select name="" id="" class="form-control" style="font-size: 12px" v-model="noviKorisnik.pol">
         <option value="" disabled selected>Pol</option>
         <option value="0">Ženski</option>
         <option value="1">Muški</option>
       </select>
-      <i class="zmdi zmdi-caret-down" style="font-size: 13px"></i>
+      <i class="zmdi zmdi-caret-down" style="font-size: 17px"></i>
     </div>
     <div class="form-wrapper">
       <input type="password" placeholder="Lozinka" class="form-control" v-model="noviKorisnik.lozinka">
@@ -83,11 +83,12 @@ Vue.component("registracija", {
             if (response.data.length == 0) {
               alert("Korisnik sa ovim korisničkim imenom već postoji!");
             } else {
-              alert("Uspešna registracija!");
+              toast("Uspešna registracija!");
               this.$router.push("/prijava")
             }
           })
           .catch(err => {
+          	alert("Neuspešna registracija!");
             console.log(err);
           })
         return true;
