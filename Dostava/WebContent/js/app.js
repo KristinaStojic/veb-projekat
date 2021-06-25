@@ -7,9 +7,6 @@ const PocetnaStranaMenadzer = { template: '<pocetnaStranaMenadzer></pocetnaStran
 const PocetnaStranaDostavljac = { template: '<pocetnaStranaDostavljac></pocetnaStranaDostavljac>' }
 const LicniPodaci = { template: '<licniPodaci></licniPodaci>' }
 
-
-
-
 const router = new VueRouter({
 	mode: 'hash',
 	  routes: [
