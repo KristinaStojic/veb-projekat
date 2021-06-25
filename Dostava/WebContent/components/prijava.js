@@ -4,8 +4,16 @@ Vue.component("prijava", {
             noviKorisnik: {
                 korisnickoIme: "",
                 lozinka: ""             
-              }
+              },
+
+
+              korIme: false,
+              lozinka: false,
+              msg: "",
+              greska: ""
 	    }
+
+      
 	},
 	    template: ` 
 
@@ -17,48 +25,61 @@ Vue.component("prijava", {
         <form @submit="proveriPodatke" method='post'>
           <h3>Prijava</h3>
           <div class="form-wrapper">
-            <input type="text" placeholder="Korisničko ime" class="form-control" v-model="noviKorisnik.korisnickoIme">
+            <input v-on:click="korImePromena" type="text" placeholder="Korisničko ime" class="form-control" v-model="noviKorisnik.korisnickoIme" 
+            v-bind:class="[{ invalid: korIme && !this.noviKorisnik.korisnickoIme}, { 'form-control': !korIme || this.noviKorisnik.korisnickoIme}]"
+            >
             <i class="zmdi zmdi-account"></i>
           </div>
           <div class="form-wrapper">
-            <input type="password" placeholder="Lozinka" class="form-control" v-model="noviKorisnik.lozinka">
+            <input v-on:click="lozinkaPromena"
+            v-bind:class="[{ invalid: lozinka && !this.noviKorisnik.lozinka }, { 'form-control': !lozinka || this.noviKorisnik.lozinka}]"
+            type="password" placeholder="Lozinka" class="form-control" v-model="noviKorisnik.lozinka">
             <i class="zmdi zmdi-lock"></i>
+          </div>
+
+          <div class="form-wrapper">
+            <label style="color:red;">{{msg}}</label>
           </div>
           <button>Prijava
             <i class="zmdi zmdi-arrow-right"></i>
           </button>
 
-          <div id="pogresno" class="snackbar">Niste uneli ispravne podatke!</div>
-          <div id="obaveznoKorIme" class="snackbar">Obavezno uneti korisničko ime!!</div>
-          <div id="obaveznaLozinka" class="snackbar">Obavezno uneti lozinku!!</div>
+          <div id="greska" class="snackbar">{{greska}}</div>
         </form>
       </div>
 </div>
     	`
     	, 
 	methods : {
+
+        lozinkaPromena: function(event) {
+          event.preventDefault();
+          this.lozinka = true;
+        },
+        korImePromena: function(event) {
+          event.preventDefault();
+          this.korIme = true;
+        },
+
+
         proveriPodatke: function (event) {
             event.preventDefault();
       
-            /*if (!this.noviKorisnik.korisnickoIme) {
-                    var x = document.getElementById("obaveznoKorIme");
-                    x.className = "snackbar show";
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            if (!this.noviKorisnik.korisnickoIme) {
+                    this.msg = "Obavezno uneti korisničko ime!";
             } else if (!this.noviKorisnik.lozinka) {
-                    var x = document.getElementById("obaveznaLozinka");
-                    x.className = "snackbar show";
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-            } */
+                     this.msg = "Obavezno uneti lozinku!";
+            } 
+            else{
               axios
                 .post('/DostavaREST/rest/korisnici/prijava', this.noviKorisnik)
                 .then(response => {
                   if(response.data.length == 0){
-
-                    var x = document.getElementById("pogresno");
-                    x.className = "snackbar show";
-                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 1800);
-
-                  }else{
+                    this.greska = "Korisnik sa ovim podacima ne postoji!";
+							      var x = document.getElementById("greska");
+							      x.className = "snackbar show";
+							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
+						      }else{
                     if(response.data.uloga.localeCompare("KUPAC") == 0){
                         this.$router.push("/pocetnaStranaKupac")
                     }
@@ -79,5 +100,6 @@ Vue.component("prijava", {
                 })
               return true;
             }
+          }
 	}
 });
