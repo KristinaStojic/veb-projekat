@@ -18,7 +18,7 @@ public class Korisnik implements Serializable {
 		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC
 	}
 
-	private Integer id;
+	private String id;
 	private Integer logickoBrisanje; // 1 - obrisan, 0 - nije obrisan
 	private String korisnickoIme;
 	private String lozinka;
@@ -45,7 +45,7 @@ public class Korisnik implements Serializable {
 		this.uloga = k.uloga;
 	}
 
-	public Korisnik(Integer id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
+	public Korisnik(String id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
 			String prezime, Pol pol, Date datumRodjenja, Uloga uloga) {
 		super();
 		this.id = id;
@@ -115,11 +115,11 @@ public class Korisnik implements Serializable {
 		this.uloga = uloga;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -111,6 +111,7 @@ Vue.component("registracija", {
 		},
 		proveriPodatke: function(event) {
 			event.preventDefault();
+			this.msg = "";
 			if (!this.noviKorisnik.ime) {
 				this.msg = "Obavezno uneti ime!";
 			} else if (!this.noviKorisnik.prezime) {
@@ -131,14 +132,20 @@ Vue.component("registracija", {
 							this.greska = "Korisnik sa ovim korisničkim imenom već postoji!";
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
-							setTimeout(function(){x.className = x.className.replace("show","");},1800);
+							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 						} else {
-							toast("Uspešna registracija!");
+							this.greska = "Uspešna registracija!";
+							var x = document.getElementById("greska");
+							x.className = "snackbar show";
+							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 							this.$router.push("/prijava")
 						}
 					})
 					.catch(err => {
-						alert("Neuspešna registracija!");
+						this.greska = "Neuspešna registracija!";
+						var x = document.getElementById("greska");
+						x.className = "snackbar show";
+						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 						console.log(err);
 					})
 				return true;

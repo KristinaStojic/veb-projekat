@@ -16,12 +16,12 @@ import dao.RestoranDAO;
 import dao.RestoranDAO;
 
 @Path("/")
-public class PocetnaStranaService {
+public class RestoraniService {
 
 	@Context
 	ServletContext ctx;
 
-	public PocetnaStranaService() {
+	public RestoraniService() {
 		
 	}
 	

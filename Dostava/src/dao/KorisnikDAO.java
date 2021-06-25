@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -65,7 +66,7 @@ public class KorisnikDAO {
 						.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
 				for (Kupac k : postojeciKupci) {
 					if (k.getLogickoBrisanje() == 0) {
-						korisnici.put(k.getKorisnickoIme(), k);
+						korisnici.put(k.getId(), k);
 					}
 					kupci.add(k);
 				}
@@ -82,7 +83,7 @@ public class KorisnikDAO {
 						mapper.readValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), Dostavljac[].class));
 				for (Dostavljac d : postojeciDostavljaci) {
 					if (d.getLogickoBrisanje() == 0) {
-						korisnici.put(d.getKorisnickoIme(), d);
+						korisnici.put(d.getId(), d);
 					}
 					dostavljaci.add(d);
 				}
@@ -99,7 +100,7 @@ public class KorisnikDAO {
 						mapper.readValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), Menadzer[].class));
 				for (Menadzer m : postojeciMenadzeri) {
 					if (m.getLogickoBrisanje() == 0) {
-						korisnici.put(m.getKorisnickoIme(), m);
+						korisnici.put(m.getId(), m);
 					}
 					menadzeri.add(m);
 				}
@@ -116,7 +117,7 @@ public class KorisnikDAO {
 						.readValue(Paths.get(this.putanja + "\\administratori.json").toFile(), Administrator[].class));
 				for (Administrator a : postojeciAdministratori) {
 					if (a.getLogickoBrisanje() == 0) {
-						korisnici.put(a.getKorisnickoIme(), a);
+						korisnici.put(a.getId(), a);
 					}
 					administratori.add(a);
 				}
@@ -133,25 +134,16 @@ public class KorisnikDAO {
 		}
 	}
 
-	public Korisnik find(String korisnickoIme, String lozinka) {
-		if (!korisnici.containsKey(korisnickoIme)) {
-			return null;
-		}
-		Korisnik korisnik = korisnici.get(korisnickoIme);
-		if (!korisnik.getLozinka().equals(lozinka)) {
-			return null;
-		}
-		return korisnik;
-	}
-
 	public Collection<Korisnik> dobaviSve() {
 		return korisnici.values();
 	}
 
 	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
 
-		if (korisnici.containsKey(korisnickoIme)) {
-			return korisnici.get(korisnickoIme);
+		for (Korisnik k : dobaviSve()) {
+			if (k.getKorisnickoIme().equals(korisnickoIme)) {
+				return k;
+			}
 		}
 
 		return null;
@@ -162,7 +154,7 @@ public class KorisnikDAO {
 			return null;
 
 		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0.0, 500.0);
-		Korisnik noviKorisnik = new Korisnik(dobaviSve().size() + 1, 0, korisnik.korisnickoIme, korisnik.lozinka,
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, korisnik.korisnickoIme, korisnik.lozinka,
 				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga);
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
@@ -189,7 +181,7 @@ public class KorisnikDAO {
 
 	public boolean daLiPostojiKorIme(String korisnickoIme) {
 
-		if (korisnici.containsKey(korisnickoIme)) {
+		if (dobaviPoKorisnickomImenu(korisnickoIme) != null) {
 			return true;
 		}
 		return false;
