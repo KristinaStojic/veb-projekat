@@ -6,9 +6,6 @@ const PocetnaStranaAdministrator = { template: '<pocetnaStranaAdministrator></po
 const PocetnaStranaMenadzer = { template: '<pocetnaStranaMenadzer></pocetnaStranaMenadzer>' }
 const PocetnaStranaDostavljac = { template: '<pocetnaStranaDostavljac></pocetnaStranaDostavljac>' }
 
-
-
-
 const router = new VueRouter({
 	mode: 'hash',
 	  routes: [
