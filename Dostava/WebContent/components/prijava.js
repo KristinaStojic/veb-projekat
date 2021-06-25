@@ -64,7 +64,7 @@ Vue.component("prijava", {
 
         proveriPodatke: function (event) {
             event.preventDefault();
-      
+            this.msg = "";
             if (!this.noviKorisnik.korisnickoIme) {
                     this.msg = "Obavezno uneti korisničko ime!";
             } else if (!this.noviKorisnik.lozinka) {
