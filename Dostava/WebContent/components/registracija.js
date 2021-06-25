@@ -17,7 +17,8 @@ Vue.component("registracija", {
 			lozinka2a: false,
 			korIme: false,
 			datum: false,
-			msg: ""
+			msg: "",
+			greska: ""
 		}
 	},
 	template: ` 
@@ -71,6 +72,8 @@ Vue.component("registracija", {
     <button>Registracija
       <i class="zmdi zmdi-arrow-right"></i>
     </button>
+    
+    <div id="greska" class="snackbar">{{greska}}</div>
   </form>
 </div>
 </div>
@@ -125,7 +128,10 @@ Vue.component("registracija", {
 					.post('/DostavaREST/rest/korisnici/registracija', this.noviKorisnik)
 					.then(response => {
 						if (response.data.length == 0) {
-							alert("Korisnik sa ovim korisničkim imenom već postoji!");
+							this.greska = "Korisnik sa ovim korisničkim imenom već postoji!";
+							var x = document.getElementById("greska");
+							x.className = "snackbar show";
+							setTimeout(function(){x.className = x.className.replace("show","");},1800);
 						} else {
 							toast("Uspešna registracija!");
 							this.$router.push("/prijava")
