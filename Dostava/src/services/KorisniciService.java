@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import beans.Korisnik;
 import dao.KorisnikDAO;
 import dto.KorisnikDTO;
+import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
 
 @Path("/korisnici")
@@ -52,7 +53,7 @@ public class KorisniciService {
 	public Korisnik login(KorisnikPrijavaDTO korisnik) {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		Korisnik prijavljeniKorisnik = korisnici.dobaviPoKorisnickomImenu(korisnik.korisnickoIme);
+		Korisnik prijavljeniKorisnik = korisnici.pronadjiKorisnika(korisnik.korisnickoIme, korisnik.lozinka);
 
 		if (prijavljeniKorisnik != null) {
 			request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik);
@@ -69,8 +70,24 @@ public class KorisniciService {
 	public Korisnik nadjiPrijavljenogKorisnika() {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
-		
+
 		return korisnici.dobaviPoKorisnickomImenu(prijavljeniKorisnik.getKorisnickoIme());
+	}
+	
+	
+	@POST
+	@Path("/izmeniLicnePodatke")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Korisnik izmeniLicnePodatke(KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+
+		Korisnik izmenjeniKor = korisnici.izmeniLicnePodatke(prijavljeniKorisnik, izmenjeniKorisnik);
+		request.getSession().setAttribute("prijavljeniKorisnik", izmenjeniKor);
+		
+		korisnici.sacuvajPodatke();
+		return izmenjeniKor;
 	}
 
 }

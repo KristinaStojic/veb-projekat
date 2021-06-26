@@ -1,21 +1,17 @@
 Vue.component("licniPodaci", {
     data: function () {
       return {
-        noviKorisnik: {
-          korisnickoIme1: "",
-          lozinka1: "",
-          ime1: "",
-          prezime1: "",
-          pol1: 0,
-          datumRodjenja1: ""
-        },
         lozinka2: "",
         korisnickoIme: "",
         lozinka: "",
         ime: "",
         prezime: "",
         pol: 0,
-        datumRodjenja: ""
+        datumRodjenja: "",
+        selektovaniPol : 0,
+        novaLozinka: "",
+        msg: "",
+        greska: ""
       }
     },
     template: ` 
@@ -31,22 +27,21 @@ Vue.component("licniPodaci", {
 
                 <div class="form-group">
                     <input v-model="ime" type="text" class="form-control">
-                    <input type="text" v-bind:value="prezime" class="form-control">
+                    <input type="text" v-model="prezime" class="form-control">
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="text" v-bind:value="korisnickoIme" class="form-control">
+                    <input type="text" v-model="korisnickoIme" class="form-control">
                     <i class="zmdi zmdi-account"></i>
                 </div>
 
                 <div class="form-wrapper">
-                    <vuejs-datepicker v-bind:value="datumRodjenja" class="form-control" style="padding-center:35px;"></vuejs-datepicker>
+                    <vuejs-datepicker v-model="datumRodjenja" class="form-control" style="padding-center:35px;"></vuejs-datepicker>
                     <i class="zmdi zmdi-calendar"></i>
                 </div>
 
                 <div class="form-wrapper">
-                    <select name="" id="" class="form-control" style="font-size: 12px" v-model="noviKorisnik.pol">
-                    <option value="" disabled selected>Pol</option>
+                    <select name="" id="" class="form-control" style="font-size: 12px" v-model="selektovaniPol">
                     <option value="0">Ženski</option>
                     <option value="1">Muški</option>
                     </select>
@@ -54,7 +49,7 @@ Vue.component("licniPodaci", {
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="password" placeholder="Nova lozinka" class="form-control" v-model="noviKorisnik.lozinka">
+                    <input type="password" placeholder="Nova lozinka" class="form-control" v-model="lozinka">
                     <i class="zmdi zmdi-lock"></i>
                 </div>
 
@@ -99,12 +94,22 @@ Vue.component("licniPodaci", {
                 this.prezime = response.data.prezime;
                 this.pol = response.data.pol;
                 this.datumRodjenja = response.data.datumRodjenja;
+
+                if(this.pol.localeCompare("ZENSKI") == 0){
+                    this.selektovaniPol = '0';
+
+                    
+                }
+                else if(this.pol.localeCompare("MUSKI") == 0){
+                    this.selektovaniPol = '1';
+                }
             }
             
     
         })
     },
     methods: {
+    
       proveriPodatke: function (event) {
         event.preventDefault();
   
@@ -127,8 +132,49 @@ Vue.component("licniPodaci", {
     		this.mode = 'BROWSE';
         }*/
   
+        var k = {
+            "korisnickoIme": this.korisnickoIme,
+            "lozinka": this.lozinka,
+            "ime": this.ime,
+            "prezime": this.prezime,
+            "pol": this.selektovaniPol,
+            "datumRodjenja": this.datumRodjenja       
+            }
+        axios
+					.post('/DostavaREST/rest/korisnici/izmeniLicnePodatke', k)
+					.then(response => {
+						if (response.data.length == 0) {
+							alert("Ne vraca korisnika");
+						
+						}else{
+                            if(response.data.uloga.localeCompare("KUPAC") == 0){
+                                this.$router.push("/pocetnaStranaKupac")
+                            }
+                            else if(response.data.uloga.localeCompare("MENADZER") == 0){
+                                this.$router.push("/pocetnaStranaMenadzer")
+                            }else if(response.data.uloga.localeCompare("DOSTAVLJAC") == 0){
+                                this.$router.push("/pocetnaStranaDostavljac")
+                            }
+                            else if(response.data.uloga.localeCompare("ADMINISTRATOR") == 0){
+                                this.$router.push("/pocetnaStranaAdministrator")
+                            }
+                            
+                          }
+					})
+					.catch(err => {
+						alert("Nesto je pogresno");
+						console.log(err);
+					})
+				return true;
+        
 
         console.log(this.ime)
+        console.log(this.prezime)
+        console.log(this.korisnickoIme)
+        console.log(this.datumRodjenja)
+        console.log(this.ime)
+        console.log(this.novaLozinka)
+        console.log(this.selektovaniPol)
       }
     }
   });

@@ -26,6 +26,7 @@ import beans.Menadzer;
 import beans.Porudzbina;
 import beans.TipKupca;
 import dto.KorisnikDTO;
+import dto.KorisnikIzmenaPodatakaDTO;
 
 public class KorisnikDAO {
 
@@ -70,6 +71,7 @@ public class KorisnikDAO {
 					}
 					kupci.add(k);
 				}
+				System.out.println(kupci.size());
 			}
 			// dostavljaci
 			file = new File(this.putanja + "\\dostavljaci.json");
@@ -148,6 +150,17 @@ public class KorisnikDAO {
 
 		return null;
 	}
+	
+	public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) {
+
+		for (Korisnik k : dobaviSve()) {
+			if (k.getKorisnickoIme().equals(korisnickoIme) && k.getLozinka().equals(lozinka)) {
+				return k;
+			}
+		}
+
+		return null;
+	}
 
 	public Korisnik registrujKorisnika(KorisnikDTO korisnik) {
 		if (daLiPostojiKorIme(korisnik.korisnickoIme))
@@ -172,6 +185,36 @@ public class KorisnikDAO {
 
 		return noviKorisnik;
 	}
+	
+	public void sacuvajPodatke() {
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\kupci.json").toFile(), kupci);
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+		
+		ObjectMapper maper1 = new ObjectMapper();
+		try {
+			maper1.writeValue(Paths.get(this.putanja + "\\administratori.json").toFile(), administratori);
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+		
+		ObjectMapper maper2 = new ObjectMapper();
+		try {
+			maper2.writeValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), dostavljaci);
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+		
+		ObjectMapper maper3 = new ObjectMapper();
+		try {
+			maper3.writeValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), menadzeri);
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+	}
 
 	public void dodajKorisnika(Korisnik korisnik) {
 		if (!korisnici.containsValue(korisnik)) {
@@ -185,6 +228,41 @@ public class KorisnikDAO {
 			return true;
 		}
 		return false;
+	}
+	
+	public Korisnik izmeniLicnePodatke(Korisnik prijavljeniKorisnik, KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
+
+		for (Korisnik k : dobaviSve()) {
+			if(k.getId() == prijavljeniKorisnik.getId()) {
+				k.setIme(izmenjeniKorisnik.ime);
+				k.setPrezime(izmenjeniKorisnik.prezime);
+				k.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
+				k.setLozinka(izmenjeniKorisnik.lozinka);
+				k.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
+				k.setPol(izmenjeniKorisnik.pol);
+				
+				for (Kupac kupac : kupci) {
+					if(kupac.getId() == prijavljeniKorisnik.getId()) {
+						kupac.setIme(izmenjeniKorisnik.ime);
+						kupac.setPrezime(izmenjeniKorisnik.prezime);
+						kupac.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
+						kupac.setLozinka(izmenjeniKorisnik.lozinka);
+						kupac.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
+						kupac.setPol(izmenjeniKorisnik.pol);
+						//kupac.getKorpa().setKorisnik(null);
+						//kupac.getKorpa().setKorisnik(k);
+						
+					}
+				}
+				
+				System.out.println(kupci.size());
+				return k;
+			}
+		}
+		
+		
+		
+		return null;
 	}
 
 }
