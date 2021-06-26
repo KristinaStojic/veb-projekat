@@ -1,6 +1,10 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import beans.Restoran;
 import dao.RestoranDAO;
+import dto.RestoranPrikazDTO;
 
 @Path("/restorani")
 public class RestoraniService {
@@ -23,9 +28,9 @@ public class RestoraniService {
 	ServletContext sc;
 
 	public RestoraniService() {
-		
+
 	}
-	
+
 	private RestoranDAO dobaviRestoranDAO() {
 
 		RestoranDAO restorani = (RestoranDAO) sc.getAttribute("restorani");
@@ -37,13 +42,20 @@ public class RestoraniService {
 
 		return restorani;
 	}
-	
+
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Restoran> dobaviRestorane() {
+	public List<RestoranPrikazDTO> dobaviRestorane() {
 		RestoranDAO dao = dobaviRestoranDAO();
-		return dao.dobaviRestorane();
+		List<RestoranPrikazDTO> restoraniDTO = new ArrayList<RestoranPrikazDTO>();
+
+		for (Restoran r : dao.dobaviRestorane()) {
+			String lokacija = r.getLokacija().getUlica() + " " + r.getLokacija().getBroj().toString() + ", " + r.getLokacija().getMesto();
+			restoraniDTO.add(new RestoranPrikazDTO(r.getId(), r.getNaziv(), r.tipString(), r.statusString(), lokacija, r.getLogo()));
+		}
+		
+		return restoraniDTO;
 	}
-	
+
 }

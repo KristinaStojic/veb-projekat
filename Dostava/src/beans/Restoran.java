@@ -1,12 +1,7 @@
 package beans;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 public class Restoran implements Serializable {
 
@@ -16,7 +11,7 @@ public class Restoran implements Serializable {
 	private static final long serialVersionUID = 7705934003444955722L;
 
 	public enum TipRestorana {
-		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA
+		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO // ako dodajes, dodaj dole u metodu
 	}
 
 	private String id;
@@ -105,8 +100,37 @@ public class Restoran implements Serializable {
 		return logo;
 	}
 
-	public void setLogo(String putanja){
+	public void setLogo(String putanja) {
 		this.logo = putanja;
 	}
 
+	public String statusString() {
+		if (status) {
+			return "Otvoreno";
+		}
+
+		return "Zatvoreno";
+	}
+
+	public String tipString() {
+		// ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO
+		switch (tipRestorana) {
+		case ITALIJANSKI:
+			return "Italijanska hrana";
+		case KINESKI:
+			return "Kineska hrana";
+		case ROSTILJ:
+			return "Jela sa roštilja";
+		case SRPSKI:
+			return "Srpska hrana";
+		case GRCKI:
+			return "Grčka hrana";
+		case VEGETARIJANSKI:
+			return "Vegetarijanska hrana";
+		case BRZA_HRANA:
+			return "Brza hrana";
+		default:
+			return "Raznolika huhinja";
+		}
+	}
 }

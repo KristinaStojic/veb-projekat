@@ -28,15 +28,21 @@ Vue.component("pocetna", {
  
 	</nav>
 
-	<div class="row row-cols-1 row-cols-md-3 g-4" v-for="(r, i) in restorani">
-  		<div class="card" style="width: 18rem;">
-        <img :src="r.logo" class="card-img-top" alt="">
+	<div class="container-fluid content-row">
+	<div class="row">
+		<div style="margin-left: 20px; margin-right: 20px; margin-bottom: 20px" v-for="(r, i) in restorani">
+  		<div class="card" >
+        <img :src="r.logo" class="card-img-top" alt="Card image cap">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">{{r.naziv}}</li>
+              <li class="list-group-item"><b>{{r.naziv}}</b></li>
               <li class="list-group-item">{{r.tipRestorana}}</li>
-              <li class="list-group-item">{{r.status}}</li>
+              <li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
+              <li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
+              <li class="list-group-item">{{r.lokacija}}</li>
             </ul>
+            </div>
       </div>
+     </div>
   </div>
 </div>		
     	`
