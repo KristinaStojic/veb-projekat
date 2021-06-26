@@ -1,7 +1,7 @@
 Vue.component("pocetnaStranaMenadzer", { 
 	data: function () {
 	    return {
-            
+            greska: ""
 	    }
 	},
 	    template: ` 
@@ -21,19 +21,40 @@ Vue.component("pocetnaStranaMenadzer", {
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Odjava</a>
+							<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 						</div>
 					</li>
 
 					
 				</ul>
 			</div>
+
+			<div id="greska" class="snackbar">{{greska}}</div>
 	  	</nav>
     	`
     	, 
 		
 	methods : {
-
+		
+		odjava : function() {
+    		axios 
+    			.post('/DostavaREST/rest/korisnici/odjava')
+    			.then(response => {
+					this.greska = "Uspesna odjava!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    				this.$router.push("/")
+    			})
+				.catch(err => {
+					this.greska = "Neuspjesna odjava!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+    		
+    	}
 		
     }
 });
