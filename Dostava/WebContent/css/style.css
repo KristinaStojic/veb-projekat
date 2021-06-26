@@ -87,6 +87,23 @@ a:hover {
   height: 400px
   }
 
+
+.top{
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 8%;
+    top: 0;
+}
+
+.bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 92%;
+     bottom: 0;
+}
+
 .slika-registracija {
   min-height: 100vh;
   background-size: cover;
@@ -106,8 +123,12 @@ a:hover {
   padding: 20px;
   background: #fff;
   max-width: 850px;
-  margin: auto;
-  display: flex; }
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: 80px;
+  display: flex;
+   }
   .inner .image-holder {
     width: 50%;
      }
@@ -126,7 +147,7 @@ a:hover {
 .navigacija {
   padding: 10px;
   background: #fff;
-  max-width: 1300px;
+  max-width: 100%;
   margin: auto;
   display: flex; }
   .navigacija .image-holder {

@@ -22,7 +22,22 @@ Vue.component("registracija", {
 		}
 	},
 	template: ` 
-
+<div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
+					<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">K&J</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+<div class="bottom">
 <div class="slika-registracija" >
 <div class="inner">
   <div class="image-holder">
@@ -75,6 +90,8 @@ Vue.component("registracija", {
     
     <div id="greska" class="snackbar">{{greska}}</div>
   </form>
+</div>
+</div>
 </div>
 </div>
 `
