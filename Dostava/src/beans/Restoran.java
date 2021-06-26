@@ -1,8 +1,12 @@
 package beans;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 public class Restoran implements Serializable {
 
@@ -15,22 +19,48 @@ public class Restoran implements Serializable {
 		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA
 	}
 
+	private String id;
+	private Integer logickoBrisanje;
 	private String naziv;
 	private TipRestorana tipRestorana;
 	private List<Artikal> artikliUPonudi;
 	private Boolean status;
 	private Lokacija lokacija;
-	private Image logo;
+	private String logo;
 
 	public Restoran() {
 		super();
 	}
 
-	public Restoran(String naziv) {
+	public Restoran(String id, Integer logickoBrisanje, String naziv, TipRestorana tipRestorana,
+			List<Artikal> artikliUPonudi, Boolean status, Lokacija lokacija, String slika) {
 		super();
+		this.id = id;
+		this.logickoBrisanje = logickoBrisanje;
 		this.naziv = naziv;
+		this.tipRestorana = tipRestorana;
+		this.artikliUPonudi = artikliUPonudi;
+		this.status = status;
+		this.lokacija = lokacija;
+		this.logo = slika;
 	}
-	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public Integer getLogickoBrisanje() {
+		return logickoBrisanje;
+	}
+
+	public void setLogickoBrisanje(Integer logickoBrisanje) {
+		this.logickoBrisanje = logickoBrisanje;
+	}
+
 	public String getNaziv() {
 		return naziv;
 	}
@@ -71,12 +101,12 @@ public class Restoran implements Serializable {
 		this.lokacija = lokacija;
 	}
 
-	public Image getLogo() {
+	public String getLogo() {
 		return logo;
 	}
 
-	public void setLogo(Image logo) {
-		this.logo = logo;
+	public void setLogo(String putanja){
+		this.logo = putanja;
 	}
 
 }

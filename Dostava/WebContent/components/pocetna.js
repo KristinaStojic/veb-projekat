@@ -1,9 +1,10 @@
-Vue.component("pocetna", { 
-	data: function () {
-	    return {
-	    }
+Vue.component("pocetna", {
+	data: function() {
+		return {
+			restorani: null
+		}
 	},
-	    template: ` 
+	template: ` 
 
 	<div>
   <nav class="navbar navbar-expand-lg navbar-light bg-light static-top mb-5 shadow">
@@ -25,21 +26,28 @@ Vue.component("pocetna", {
     </div>
   </div>
  
-  
-</nav>
+	</nav>
 
-<div
-  class="bg-image"
-  style="
-    background-image: url('https://image.shutterstock.com/shutterstock/photos/466836764/display_1500/stock-photo-chinese-food-on-white-background-noodles-fried-rice-dumplings-stir-fry-chicken-dim-sum-spring-466836764.jpg');
-    height: 400px
-	
-  "
-></div>
+	<div class="row row-cols-1 row-cols-md-3 g-4" v-for="(r, i) in restorani">
+  		<div class="card" style="width: 18rem;">
+        <img :src="r.logo" class="card-img-top" alt="">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{r.naziv}}</li>
+              <li class="list-group-item">{{r.tipRestorana}}</li>
+              <li class="list-group-item">{{r.status}}</li>
+            </ul>
+      </div>
+  </div>
 </div>		
     	`
-    	, 
-	methods : {
-    
+	,
+	mounted() {
+		axios
+			.get('rest/restorani/')
+			.then(response => (this.restorani = response.data))
+	}
+	,
+	methods: {
+
 	}
 });

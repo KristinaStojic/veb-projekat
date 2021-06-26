@@ -20,6 +20,19 @@ public class Lokacija implements Serializable {
 		super();
 	}
 
+	
+	public Lokacija(Double geografskaDuzina, Double geografskaSirina, String ulica, Integer broj, String mesto,
+			Integer postanskiBroj) {
+		super();
+		this.geografskaDuzina = geografskaDuzina;
+		this.geografskaSirina = geografskaSirina;
+		this.ulica = ulica;
+		this.broj = broj;
+		this.mesto = mesto;
+		this.postanskiBroj = postanskiBroj;
+	}
+
+
 	public Double getGeografskaDuzina() {
 		return geografskaDuzina;
 	}
