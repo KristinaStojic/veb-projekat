@@ -2,6 +2,7 @@ package services;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.Korisnik;
 import dao.KorisnikDAO;
@@ -63,6 +65,21 @@ public class KorisniciService {
 
 	}
 	
+	@POST
+	@Path("/odjava")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void logout() {
+		System.out.println("uslo");
+		HttpSession session = request.getSession();
+		if(session != null && session.getAttribute("prijavljeniKorisnik") != null) {
+			session.invalidate();
+		}
+		
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		System.out.println(prijavljeniKorisnik);
+		
+	}
 	
 	@GET
 	@Path("/nadjiPrijavljenogKorisnika")

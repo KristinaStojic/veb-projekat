@@ -255,7 +255,51 @@ public class KorisnikDAO {
 					}
 				}
 				
-				System.out.println(kupci.size());
+				
+				for (Menadzer men : menadzeri) {
+					if(men.getId() == prijavljeniKorisnik.getId()) {
+						men.setIme(izmenjeniKorisnik.ime);
+						men.setPrezime(izmenjeniKorisnik.prezime);
+						men.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
+						men.setLozinka(izmenjeniKorisnik.lozinka);
+						men.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
+						men.setPol(izmenjeniKorisnik.pol);
+						//kupac.getKorpa().setKorisnik(null);
+						//kupac.getKorpa().setKorisnik(k);
+						
+					}
+				}
+				
+				
+				for (Administrator admin : administratori) {
+					if(admin.getId() == prijavljeniKorisnik.getId()) {
+						admin.setIme(izmenjeniKorisnik.ime);
+						admin.setPrezime(izmenjeniKorisnik.prezime);
+						admin.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
+						admin.setLozinka(izmenjeniKorisnik.lozinka);
+						admin.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
+						admin.setPol(izmenjeniKorisnik.pol);
+						//kupac.getKorpa().setKorisnik(null);
+						//kupac.getKorpa().setKorisnik(k);
+						
+					}
+				}
+				
+				
+				for (Dostavljac dost : dostavljaci) {
+					if(dost.getId() == prijavljeniKorisnik.getId()) {
+						dost.setIme(izmenjeniKorisnik.ime);
+						dost.setPrezime(izmenjeniKorisnik.prezime);
+						dost.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
+						dost.setLozinka(izmenjeniKorisnik.lozinka);
+						dost.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
+						dost.setPol(izmenjeniKorisnik.pol);
+						//kupac.getKorpa().setKorisnik(null);
+						//kupac.getKorpa().setKorisnik(k);
+						
+					}
+				}
+				
 				return k;
 			}
 		}

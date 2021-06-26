@@ -11,7 +11,14 @@ Vue.component("licniPodaci", {
         selektovaniPol : 0,
         novaLozinka: "",
         msg: "",
-        greska: ""
+        greska: "",
+
+        postojiIme : false,
+        postojiPrezime : false,
+        postojiLozinka : false,
+        postojiLozinka2 : false,
+        postojiKorIme : false,
+        postojiDatum : false
       }
     },
     template: ` 
@@ -26,17 +33,25 @@ Vue.component("licniPodaci", {
                 <h3>Lični podaci</h3>
 
                 <div class="form-group">
-                    <input v-model="ime" type="text" class="form-control">
-                    <input type="text" v-model="prezime" class="form-control">
+                    <input v-model="ime" type="text" class="form-control" v-on:click="imePromena" 
+                    v-bind:class="[{ invalid: postojiIme && !this.ime}, { 'form-control': !postojiIme || this.ime}]"
+                    >
+                    <input type="text" v-model="prezime" class="form-control"
+                    v-bind:class="[{ invalid: postojiPrezime && !this.prezime}, { 'form-control': !postojiPrezime || this.prezime}]"
+                    >
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="text" v-model="korisnickoIme" class="form-control">
+                    <input type="text" v-model="korisnickoIme" class="form-control"
+                    v-bind:class="[{ invalid: postojiKorIme && !this.korisnickoIme}, { 'form-control': !postojiKorIme || this.korisnickoIme}]"
+                    >
                     <i class="zmdi zmdi-account"></i>
                 </div>
 
                 <div class="form-wrapper">
-                    <vuejs-datepicker v-model="datumRodjenja" class="form-control" style="padding-center:35px;"></vuejs-datepicker>
+                    <vuejs-datepicker v-model="datumRodjenja" class="form-control" style="padding-center:35px;"></vuejs-datepicker
+                    v-bind:class="[{ invalid: postojiDatum && !this.datumRodjenja}, { 'form-control': !postojiDatum || this.datumRodjenja}]"
+                    >
                     <i class="zmdi zmdi-calendar"></i>
                 </div>
 
@@ -49,15 +64,22 @@ Vue.component("licniPodaci", {
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="password" placeholder="Nova lozinka" class="form-control" v-model="lozinka">
+                    <input type="password" placeholder="Nova lozinka" class="form-control" v-model="lozinka"
+                    v-bind:class="[{ invalid: postojiLozinka && !this.lozinka}, { 'form-control': !postojiLozinka || this.lozinka}]"
+                    >
                     <i class="zmdi zmdi-lock"></i>
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="password" placeholder="Potvrdite lozinku" class="form-control" v-model="lozinka2">
+                    <input type="password" placeholder="Potvrdite lozinku" class="form-control" v-model="lozinka2"
+                    v-bind:class="[{ invalid: postojiLozinka2 && !this.lozinka2}, { 'form-control': !postojiLozinka2 || this.lozinka2}]"
+                    >
                     <i class="zmdi zmdi-lock"></i>
                 </div>
 
+                <div class="form-wrapper">
+                    <label style="color:red;">{{msg}}</label>
+                </div>
                 <div class="form-group">
                     <button>Izmeni podatke
                         <i class="zmdi zmdi-arrow-right"></i>
@@ -70,6 +92,7 @@ Vue.component("licniPodaci", {
                     -->
                 </div>
                 
+                <div id="greska" class="snackbar">{{greska}}</div>
             </form>
         </div>
   </div>
@@ -109,29 +132,46 @@ Vue.component("licniPodaci", {
         })
     },
     methods: {
-    
+        imePromena: function(event) {
+			event.preventDefault();
+			this.postojiIme = true;
+		},
+		prezimePromena: function(event) {
+			event.preventDefault();
+			this.postojiPrezime = true;
+		},
+		lozinkaPromena: function(event) {
+			event.preventDefault();
+			this.postojiLozinka = true;
+		},
+		lozinka2Promena: function(event) {
+			event.preventDefault();
+			this.postojiLozinka2 = true;
+		},
+		korImePromena: function(event) {
+			event.preventDefault();
+			this.postojiKorIme = true;
+		},
+		datumPromena: function(event) {
+			event.preventDefault();
+			this.postojiDatum = true;
+		},
       proveriPodatke: function (event) {
         event.preventDefault();
-  
-        /*if (!this.noviKorisnik.korisnickoIme) {
-          alert('Obavezno uneti korisničko ime!');
-        } else if (!this.noviKorisnik.lozinka) {
-          alert('Obavezno uneti lozinku!');
-        } else if (!this.noviKorisnik.ime) {
-          alert('Obavezno uneti ime!');
-        } else if (!this.noviKorisnik.prezime) {
-          alert('Obavezno uneti prezime!');
-        } else if (this.noviKorisnik.lozinka.localeCompare(this.lozinka2) != 0) {
-          alert('Lozinke se ne poklapaju!');
-        } else {
-
-            var s = {jmbg:student.jmbg, ime:student.ime, prezime:student.prezime, datumRodjenja:student.datumRodjenja.getTime(), brojIndeksa:student.brojIndeksa};
-    		axios
-    		.post("rest/studenti/updatejson", s)
-    		.then(response => toast('Student ' + student.ime + " " + student.prezime + " uspešno snimljen."));
-    		this.mode = 'BROWSE';
-        }*/
-  
+        this.msg = "";
+        if (!this.ime) {
+            this.msg = "Obavezno uneti ime!";
+        }else if (!this.prezime) {
+            this.msg = "Obavezno uneti prezime!";
+        } else if (!this.korisnickoIme) {
+            this.msg = "Obavezno uneti korisničko ime!";
+        } else if (!this.datumRodjenja) {
+            this.msg = "Obavezno izabrati datum!";
+        } else if (!this.lozinka) {
+            this.msg = "Obavezno uneti lozinku!";
+        } else if (this.lozinka.localeCompare(this.lozinka2) != 0) {
+            this.msg = "Lozinke se ne poklapaju!";
+        }else{
         var k = {
             "korisnickoIme": this.korisnickoIme,
             "lozinka": this.lozinka,
@@ -144,7 +184,10 @@ Vue.component("licniPodaci", {
 					.post('/DostavaREST/rest/korisnici/izmeniLicnePodatke', k)
 					.then(response => {
 						if (response.data.length == 0) {
-							alert("Ne vraca korisnika");
+							this.greska = "Korisnik sa ovim korisničkim imenom već postoji!";
+							var x = document.getElementById("greska");
+							x.className = "snackbar show";
+							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 						
 						}else{
                             if(response.data.uloga.localeCompare("KUPAC") == 0){
@@ -176,5 +219,6 @@ Vue.component("licniPodaci", {
         console.log(this.novaLozinka)
         console.log(this.selektovaniPol)
       }
+    }
     }
   });
