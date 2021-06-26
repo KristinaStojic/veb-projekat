@@ -1,9 +1,10 @@
-Vue.component("pocetna", { 
-	data: function () {
-	    return {
-	    }
+Vue.component("pocetna", {
+	data: function() {
+		return {
+			restorani: null
+		}
 	},
-	    template: ` 
+	template: ` 
 
 	<div>
   <nav class="navbar navbar-expand-lg navbar-light bg-light static-top mb-5 shadow">
@@ -25,21 +26,34 @@ Vue.component("pocetna", {
     </div>
   </div>
  
-  
-</nav>
+	</nav>
 
-<div
-  class="bg-image"
-  style="
-    background-image: url('https://image.shutterstock.com/shutterstock/photos/466836764/display_1500/stock-photo-chinese-food-on-white-background-noodles-fried-rice-dumplings-stir-fry-chicken-dim-sum-spring-466836764.jpg');
-    height: 400px
-	
-  "
-></div>
+	<div class="container-fluid content-row">
+	<div class="row">
+		<div style="margin-left: 20px; margin-right: 20px; margin-bottom: 20px" v-for="(r, i) in restorani">
+  		<div class="card" >
+        <img :src="r.logo" class="card-img-top" alt="Card image cap">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>{{r.naziv}}</b></li>
+              <li class="list-group-item">{{r.tipRestorana}}</li>
+              <li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
+              <li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
+              <li class="list-group-item">{{r.lokacija}}</li>
+            </ul>
+            </div>
+      </div>
+     </div>
+  </div>
 </div>		
     	`
-    	, 
-	methods : {
-    
+	,
+	mounted() {
+		axios
+			.get('rest/restorani/')
+			.then(response => (this.restorani = response.data))
+	}
+	,
+	methods: {
+
 	}
 });

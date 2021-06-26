@@ -1,42 +1,103 @@
 package dao;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Map;
+import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import beans.Artikal;
+import beans.Lokacija;
 import beans.Restoran;
+import beans.Restoran.TipRestorana;
 
 public class RestoranDAO {
 
-	private List<Restoran> restorani = new ArrayList<Restoran>();
+	private Map<String, Restoran> restorani; //pazi na logicki obrisane
+	private String putanja;
 
-	public RestoranDAO() {
+	public RestoranDAO(String putanjaDoFajla) {
+		restorani = new HashMap<>();
 
+		this.putanja = putanjaDoFajla;
+		
+//		ObjectMapper maper = new ObjectMapper();
+//		try {
+//			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+//			System.out.println("upisao");
+//		} catch (IOException e) {
+//			System.out.println("Greska");
+//		}
+
+		ucitajPodatke();
 	}
 
-	
-	public RestoranDAO(String contextPath) {
-		ucitajRestorane(contextPath);
+	public void ucitajPodatke() {
+
+		ObjectMapper mapper = new ObjectMapper();
+		File file;
+
+		try {
+			file = new File(this.putanja + "\\restorani.json");
+			if (!file.exists()) {
+				file.createNewFile();
+				FileWriter writer = new FileWriter(this.putanja + "\\restorani.json");
+				writer.write("[]");
+				writer.close();
+			} else {
+				TypeReference<HashMap<String, Restoran>> typeRef 
+				  = new TypeReference<HashMap<String, Restoran>>() {};
+				Map<String, Restoran> postojeciRestorani = 
+						mapper.readValue(Paths.get(this.putanja + "\\restorani.json").toFile(), typeRef);
+				for (Restoran r : postojeciRestorani.values()) {
+					restorani.put(r.getId(), r);
+				}
+			}
+
+		} catch (
+
+		JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	
 	public Collection<Restoran> dobaviRestorane() {
-		return restorani;
+		List<Restoran> sortirani = new ArrayList<Restoran>();
+		
+		for (Restoran restoran : restorani.values()) {
+		
+			if(restoran.getStatus()) {
+				sortirani.add(restoran);
+			}
+		}
+		
+		for (Restoran restoran : restorani.values()) {
+			
+			if(!restoran.getStatus()) {
+				sortirani.add(restoran);
+			}
+		}
+		
+		return sortirani;
 	}
 
-	
-//	public Restoran findRestoran(String id) {
-//		return restorani.containsKey(id) ? restorani.get(id) : null;
-//	}
-
-	
-	public Restoran sacuvaj(Restoran restoran) {
-		return restoran;
-	}
 //
 //	public Restoran update(String id, Restoran restoran) {
 //		Restoran restoranToUpdate = this.findRestoran(id);
@@ -52,34 +113,4 @@ public class RestoranDAO {
 //		this.restorani.remove(id);
 //	}
 
-	private void ucitajRestorane(String contextPath) {
-		BufferedReader in = null;
-		try {
-			File file = new File(contextPath + "/restorani.txt");
-			System.out.println(file.getCanonicalPath());
-			in = new BufferedReader(new FileReader(file));
-			String line = "", naziv = "";
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					naziv = st.nextToken().trim();
-				}
-				restorani.add(new Restoran(naziv));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
-		}
-
-	}
 }
