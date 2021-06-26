@@ -31,6 +31,9 @@ Vue.component("pocetnaStranaMenadzer", {
 	  	</nav>
     	`
     	, 
+		
 	methods : {
+
+		
     }
 });

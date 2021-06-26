@@ -2,15 +2,20 @@ Vue.component("licniPodaci", {
     data: function () {
       return {
         noviKorisnik: {
-          korisnickoIme: "",
-          lozinka: "",
-          ime: "",
-          prezime: "",
-          pol: 0,
-          datumRodjenja: "",
-          uloga: 3
+          korisnickoIme1: "",
+          lozinka1: "",
+          ime1: "",
+          prezime1: "",
+          pol1: 0,
+          datumRodjenja1: ""
         },
-        lozinka2: ""
+        lozinka2: "",
+        korisnickoIme: "",
+        lozinka: "",
+        ime: "",
+        prezime: "",
+        pol: 0,
+        datumRodjenja: ""
       }
     },
     template: ` 
@@ -25,17 +30,17 @@ Vue.component("licniPodaci", {
                 <h3>Lični podaci</h3>
 
                 <div class="form-group">
-                    <input type="text" placeholder="Ime" class="form-control" v-model="noviKorisnik.ime">
-                    <input type="text" placeholder="Prezime" class="form-control" v-model="noviKorisnik.prezime">
+                    <input v-model="ime" type="text" class="form-control">
+                    <input type="text" v-bind:value="prezime" class="form-control">
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="text" placeholder="Korisničko ime" class="form-control" v-model="noviKorisnik.korisnickoIme">
+                    <input type="text" v-bind:value="korisnickoIme" class="form-control">
                     <i class="zmdi zmdi-account"></i>
                 </div>
 
                 <div class="form-wrapper">
-                    <vuejs-datepicker class="form-control" style="padding-center:35px;" placeholder="Datum rođenja" v-model="noviKorisnik.datumRodjenja"></vuejs-datepicker>
+                    <vuejs-datepicker v-bind:value="datumRodjenja" class="form-control" style="padding-center:35px;"></vuejs-datepicker>
                     <i class="zmdi zmdi-calendar"></i>
                 </div>
 
@@ -49,7 +54,7 @@ Vue.component("licniPodaci", {
                 </div>
 
                 <div class="form-wrapper">
-                    <input type="password" placeholder="Lozinka" class="form-control" v-model="noviKorisnik.lozinka">
+                    <input type="password" placeholder="Nova lozinka" class="form-control" v-model="noviKorisnik.lozinka">
                     <i class="zmdi zmdi-lock"></i>
                 </div>
 
@@ -79,11 +84,31 @@ Vue.component("licniPodaci", {
       vuejsDatepicker
     }
     ,
+
+
+
+    mounted () {
+        axios 
+        .get('rest/korisnici/nadjiPrijavljenogKorisnika')
+        .then(response => {
+            if(response.data != null)
+            {     
+                this.korisnickoIme = response.data.korisnickoIme;
+                this.lozinka = response.data.lozinka;
+                this.ime = response.data.ime;
+                this.prezime = response.data.prezime;
+                this.pol = response.data.pol;
+                this.datumRodjenja = response.data.datumRodjenja;
+            }
+            
+    
+        })
+    },
     methods: {
       proveriPodatke: function (event) {
         event.preventDefault();
   
-        if (!this.noviKorisnik.korisnickoIme) {
+        /*if (!this.noviKorisnik.korisnickoIme) {
           alert('Obavezno uneti korisničko ime!');
         } else if (!this.noviKorisnik.lozinka) {
           alert('Obavezno uneti lozinku!');
@@ -94,23 +119,16 @@ Vue.component("licniPodaci", {
         } else if (this.noviKorisnik.lozinka.localeCompare(this.lozinka2) != 0) {
           alert('Lozinke se ne poklapaju!');
         } else {
-          axios
-            .post('/DostavaREST/rest/korisnici/registracija', this.noviKorisnik)
-            .then(response => {
-              if (response.data.length == 0) {
-                alert("Korisnik sa ovim korisničkim imenom već postoji!");
-              } else {
-                toast("Uspešna registracija!");
-                this.$router.push("/prijava")
-              }
-            })
-            .catch(err => {
-                alert("Neuspešna registracija!");
-              console.log(err);
-            })
-          return true;
-        }
+
+            var s = {jmbg:student.jmbg, ime:student.ime, prezime:student.prezime, datumRodjenja:student.datumRodjenja.getTime(), brojIndeksa:student.brojIndeksa};
+    		axios
+    		.post("rest/studenti/updatejson", s)
+    		.then(response => toast('Student ' + student.ime + " " + student.prezime + " uspešno snimljen."));
+    		this.mode = 'BROWSE';
+        }*/
   
+
+        console.log(this.ime)
       }
     }
   });

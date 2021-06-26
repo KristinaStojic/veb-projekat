@@ -3,6 +3,7 @@ package services;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -59,6 +60,17 @@ public class KorisniciService {
 
 		return prijavljeniKorisnik;
 
+	}
+	
+	
+	@GET
+	@Path("/nadjiPrijavljenogKorisnika")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Korisnik nadjiPrijavljenogKorisnika() {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		
+		return korisnici.dobaviPoKorisnickomImenu(prijavljeniKorisnik.getKorisnickoIme());
 	}
 
 }
