@@ -18,6 +18,7 @@ Vue.component("pocetna", {
         <li class="nav-item">
         <router-link to="/prijava" exact> Prijava </router-link>
         </li>
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <li class="nav-item"></li>
         <li class="nav-item">
         <router-link to="/registracija" exact> Registracija </router-link>

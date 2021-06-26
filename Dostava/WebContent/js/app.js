@@ -6,6 +6,8 @@ const PocetnaStranaAdministrator = { template: '<pocetnaStranaAdministrator></po
 const PocetnaStranaMenadzer = { template: '<pocetnaStranaMenadzer></pocetnaStranaMenadzer>' }
 const PocetnaStranaDostavljac = { template: '<pocetnaStranaDostavljac></pocetnaStranaDostavljac>' }
 const LicniPodaci = { template: '<licniPodaci></licniPodaci>' }
+const DodavanjeMenadzera = { template: '<dodavanjeMenadzera></dodavanjeMenadzera>' }
+
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -17,7 +19,8 @@ const router = new VueRouter({
 		{ path: '/pocetnaStranaAdministrator', component: PocetnaStranaAdministrator},
 		{ path: '/pocetnaStranaMenadzer', component: PocetnaStranaMenadzer},
 		{ path: '/pocetnaStranaDostavljac', component: PocetnaStranaDostavljac},
-		{ path: '/licniPodaci', component: LicniPodaci}
+		{ path: '/licniPodaci', component: LicniPodaci},
+		{ path: '/dodavanjeMenadzera', component: DodavanjeMenadzera}
 		
 		
 	  ]
