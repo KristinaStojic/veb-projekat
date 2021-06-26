@@ -1,11 +1,13 @@
 Vue.component("pocetnaStranaAdministrator", { 
 	data: function () {
 	    return {
-            greska: ""
+            greska: "",
+			restorani: null
 	    }
 	},
 	    template: ` 
 
+	<div>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
 			<a class="navbar-brand" href="#">K&J</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +41,34 @@ Vue.component("pocetnaStranaAdministrator", {
 
 			<div id="greska" class="snackbar">{{greska}}</div>
 	  	</nav>
+
+
+		  <div class="container-fluid content-row">
+			<div class="row">
+				<div style="margin-left: 20px; margin-right: 20px; margin-bottom: 20px" v-for="(r, i) in restorani">
+					<div class="card" >
+					<img :src="r.logo" class="card-img-top" alt="Card image cap">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item"><b>{{r.naziv}}</b></li>
+						<li class="list-group-item">{{r.tipRestorana}}</li>
+						<li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
+						<li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
+						<li class="list-group-item">{{r.lokacija}}</li>
+					</ul>
+					</div>
+				</div>
+    	 	</div>
+  		</div>
+	</div>
+
     	`
     	, 
-		
+		mounted() {
+			axios
+				.get('rest/restorani/')
+				.then(response => (this.restorani = response.data))
+		},
+
 	methods : {
 
 		odjava : function() {
