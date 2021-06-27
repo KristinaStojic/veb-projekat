@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -56,6 +57,7 @@ public class KorisniciService {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Korisnik prijavljeniKorisnik = korisnici.pronadjiKorisnika(korisnik.korisnickoIme, korisnik.lozinka);
+		
 
 		if (prijavljeniKorisnik != null) {
 			request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik);
@@ -64,6 +66,11 @@ public class KorisniciService {
 		return prijavljeniKorisnik;
 
 	}
+	
+	
+	
+	
+	
 	
 	@POST
 	@Path("/odjava")
@@ -82,13 +89,13 @@ public class KorisniciService {
 	}
 	
 	@GET
-	@Path("/nadjiPrijavljenogKorisnika")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Korisnik nadjiPrijavljenogKorisnika() {
+	public Korisnik nadjiPrijavljenogKorisnika(@PathParam("id") String id) {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		//Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
 
-		return korisnici.dobaviPoKorisnickomImenu(prijavljeniKorisnik.getKorisnickoIme());
+		return korisnici.nadjiPoId(id);
 	}
 	
 	

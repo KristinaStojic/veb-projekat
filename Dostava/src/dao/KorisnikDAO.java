@@ -308,5 +308,10 @@ public class KorisnikDAO {
 		
 		return null;
 	}
+	
+	
+	public Korisnik nadjiPoId(String id) {
+		return korisnici.containsKey(id) ? korisnici.get(id) : null;
+	}
 
 }

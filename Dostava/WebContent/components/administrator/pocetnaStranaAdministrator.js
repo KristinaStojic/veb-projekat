@@ -75,6 +75,7 @@ Vue.component("pocetnaStranaAdministrator", {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')
     			.then(response => {
+					window.localStorage.removeItem("korisnik");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";

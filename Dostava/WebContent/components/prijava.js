@@ -98,16 +98,21 @@ Vue.component("prijava", {
 							      x.className = "snackbar show";
 							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
 						      }else{
+                    console.log(response.data.id);
+                    window.localStorage.setItem("korisnik", response.data.id);
+                    window.localStorage.setItem("uloga", response.data.uloga);
                     if(response.data.uloga.localeCompare("KUPAC") == 0){
-                        this.$router.push("/pocetnaStranaKupac")
+                        window.localStorage.setItem("tipKupca",response.data.tipKupca);
+                        this.$router.push("/pocetnaStranaKupac");
+
                     }
                     else if(response.data.uloga.localeCompare("MENADZER") == 0){
-                        this.$router.push("/pocetnaStranaMenadzer")
+                        this.$router.push("/pocetnaStranaMenadzer");
                     }else if(response.data.uloga.localeCompare("DOSTAVLJAC") == 0){
-                        this.$router.push("/pocetnaStranaDostavljac")
+                        this.$router.push("/pocetnaStranaDostavljac");
                     }
                     else if(response.data.uloga.localeCompare("ADMINISTRATOR") == 0){
-                        this.$router.push("/pocetnaStranaAdministrator")
+                        this.$router.push("/pocetnaStranaAdministrator");
                     }
                     
                   }
