@@ -1,5 +1,8 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +23,7 @@ import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
 import dto.MenadzerDTO;
+import dto.MenadzerPrikazDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -139,5 +143,21 @@ public class KorisniciService {
 		Dostavljac noviDostavljac = korisnici.dodajDostavljaca(dostavljac);
 		return noviDostavljac;
 	}
+	
+	@GET
+	@Path("/menadzeri")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<MenadzerPrikazDTO> dobaviMenadzere() {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		List<MenadzerPrikazDTO> menadzeri = new ArrayList<MenadzerPrikazDTO>();
+
+		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
+			
+			menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(), (m.getRestoran() != null)));
+			
+		}
+		return menadzeri;
+	}
+
 
 }

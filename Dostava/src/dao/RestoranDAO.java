@@ -5,24 +5,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import beans.Artikal;
-import beans.Lokacija;
+
 import beans.Restoran;
-import beans.Restoran.TipRestorana;
 
 public class RestoranDAO {
 
@@ -34,14 +28,6 @@ public class RestoranDAO {
 
 		this.putanja = putanjaDoFajla;
 		
-//		ObjectMapper maper = new ObjectMapper();
-//		try {
-//			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
-//			System.out.println("upisao");
-//		} catch (IOException e) {
-//			System.out.println("Greska");
-//		}
-
 		ucitajPodatke();
 	}
 
@@ -96,6 +82,22 @@ public class RestoranDAO {
 		}
 		
 		return sortirani;
+	}
+	
+	public Restoran dodajRestoran(Restoran noviRestoran) {
+		
+			
+		restorani.put(noviRestoran.getId(), noviRestoran);
+
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+			System.out.println("upisao");
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+		
+		return noviRestoran;
 	}
 
 //

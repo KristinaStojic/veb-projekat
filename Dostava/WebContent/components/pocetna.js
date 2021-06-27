@@ -1,7 +1,8 @@
 Vue.component("pocetna", {
 	data: function() {
 		return {
-			restorani: null
+			restorani: null,
+			image : ""
 		}
 	},
 	template: ` 
@@ -13,7 +14,7 @@ Vue.component("pocetna", {
 						<span class="navbar-toggler-icon"></span>
 					</button>
 				
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<div class="collapse navbar-collapse" id="navbarSupportedContent" >
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item nav-link active">
 								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
@@ -28,8 +29,9 @@ Vue.component("pocetna", {
 	<div class="container-fluid content-row">
 	<div class="row">
 		<div style="margin: 20px;" v-for="(r, i) in restorani">
+		{{postaviSliku(r.logo)}}
   		<div class="card" >
-        <img :src="r.logo" class="card-img-top" alt="Card image cap">
+        <img :src="image" class="card-img-top" alt="Nedostaje fotografija">
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><b>{{r.naziv}}</b></li>
               <li class="list-group-item">{{r.tipRestorana}}</li>
@@ -50,8 +52,10 @@ Vue.component("pocetna", {
 			.get('rest/restorani/')
 			.then(response => (this.restorani = response.data))
 	}
-	,
+    ,
 	methods: {
-
+	 postaviSliku: function(value) {
+      this.image = "slike/restorani-logo/" + value;
+    }
 	}
 });

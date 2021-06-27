@@ -212,7 +212,7 @@ Vue.component("dodavanjeMenadzera", {
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-							this.$router.push("/prijava")
+							this.$router.push("/pocetnaStranaAdministrator")
 						}
 					})
 					.catch(err => {

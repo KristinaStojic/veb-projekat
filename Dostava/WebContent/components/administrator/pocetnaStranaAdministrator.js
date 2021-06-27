@@ -56,16 +56,17 @@ Vue.component("pocetnaStranaAdministrator", {
 
 		  <div class="container-fluid content-row">
 			<div class="row">
-				<div style="margin-left: 20px; margin-right: 20px; margin-bottom: 20px" v-for="(r, i) in restorani">
-					<div class="card" >
-					<img :src="r.logo" class="card-img-top" alt="Card image cap">
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item"><b>{{r.naziv}}</b></li>
-						<li class="list-group-item">{{r.tipRestorana}}</li>
-						<li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
-						<li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
-						<li class="list-group-item">{{r.lokacija}}</li>
-					</ul>
+		<div style="margin: 20px;" v-for="(r, i) in restorani">
+		{{postaviSliku(r.logo)}}
+  		<div class="card" >
+        <img :src="image" class="card-img-top" alt="Nedostaje fotografija">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>{{r.naziv}}</b></li>
+              <li class="list-group-item">{{r.tipRestorana}}</li>
+              <li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
+              <li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
+              <li class="list-group-item">{{r.lokacija}}</li>
+            </ul>
 					</div>
 				</div>
     	 	</div>
@@ -101,6 +102,9 @@ Vue.component("pocetnaStranaAdministrator", {
 					console.log(err);
 				  })
     		
-    	}
+    	},
+    	postaviSliku: function(value) {
+      this.image = "slike/restorani-logo/" + value;
+    }
     }
 });

@@ -24,6 +24,7 @@ import beans.Korpa;
 import beans.Kupac;
 import beans.Menadzer;
 import beans.Porudzbina;
+import beans.Restoran;
 import beans.TipKupca;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
@@ -173,7 +174,7 @@ public class KorisnikDAO {
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
 
-		korisnici.put(korisnik.korisnickoIme, noviKorisnik);
+		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		kupci.add(noviKupac);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -234,7 +235,7 @@ public class KorisnikDAO {
 	public Korisnik izmeniLicnePodatke(Korisnik prijavljeniKorisnik, KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
 
 		for (Korisnik k : dobaviSve()) {
-			if(k.getId() == prijavljeniKorisnik.getId()) {
+			if(k.getId().equals(prijavljeniKorisnik.getId())) {
 				k.setIme(izmenjeniKorisnik.ime);
 				k.setPrezime(izmenjeniKorisnik.prezime);
 				k.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
@@ -243,7 +244,7 @@ public class KorisnikDAO {
 				k.setPol(izmenjeniKorisnik.pol);
 				
 				for (Kupac kupac : kupci) {
-					if(kupac.getId() == prijavljeniKorisnik.getId()) {
+					if(kupac.getId().equals(prijavljeniKorisnik.getId())) {
 						kupac.setIme(izmenjeniKorisnik.ime);
 						kupac.setPrezime(izmenjeniKorisnik.prezime);
 						kupac.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
@@ -258,7 +259,7 @@ public class KorisnikDAO {
 				
 				
 				for (Menadzer men : menadzeri) {
-					if(men.getId() == prijavljeniKorisnik.getId()) {
+					if(men.getId().equals(prijavljeniKorisnik.getId())) {
 						men.setIme(izmenjeniKorisnik.ime);
 						men.setPrezime(izmenjeniKorisnik.prezime);
 						men.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
@@ -273,7 +274,7 @@ public class KorisnikDAO {
 				
 				
 				for (Administrator admin : administratori) {
-					if(admin.getId() == prijavljeniKorisnik.getId()) {
+					if(admin.getId().equals(prijavljeniKorisnik.getId())) {
 						admin.setIme(izmenjeniKorisnik.ime);
 						admin.setPrezime(izmenjeniKorisnik.prezime);
 						admin.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
@@ -288,7 +289,7 @@ public class KorisnikDAO {
 				
 				
 				for (Dostavljac dost : dostavljaci) {
-					if(dost.getId() == prijavljeniKorisnik.getId()) {
+					if(dost.getId().equals(prijavljeniKorisnik.getId())) {
 						dost.setIme(izmenjeniKorisnik.ime);
 						dost.setPrezime(izmenjeniKorisnik.prezime);
 						dost.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
@@ -388,6 +389,31 @@ public class KorisnikDAO {
 		}
 
 		return null;
+	}
+	
+	public String dodajRestoranMenadzeru(Restoran r, String idMenadzera) {
+
+		for (Menadzer men : menadzeri) {
+			if (men.getId().equals(idMenadzera)) {
+				men.setRestoran(r);
+				sacuvajPodatke();
+				return idMenadzera;
+			}
+		}
+
+		return null;
+	}
+
+	public Collection<Menadzer> dobaviNeobrisaneMenadzere() {
+		List<Menadzer> menadzeriNeobrisani = new ArrayList<Menadzer>();
+
+		for (Menadzer m : menadzeri) {
+			if (m.getLogickoBrisanje() == 0) {
+				menadzeriNeobrisani.add(m);
+			}
+		}
+
+		return menadzeriNeobrisani;
 	}
 
 }
