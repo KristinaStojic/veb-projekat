@@ -24,7 +24,7 @@ Vue.component("dodavanjeDostavljaca", {
 	    template: ` 
 
 		<div>	
-				<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
+					<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
 					<a class="navbar-brand" href="#">K&J</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -37,7 +37,11 @@ Vue.component("dodavanjeDostavljaca", {
 							</li>
 
 							<li class="nav-item nav-link active">
-								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadzera</a>
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+							</li>
+
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
 							</li>
 
 							<li class="nav-item dropdown">
@@ -54,6 +58,7 @@ Vue.component("dodavanjeDostavljaca", {
 							
 						</ul>
 					</div>
+
 					<div id="greska" class="snackbar">{{greska}}</div>
 				</nav>
 				<div class = "bottom">
