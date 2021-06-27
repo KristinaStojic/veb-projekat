@@ -1,5 +1,6 @@
 package dto;
 
+import beans.Restoran;
 
 public class RestoranPrikazDTO {
 

@@ -1,5 +1,8 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -69,11 +72,6 @@ public class KorisniciService {
 
 	}
 	
-	
-	
-	
-	
-	
 	@POST
 	@Path("/odjava")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -81,43 +79,38 @@ public class KorisniciService {
 	public void logout() {
 		System.out.println("uslo");
 		HttpSession session = request.getSession();
-		if(session != null && session.getAttribute("prijavljeniKorisnik") != null) {
+		if (session != null && session.getAttribute("prijavljeniKorisnik") != null) {
 			session.invalidate();
 		}
-		
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		System.out.println(prijavljeniKorisnik);
-		
+
 	}
-	
+
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Korisnik nadjiPrijavljenogKorisnika(@PathParam("id") String id) {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		//Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
-
+		//Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		return korisnici.nadjiPoId(id);
 	}
-	
-	
+
 	@POST
 	@Path("/izmeniLicnePodatke")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Korisnik izmeniLicnePodatke(KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 
 		Korisnik izmenjeniKor = korisnici.izmeniLicnePodatke(prijavljeniKorisnik, izmenjeniKorisnik);
 		request.getSession().setAttribute("prijavljeniKorisnik", izmenjeniKor);
-		
+
 		korisnici.sacuvajPodatke();
 		return izmenjeniKor;
 	}
-	
-	
-	
 
 	@POST
 	@Path("/dodajMenadzera")
@@ -140,4 +133,19 @@ public class KorisniciService {
 		return noviDostavljac;
 	}
 
+	@GET
+	@Path("/menadzeri")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<MenadzerDTO> dobaviMenadzere() {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		List<MenadzerDTO> menadzeri = new ArrayList<MenadzerDTO>();
+
+		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
+			
+			menadzeri.add(new MenadzerDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(), (m.getRestoran() != null)));
+			
+		}
+		return menadzeri;
+	}
+	
 }

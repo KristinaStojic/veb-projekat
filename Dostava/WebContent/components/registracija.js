@@ -60,7 +60,7 @@ Vue.component("registracija", {
       <vuejs-datepicker style="padding-center:35px;" placeholder="Datum" v-model="noviKorisnik.datumRodjenja" 
       v-on:click="datumPromena" v-bind:class="[{ invalid: datum && !this.noviKorisnik.datumRodjenja}, { 'form-control': !datum || this.noviKorisnik.datumRodjenja}]">
       </vuejs-datepicker>
-      <i class="zmdi zmdi-calendar"></i>
+      <i class="zmdi zmdi-cake"></i>
     </div>
     <div class="form-wrapper">
       <select name="" id="" class="form-control" style="font-size: 12px" v-model="noviKorisnik.pol">
