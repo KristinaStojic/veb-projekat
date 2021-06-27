@@ -106,7 +106,7 @@ Vue.component("pocetnaStranaKupac", {
 						inline-template
 					>
 						<div class="content">
-						<h3>{{data.title}}</h1>
+						<h3>{{data.title}}</h3>
 						<p>{{data.body}}</p>
 						
 						</div>
