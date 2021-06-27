@@ -21,8 +21,19 @@ Vue.component("pocetnaStranaAdministrator", {
 			  		</li>
 
 					<li class="nav-item nav-link active">
-						<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadzera</a>
+						<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
 			  		</li>
+
+					<li class="nav-item nav-link active">
+					  <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+					</li>
+
+					<li class="nav-item nav-link active">
+					  <a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
+					</li>
+
+					
+
 
 					<li class="nav-item dropdown">
 						<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >

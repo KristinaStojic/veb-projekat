@@ -15,6 +15,11 @@ public class Dostavljac extends Korisnik implements Serializable {
 	public Dostavljac() {
 		super();
 	}
+	
+	public Dostavljac(Korisnik k) {
+		super(k);
+		this.porudzbineZaDostavu = null;
+	}
 
 	public List<Porudzbina> getPorudzbineZaDostavu() {
 		return porudzbineZaDostavu;

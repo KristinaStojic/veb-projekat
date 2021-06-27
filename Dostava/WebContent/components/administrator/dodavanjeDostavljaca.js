@@ -1,4 +1,4 @@
-Vue.component("dodavanjeMenadzera", { 
+Vue.component("dodavanjeDostavljaca", { 
 	data: function () {
 	    return {
 			noviKorisnik: {
@@ -8,7 +8,7 @@ Vue.component("dodavanjeMenadzera", {
 				prezime: "",
 				pol: 0,
 				datumRodjenja: "",
-				uloga: 1
+				uloga: 2
 			},
 			lozinka2: "",
 			ime: false,
@@ -25,50 +25,50 @@ Vue.component("dodavanjeMenadzera", {
 
 		<div>	
 					<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-						<a class="navbar-brand" href="#">K&J</a>
-						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-							<span class="navbar-toggler-icon"></span>
-						</button>
-					
-						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="navbar-nav ml-auto">
-								<li class="nav-item nav-link active">
-									<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
-								</li>
+					<a class="navbar-brand" href="#">K&J</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
+							</li>
 
-								<li class="nav-item nav-link active">
-									<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
-								</li>
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+							</li>
 
-								<li class="nav-item nav-link active">
-								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
-								</li>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+							</li>
 
-								<li class="nav-item dropdown">
-									<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-										<i class="zmdi zmdi-account zmdi-hc-2x"></i>
-									</div>
-									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-										<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
-										<div class="dropdown-divider"></div>
-										<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
-									</div>
-								</li>
+							<li class="nav-item dropdown">
+								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+								</div>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+									<div class="dropdown-divider"></div>
+									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+								</div>
+							</li>
 
-								
-							</ul>
-						</div>
+							
+						</ul>
+					</div>
 
-						<div id="greska" class="snackbar">{{greska}}</div>
+					<div id="greska" class="snackbar">{{greska}}</div>
 				</nav>
 				<div class = "bottom">
 					<div class="slika-registracija">
 						<div class = "inner">
 							<div class="image-holder">
-								<div class="slika-menager"></div>
+								<div class="slika-dostavljac"></div>
 							</div>
 									<form @submit="proveriPodatke" method='post'>
-										<h3>Dodavanje novog menadžera</h3>
+										<h3>Dodavanje novog dostavljača</h3>
 
 										<div class="form-group">
 											<input type="text" placeholder="Ime" v-model="noviKorisnik.ime" v-on:click="imePromena" 
@@ -200,7 +200,7 @@ Vue.component("dodavanjeMenadzera", {
 				this.msg = "Lozinke se ne poklapaju!";
 			} else {
 				axios
-					.post('/DostavaREST/rest/korisnici/dodajMenadzera', this.noviKorisnik)
+					.post('/DostavaREST/rest/korisnici/dodajDostavljaca', this.noviKorisnik)
 					.then(response => {
 						if (response.data.length == 0) {
 							this.greska = "Korisnik sa ovim korisničkim imenom već postoji!";
