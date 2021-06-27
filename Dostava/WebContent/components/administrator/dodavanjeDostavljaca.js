@@ -1,4 +1,4 @@
-Vue.component("dodavanjeMenadzera", { 
+Vue.component("dodavanjeDostavljaca", { 
 	data: function () {
 	    return {
             greska: ""
@@ -43,7 +43,7 @@ Vue.component("dodavanjeMenadzera", {
 					<div class="slika-registracija">
 						<div class = "inner">
 							<div class="image-holder">
-								<div class="slika-menager"></div>
+								<div class="slika-dostavljac"></div>
 							</div>
 						</div>
 					</div>

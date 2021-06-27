@@ -8,6 +8,8 @@ const PocetnaStranaDostavljac = { template: '<pocetnaStranaDostavljac></pocetnaS
 const LicniPodaci = { template: '<licniPodaci></licniPodaci>' }
 const DodavanjeMenadzera = { template: '<dodavanjeMenadzera></dodavanjeMenadzera>' }
 const DodavanjeRestorana = { template: '<dodavanjeRestorana></dodavanjeRestorana>' }
+const DodavanjeDostavljaca = { template: '<dodavanjeDostavljaca></dodavanjeDostavljaca>' }
+
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -21,7 +23,8 @@ const router = new VueRouter({
 		{ path: '/pocetnaStranaDostavljac', component: PocetnaStranaDostavljac},
 		{ path: '/licniPodaci', component: LicniPodaci},
 		{ path: '/dodavanjeMenadzera', component: DodavanjeMenadzera},
-		{ path: '/dodavanjeRestorana', component: DodavanjeRestorana}
+		{ path: '/dodavanjeRestorana', component: DodavanjeRestorana},
+		{ path: '/dodavanjeDostavljaca', component: DodavanjeDostavljaca}
 		
 		
 	  ]
