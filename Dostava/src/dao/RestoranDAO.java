@@ -20,18 +20,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
-import beans.ArtikalKorpa;
-import beans.Korisnik;
-import beans.Korpa;
-import beans.Kupac;
 import beans.Lokacija;
-import beans.Porudzbina;
 import beans.Restoran;
-import beans.TipKupca;
 import beans.Restoran.TipRestorana;
-import dto.KorisnikDTO;
-import dto.LokacijaDTO;
-import dto.RestoranDTO;
 
 public class RestoranDAO {
 
@@ -43,6 +34,14 @@ public class RestoranDAO {
 
 		this.putanja = putanjaDoFajla;
 		
+//		ObjectMapper maper = new ObjectMapper();
+//		try {
+//			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+//			System.out.println("upisao");
+//		} catch (IOException e) {
+//			System.out.println("Greska");
+//		}
+
 		ucitajPodatke();
 	}
 
@@ -97,22 +96,6 @@ public class RestoranDAO {
 		}
 		
 		return sortirani;
-	}
-	
-	public Restoran dodajRestoran(Restoran noviRestoran) {
-		
-			
-		restorani.put(noviRestoran.getId(), noviRestoran);
-
-		ObjectMapper maper = new ObjectMapper();
-		try {
-			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
-			System.out.println("upisao");
-		} catch (IOException e) {
-			System.out.println("Greska");
-		}
-		
-		return noviRestoran;
 	}
 
 //

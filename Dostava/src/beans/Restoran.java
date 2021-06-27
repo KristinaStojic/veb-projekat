@@ -12,7 +12,7 @@ public class Restoran implements Serializable {
 
 	public enum TipRestorana {
 		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO // ako dodajes, dodaj dole u metodu
-	} // i na frontu kod dodavanja
+	}
 
 	private String id;
 	private Integer logickoBrisanje;
@@ -130,7 +130,7 @@ public class Restoran implements Serializable {
 		case BRZA_HRANA:
 			return "Brza hrana";
 		default:
-			return "Raznolika kuhinja";
+			return "Raznolika huhinja";
 		}
 	}
 }

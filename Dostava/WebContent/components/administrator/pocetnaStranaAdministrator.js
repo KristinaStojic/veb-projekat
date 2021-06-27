@@ -2,15 +2,14 @@ Vue.component("pocetnaStranaAdministrator", {
 	data: function () {
 	    return {
             greska: "",
-			restorani: null,
-			image : ""
+			restorani: null
 	    }
 	},
 	    template: ` 
 
 	<div>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-			<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/pocetnaStranaAdministrator">K&J</a>
+			<a class="navbar-brand" href="#">K&J</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -57,10 +56,9 @@ Vue.component("pocetnaStranaAdministrator", {
 
 		  <div class="container-fluid content-row">
 			<div class="row">
-				<div style="margin: 20px" v-for="(r, i) in restorani">
-					{{postaviSliku(r.logo)}}
-  				<div class="card" >
-        			<img :src="image" class="card-img-top" alt="Nedostaje fotografija">
+				<div style="margin-left: 20px; margin-right: 20px; margin-bottom: 20px" v-for="(r, i) in restorani">
+					<div class="card" >
+					<img :src="r.logo" class="card-img-top" alt="Card image cap">
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item"><b>{{r.naziv}}</b></li>
 						<li class="list-group-item">{{r.tipRestorana}}</li>
@@ -103,11 +101,6 @@ Vue.component("pocetnaStranaAdministrator", {
 					console.log(err);
 				  })
     		
-    	},
-    	postaviSliku: function(value) {
-      		this.image = "slike/restorani-logo/" + value;
     	}
-    	
-    	
     }
 });
