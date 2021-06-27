@@ -1,5 +1,8 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,10 +16,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Korisnik;
+import beans.Restoran;
 import dao.KorisnikDAO;
+import dao.RestoranDAO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
+import dto.RestoranPrikazDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -105,6 +111,22 @@ public class KorisniciService {
 		
 		korisnici.sacuvajPodatke();
 		return izmenjeniKor;
+	}
+	
+	@GET
+	@Path("/menadzeri")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikDTO> dobaviMenadzere() {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		List<KorisnikDTO> korisnici = new ArrayList<KorisnikDTO>();
+
+		for (Korisnik k : dao.dobaviSve()) {
+			if(k.getUloga().equals(Korisnik.Uloga.MENADZER)) {
+				korisnici.add(new KorisnikDTO(k.getId(),k.getKorisnickoIme(), k.getLozinka(),k.getIme(),k.getPrezime(),k.getPol(), k.getDatumRodjenja(), k.getUloga()));
+			}
+			
+		}
+		return korisnici;
 	}
 
 }

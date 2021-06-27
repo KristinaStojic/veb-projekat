@@ -119,8 +119,14 @@ a:hover {
 	content:url('../slike/telefon.jpg');
 }
 
+.restoran{
+	width: 100%;
+	height: 100%;
+	content:url('../slike/restoran.png');
+}
+
 .inner {
-  padding: 20px;
+  padding: 15px;
   background: #fff;
   max-width: 850px;
   margin-left: auto;
@@ -235,6 +241,32 @@ a:hover {
     color: #333;
     font-family: "Poppins-Regular"; }
 
+.dugme1 {
+  border: 1px solid #333;
+  background: white;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  color: black;
+  margin-bottom: 25px; }
+  .form-control::-webkit-input-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control::-moz-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control:-ms-input-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control:-moz-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+    
 select {
   -moz-appearance: none;
   -webkit-appearance: none;
