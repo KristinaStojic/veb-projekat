@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Menadzer extends Korisnik implements Serializable {
 
@@ -13,6 +14,11 @@ public class Menadzer extends Korisnik implements Serializable {
 
 	public Menadzer() {
 		super();
+	}
+	
+	public Menadzer(Korisnik k) {
+		super(k);
+		this.restoran = null;
 	}
 
 	public Restoran getRestoran() {
