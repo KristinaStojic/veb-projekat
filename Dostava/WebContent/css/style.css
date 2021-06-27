@@ -112,6 +112,8 @@ a:hover {
   align-items: center; 
   background-image: url('../slike/hrana1.1.png');
   }
+  
+
 
 .pica{
 	width: 100%;
@@ -132,6 +134,18 @@ input[type=number] {
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.slika-menager{
+	width: 100%;
+	height: 100%;
+	content:url('../slike/menager.jpg');
+}
+
+.slika-dostavljac{
+	width: 100%;
+	height: 100%;
+	content:url('../slike/dostavljac.jpg');
 }
 
 .inner {
@@ -431,5 +445,23 @@ button {
   button {
     margin-top: 60px; } }
 
-/*# sourceMappingURL=style.css.map */
+dugme {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.dugmeTab {
+  background-color: white;
+  color: black;
+  border: 2px solid #555555;
+}
 

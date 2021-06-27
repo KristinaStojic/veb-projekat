@@ -10,19 +10,19 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Menadzer;
 import dao.KorisnikDAO;
-import dao.RestoranDAO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
 import dto.MenadzerDTO;
-import dto.RestoranDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -58,10 +58,11 @@ public class KorisniciService {
 	@Path("/prijava")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Korisnik login(KorisnikPrijavaDTO korisnik) {
+	public Korisnik prijava(KorisnikPrijavaDTO korisnik) {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Korisnik prijavljeniKorisnik = korisnici.pronadjiKorisnika(korisnik.korisnickoIme, korisnik.lozinka);
+		
 
 		if (prijavljeniKorisnik != null) {
 			request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik);
@@ -70,7 +71,7 @@ public class KorisniciService {
 		return prijavljeniKorisnik;
 
 	}
-
+	
 	@POST
 	@Path("/odjava")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -88,13 +89,12 @@ public class KorisniciService {
 	}
 
 	@GET
-	@Path("/nadjiPrijavljenogKorisnika")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Korisnik nadjiPrijavljenogKorisnika() {
+	public Korisnik nadjiPrijavljenogKorisnika(@PathParam("id") String id) {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
-
-		return korisnici.dobaviPoKorisnickomImenu(prijavljeniKorisnik.getKorisnickoIme());
+		//Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
+		return korisnici.nadjiPoId(id);
 	}
 
 	@POST
@@ -110,6 +110,27 @@ public class KorisniciService {
 
 		korisnici.sacuvajPodatke();
 		return izmenjeniKor;
+	}
+
+	@POST
+	@Path("/dodajMenadzera")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Menadzer dodajMenadzera(MenadzerDTO menadzer) {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Menadzer noviMenadzer = korisnici.dodajMenadzera(menadzer);
+		return noviMenadzer;
+	}
+	
+	
+	@POST
+	@Path("/dodajDostavljaca")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Dostavljac noviDostavljac = korisnici.dodajDostavljaca(dostavljac);
+		return noviDostavljac;
 	}
 
 	@GET

@@ -31,6 +31,7 @@ import beans.TipKupca;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.RestoranDTO;
+import dto.MenadzerDTO;
 
 public class KorisnikDAO {
 
@@ -333,5 +334,83 @@ public class KorisnikDAO {
 		return null;
 	}
 	
+	public Korisnik nadjiPoId(String id) {
+		return korisnici.containsKey(id) ? korisnici.get(id) : null;
+	}
+	
+	
+	
+	///MenadzerDAO
+
+	public Menadzer dodajMenadzera(MenadzerDTO menadzer) {
+		if (daLiPostojiKorIme(menadzer.korisnickoIme))
+			return null;
+
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, menadzer.korisnickoIme, menadzer.lozinka,
+				menadzer.ime, menadzer.prezime, menadzer.pol, menadzer.datumRodjenja, menadzer.uloga);
+		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
+		korisnici.put(menadzer.korisnickoIme, noviKorisnik);
+		menadzeri.add(noviMenadzer);
+
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), menadzeri);
+		} catch (IOException e) {
+			System.out.println("Greska");
+			return null;
+		}
+
+		return noviMenadzer;
+	}
+	
+	
+	
+	public Menadzer dobaviMenadzeraPoKorisnickomImenu(String korisnickoIme) {
+
+		for (Menadzer m : menadzeri) {
+			if (m.getKorisnickoIme().equals(korisnickoIme)) {
+				return m;
+			}
+		}
+
+		return null;
+	}
+	
+	
+	
+	
+	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
+		if (daLiPostojiKorIme(dostavljac.korisnickoIme))
+			return null;
+
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
+				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga);
+		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
+		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
+		dostavljaci.add(noviDostavljac);
+
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), dostavljaci);
+		} catch (IOException e) {
+			System.out.println("Greska");
+			return null;
+		}
+
+		return noviDostavljac;
+	}
+	
+	
+	
+	public Dostavljac dobaviDostavljacaPoKorisnickomImenu(String korisnickoIme) {
+
+		for (Dostavljac d : dostavljaci) {
+			if (d.getKorisnickoIme().equals(korisnickoIme)) {
+				return d;
+			}
+		}
+
+		return null;
+	}
 
 }

@@ -18,7 +18,7 @@ Vue.component("pocetnaStranaDostavljac", {
 						<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 							<i class="zmdi zmdi-account zmdi-hc-2x"></i>
 						</div>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 							<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
 							<div class="dropdown-divider"></div>
 							<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
@@ -40,6 +40,7 @@ Vue.component("pocetnaStranaDostavljac", {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')
     			.then(response => {
+					window.localStorage.removeItem("korisnik");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
