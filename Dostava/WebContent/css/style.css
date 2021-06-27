@@ -125,8 +125,17 @@ a:hover {
 	content:url('../slike/restoran.png');
 }
 
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .inner {
-  padding: 15px;
+  padding: 20px;
   background: #fff;
   max-width: 850px;
   margin-left: auto;
@@ -179,6 +188,7 @@ a:hover {
     .form-group input:first-child {
       margin-right: 25px; }
 
+      
 .form-wrapper {
   position: relative; }
   .form-wrapper i {
@@ -241,6 +251,61 @@ a:hover {
     color: #333;
     font-family: "Poppins-Regular"; }
 
+.invalid1 {
+  border: 1px solid red;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  margin-bottom: 15px; }
+  .form-control::-webkit-input-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control::-moz-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control:-ms-input-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control:-moz-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; 
+}
+
+.form-control1 {
+  border: 1px solid #333;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  margin-bottom: 15px; }
+  .form-control::-webkit-input-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control::-moz-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control:-ms-input-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+  .form-control:-moz-placeholder {
+    font-size: 13px;
+    color: #333;
+    font-family: "Poppins-Regular"; }
+
 .dugme1 {
   border: 1px solid #333;
   background: white;
@@ -249,7 +314,7 @@ a:hover {
   height: 30px;
   padding: 0;
   color: black;
-  margin-bottom: 25px; }
+  margin-bottom: 10px;}
   .form-control::-webkit-input-placeholder {
     font-size: 13px;
     color: #333;
@@ -280,7 +345,7 @@ button {
   width: 164px;
   height: 51px;
   margin: auto;
-  margin-top: 40px;
+  margin-top: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -367,3 +432,4 @@ button {
     margin-top: 60px; } }
 
 /*# sourceMappingURL=style.css.map */
+

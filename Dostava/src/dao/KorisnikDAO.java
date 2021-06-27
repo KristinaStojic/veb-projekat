@@ -17,16 +17,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Administrator;
+import beans.Artikal;
 import beans.ArtikalKorpa;
 import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Korpa;
 import beans.Kupac;
+import beans.Lokacija;
 import beans.Menadzer;
 import beans.Porudzbina;
+import beans.Restoran;
 import beans.TipKupca;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
+import dto.RestoranDTO;
 
 public class KorisnikDAO {
 
@@ -140,6 +144,18 @@ public class KorisnikDAO {
 		return korisnici.values();
 	}
 
+	public Collection<Menadzer> dobaviNeobrisaneMenadzere() {
+		List<Menadzer> menadzeriNeobrisani = new ArrayList<Menadzer>();
+
+		for (Menadzer m : menadzeri) {
+			if (m.getLogickoBrisanje() == 0) {
+				menadzeriNeobrisani.add(m);
+			}
+		}
+
+		return menadzeriNeobrisani;
+	}
+
 	public Korisnik dobaviPoKorisnickomImenu(String korisnickoIme) {
 
 		for (Korisnik k : dobaviSve()) {
@@ -150,7 +166,7 @@ public class KorisnikDAO {
 
 		return null;
 	}
-	
+
 	public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) {
 
 		for (Korisnik k : dobaviSve()) {
@@ -172,7 +188,7 @@ public class KorisnikDAO {
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
 
-		korisnici.put(korisnik.korisnickoIme, noviKorisnik);
+		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		kupci.add(noviKupac);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -185,7 +201,7 @@ public class KorisnikDAO {
 
 		return noviKorisnik;
 	}
-	
+
 	public void sacuvajPodatke() {
 		ObjectMapper maper = new ObjectMapper();
 		try {
@@ -193,21 +209,21 @@ public class KorisnikDAO {
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
+
 		ObjectMapper maper1 = new ObjectMapper();
 		try {
 			maper1.writeValue(Paths.get(this.putanja + "\\administratori.json").toFile(), administratori);
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
+
 		ObjectMapper maper2 = new ObjectMapper();
 		try {
 			maper2.writeValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), dostavljaci);
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
+
 		ObjectMapper maper3 = new ObjectMapper();
 		try {
 			maper3.writeValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), menadzeri);
@@ -229,84 +245,93 @@ public class KorisnikDAO {
 		}
 		return false;
 	}
-	
+
 	public Korisnik izmeniLicnePodatke(Korisnik prijavljeniKorisnik, KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
 
 		for (Korisnik k : dobaviSve()) {
-			if(k.getId() == prijavljeniKorisnik.getId()) {
+			if (k.getId().equals(prijavljeniKorisnik.getId())) {
 				k.setIme(izmenjeniKorisnik.ime);
 				k.setPrezime(izmenjeniKorisnik.prezime);
 				k.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 				k.setLozinka(izmenjeniKorisnik.lozinka);
 				k.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 				k.setPol(izmenjeniKorisnik.pol);
-				
+
 				for (Kupac kupac : kupci) {
-					if(kupac.getId() == prijavljeniKorisnik.getId()) {
+					if (kupac.getId().equals(prijavljeniKorisnik.getId())) {
 						kupac.setIme(izmenjeniKorisnik.ime);
 						kupac.setPrezime(izmenjeniKorisnik.prezime);
 						kupac.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						kupac.setLozinka(izmenjeniKorisnik.lozinka);
 						kupac.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						kupac.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
-				
+
 				for (Menadzer men : menadzeri) {
-					if(men.getId() == prijavljeniKorisnik.getId()) {
+					if (men.getId().equals(prijavljeniKorisnik.getId())) {
 						men.setIme(izmenjeniKorisnik.ime);
 						men.setPrezime(izmenjeniKorisnik.prezime);
 						men.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						men.setLozinka(izmenjeniKorisnik.lozinka);
 						men.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						men.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
-				
+
 				for (Administrator admin : administratori) {
-					if(admin.getId() == prijavljeniKorisnik.getId()) {
+					if (admin.getId().equals(prijavljeniKorisnik.getId())) {
 						admin.setIme(izmenjeniKorisnik.ime);
 						admin.setPrezime(izmenjeniKorisnik.prezime);
 						admin.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						admin.setLozinka(izmenjeniKorisnik.lozinka);
 						admin.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						admin.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
-				
+
 				for (Dostavljac dost : dostavljaci) {
-					if(dost.getId() == prijavljeniKorisnik.getId()) {
+					if (dost.getId().equals(prijavljeniKorisnik.getId())) {
 						dost.setIme(izmenjeniKorisnik.ime);
 						dost.setPrezime(izmenjeniKorisnik.prezime);
 						dost.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						dost.setLozinka(izmenjeniKorisnik.lozinka);
 						dost.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						dost.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
+
 				return k;
 			}
 		}
-		
-		
-		
+
 		return null;
 	}
+
+	public String dodajRestoranMenadzeru(Restoran r, String idMenadzera) {
+
+		for (Menadzer men : menadzeri) {
+			if (men.getId().equals(idMenadzera)) {
+				men.setRestoran(r);
+				sacuvajPodatke();
+				return idMenadzera;
+			}
+		}
+
+		return null;
+	}
+	
 
 }

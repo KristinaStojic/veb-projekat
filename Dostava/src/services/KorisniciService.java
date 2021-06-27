@@ -13,16 +13,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import beans.Korisnik;
-import beans.Restoran;
+import beans.Menadzer;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
-import dto.RestoranPrikazDTO;
+import dto.MenadzerDTO;
+import dto.RestoranDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -70,7 +70,7 @@ public class KorisniciService {
 		return prijavljeniKorisnik;
 
 	}
-	
+
 	@POST
 	@Path("/odjava")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -78,55 +78,53 @@ public class KorisniciService {
 	public void logout() {
 		System.out.println("uslo");
 		HttpSession session = request.getSession();
-		if(session != null && session.getAttribute("prijavljeniKorisnik") != null) {
+		if (session != null && session.getAttribute("prijavljeniKorisnik") != null) {
 			session.invalidate();
 		}
-		
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		System.out.println(prijavljeniKorisnik);
-		
+
 	}
-	
+
 	@GET
 	@Path("/nadjiPrijavljenogKorisnika")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Korisnik nadjiPrijavljenogKorisnika() {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 
 		return korisnici.dobaviPoKorisnickomImenu(prijavljeniKorisnik.getKorisnickoIme());
 	}
-	
-	
+
 	@POST
 	@Path("/izmeniLicnePodatke")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Korisnik izmeniLicnePodatke(KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 
 		Korisnik izmenjeniKor = korisnici.izmeniLicnePodatke(prijavljeniKorisnik, izmenjeniKorisnik);
 		request.getSession().setAttribute("prijavljeniKorisnik", izmenjeniKor);
-		
+
 		korisnici.sacuvajPodatke();
 		return izmenjeniKor;
 	}
-	
+
 	@GET
 	@Path("/menadzeri")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<KorisnikDTO> dobaviMenadzere() {
+	public List<MenadzerDTO> dobaviMenadzere() {
 		KorisnikDAO dao = dobaviKorisnikDAO();
-		List<KorisnikDTO> korisnici = new ArrayList<KorisnikDTO>();
+		List<MenadzerDTO> menadzeri = new ArrayList<MenadzerDTO>();
 
-		for (Korisnik k : dao.dobaviSve()) {
-			if(k.getUloga().equals(Korisnik.Uloga.MENADZER)) {
-				korisnici.add(new KorisnikDTO(k.getId(),k.getKorisnickoIme(), k.getLozinka(),k.getIme(),k.getPrezime(),k.getPol(), k.getDatumRodjenja(), k.getUloga()));
-			}
+		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
+			
+			menadzeri.add(new MenadzerDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(), (m.getRestoran() != null)));
 			
 		}
-		return korisnici;
+		return menadzeri;
 	}
-
+	
 }

@@ -55,7 +55,7 @@ Vue.component("pocetna", {
     ,
 	methods: {
 	 postaviSliku: function(value) {
-      this.image = value;
+      this.image = "slike/restorani-logo/" + value;
     }
 	}
 });
