@@ -93,7 +93,7 @@ Vue.component("pocetnaStranaAdministrator", {
     		
     	},
     	postaviSliku: function(value) {
-      		"slike/restorani-logo/" + value;
+      		this.image = "slike/restorani-logo/" + value;
     	}
     	
     	
