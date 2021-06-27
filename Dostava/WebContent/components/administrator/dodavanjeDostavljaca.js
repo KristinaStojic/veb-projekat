@@ -8,7 +8,7 @@ Vue.component("dodavanjeDostavljaca", {
 				prezime: "",
 				pol: 0,
 				datumRodjenja: "",
-				uloga: 1
+				uloga: 2
 			},
 			lozinka2: "",
 			ime: false,

@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Menadzer;
 import dao.KorisnikDAO;
@@ -126,6 +127,17 @@ public class KorisniciService {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Menadzer noviMenadzer = korisnici.dodajMenadzera(menadzer);
 		return noviMenadzer;
+	}
+	
+	
+	@POST
+	@Path("/dodajDostavljaca")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Dostavljac noviDostavljac = korisnici.dodajDostavljaca(dostavljac);
+		return noviDostavljac;
 	}
 
 }
