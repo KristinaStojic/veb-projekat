@@ -28,6 +28,7 @@ import dao.RestoranDAO;
 import dto.KorisnikDTO;
 import dto.RestoranDTO;
 import dto.RestoranPrikazDTO;
+import sun.invoke.empty.Empty;
 
 @Path("/restorani")
 public class RestoraniService {
@@ -52,7 +53,7 @@ public class RestoraniService {
 
 		return restorani;
 	}
-	
+
 	private KorisnikDAO dobaviKorisnikDAO() {
 
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
@@ -64,7 +65,7 @@ public class RestoraniService {
 
 		return korisnici;
 	}
-	
+
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -95,19 +96,27 @@ public class RestoraniService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public RestoranDTO dodajRestoran(RestoranDTO r) {
-		
-		Lokacija lokacija = new Lokacija(r.geografskaDuzina,r.geografskaSirina,r.ulica,r.broj,r.mesto,r.postanskiBroj);
-		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString(),0,r.naziv,r.tipRestorana,new ArrayList<Artikal>(),true,lokacija,r.logo);
-	
+
+		Lokacija lokacija = new Lokacija(r.geografskaDuzina, r.geografskaSirina, r.ulica, r.broj, r.mesto,
+				r.postanskiBroj);
+		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString(), 0, r.naziv, r.tipRestorana,
+				new ArrayList<Artikal>(), true, lokacija, r.logo);
+
 		RestoranDAO restorani = dobaviRestoranDAO();
 		Restoran dodat = restorani.dodajRestoran(noviRestoran);
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		String menadzer = korisnici.dodajRestoranMenadzeru(noviRestoran, r.idMenadzera);
-		System.out.println(r.idMenadzera + "restserv");
 		
-		if(dodat!=null && menadzer!=null) {
-		return r;}
-		return null;
+		if (!r.idMenadzera.equals("")) {
+			String menadzer = korisnici.dodajRestoranMenadzeru(noviRestoran, r.idMenadzera);
+			if (menadzer == null)
+				return null;
+		}
+
+		if (dodat == null) {
+			return null;
+		}
+		r.id = dodat.getId();
+		return r;
 	}
 
 }

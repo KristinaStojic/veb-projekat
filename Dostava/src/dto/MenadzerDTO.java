@@ -14,4 +14,5 @@ public class MenadzerDTO {
 	public Pol pol;
 	public Date datumRodjenja;
 	public Uloga uloga;
+	public String restoran;
 }

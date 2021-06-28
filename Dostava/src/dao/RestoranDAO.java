@@ -86,7 +86,6 @@ public class RestoranDAO {
 	
 	public Restoran dodajRestoran(Restoran noviRestoran) {
 		
-			
 		restorani.put(noviRestoran.getId(), noviRestoran);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -98,6 +97,10 @@ public class RestoranDAO {
 		}
 		
 		return noviRestoran;
+	}
+
+	public Restoran dobaviRestoran(String id) {
+		return restorani.containsKey(id) ? restorani.get(id) : null;
 	}
 
 //

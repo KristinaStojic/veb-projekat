@@ -261,7 +261,7 @@ select {
   select option[value=""][disabled] {
     display: none; }
 
-button {
+.button1 {
   border: none;
   width: 164px;
   height: 51px;

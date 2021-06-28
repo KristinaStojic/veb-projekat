@@ -119,7 +119,7 @@ Vue.component("dodavanjeRestorana", {
   		<label class="form-check-label" for="dodajNovog">Kreiranje novog menadžera</label>
 	</div>
       <label style="color:red;">{{msg}}</label>
-      <button @click="proveriPodatke" method='post'>Potvrdi
+      <button class="button1" @click="proveriPodatke" method='post'>Potvrdi
       <i class="zmdi zmdi-arrow-right"></i>
     </button>
    <div id="greska" class="snackbar">{{greska}}</div>
@@ -233,7 +233,11 @@ Vue.component("dodavanjeRestorana", {
 			}
 			else if (this.selektovano === false && !this.restoran.idMenadzera) {
 				this.msg = "Odabrati menadžera ili selektovati kreiranje novog!";
-			} else if (this.selektovano === false && this.restoran.idMenadzera) {
+			} else{
+				if(this.selektovano === true){
+					this.restoran.idMenadzera = "";
+				}
+				
 				axios
 					.post('/DostavaREST/rest/restorani/dodajRestoran', this.restoran)
 					.then(response => {
@@ -242,12 +246,20 @@ Vue.component("dodavanjeRestorana", {
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+							console.log("neuspesno");
 						} else {
 							this.greska = "Uspešno dodavanje!";
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-							this.$router.push("/pocetnaStranaAdministrator")
+							if(this.selektovano === false){
+								window.localStorage.removeItem("restoran");
+								this.$router.push("/pocetnaStranaAdministrator")
+							}else if (this.selektovano === true){
+								window.localStorage.setItem("restoran", response.data.id);
+								console.log("tu sam" + response.data.id);
+								this.$router.push("/dodavanjeMenadzera")
+							}
 						}
 					})
 					.catch(err => {
@@ -258,8 +270,6 @@ Vue.component("dodavanjeRestorana", {
 						console.log(err);
 					})
 				return true;
-			}else{
-				
 			}
 		}
 	}

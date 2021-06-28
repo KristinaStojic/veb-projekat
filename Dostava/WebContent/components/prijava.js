@@ -56,7 +56,7 @@ Vue.component("prijava", {
           <div class="form-wrapper">
             <label style="color:red;">{{msg}}</label>
           </div>
-          <button>Prijava
+          <button class="button1">Prijava
             <i class="zmdi zmdi-arrow-right"></i>
           </button>
 
