@@ -16,18 +16,11 @@ public class KorisnikPrikazDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	public Date datumRodjenja;
 	public String uloga;
+	public String ime;
+	public String prezime;
 	
 	
-	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
-			String uloga) {
-		super();
-		this.id = id;
-		this.korisnickoIme = korisnickoIme;
-		this.imePrezime = imePrezime;
-		this.pol = pol;
-		this.datumRodjenja = datumRodjenja;
-		this.uloga = uloga;
-	}
+	
 
 	public KorisnikPrikazDTO() {
 		super();
@@ -91,6 +84,35 @@ public class KorisnikPrikazDTO {
 
 	public void setUloga(String uloga) {
 		this.uloga = uloga;
+	}
+
+	public String getIme() {
+		return ime;
+	}
+
+	public void setIme(String ime) {
+		this.ime = ime;
+	}
+
+	public String getPrezime() {
+		return prezime;
+	}
+
+	public void setPrezime(String prezime) {
+		this.prezime = prezime;
+	}
+
+	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
+			String uloga, String ime, String prezime) {
+		super();
+		this.id = id;
+		this.korisnickoIme = korisnickoIme;
+		this.imePrezime = imePrezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.ime = ime;
+		this.prezime = prezime;
 	}
 
 

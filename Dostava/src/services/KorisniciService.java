@@ -175,9 +175,10 @@ public class KorisniciService {
 		for (Korisnik k : korisniciDAO.dobaviSve()) {
 			String imePrz = k.getIme() + " " + k.getPrezime();
 			korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
-					korisniciDAO.nadjiUlogu(k.getUloga())));
+					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));
+			
 		}
-
+		
 		return korisniciDTO;
 	}
 
