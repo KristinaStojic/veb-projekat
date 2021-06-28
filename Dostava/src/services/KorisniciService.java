@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 
 import beans.Dostavljac;
 import beans.Korisnik;
+import beans.Korisnik.Pol;
+import beans.Korisnik.Uloga;
 import beans.Menadzer;
 import beans.Restoran;
 import dao.KorisnikDAO;
@@ -24,6 +26,7 @@ import dao.RestoranDAO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
+import dto.KorisnikPrikazDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
 
@@ -178,5 +181,26 @@ public class KorisniciService {
 		}
 		return menadzeri;
 	}
+	
+	
+	
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikPrikazDTO> nadjiKorisnike() {
+		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
+		List<KorisnikPrikazDTO> korisniciDTO = new ArrayList<KorisnikPrikazDTO>();
+
+		for (Korisnik k : korisniciDAO.dobaviSve()) {
+			String imePrz = k.getIme() + " " + k.getPrezime();
+			korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
+					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));
+			
+		}
+		
+		return korisniciDTO;
+	}
+
 
 }

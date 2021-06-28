@@ -102,6 +102,9 @@ a:hover {
     right: 0;
     height: 92%;
      bottom: 0;
+     overflow:scroll;
+     overfrow-x:hidden;
+     
 }
 
 .slika-registracija {
@@ -455,9 +458,37 @@ dugme {
   cursor: pointer;
 }
 
+
+
+
 .dugmeTab {
   background-color: white;
   color: black;
   border: 2px solid #555555;
 }
 /*# sourceMappingURL=style.css.map */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
