@@ -7,6 +7,7 @@ Vue.component("sviKorisnici", {
         search: "",
         filterText: '',
         sort: '',
+        filteri: "",
         
         //kor : [{"id":"7446a900-1c64-448f-86cf-ad8703ac8ecb","logickoBrisanje":0,"korisnickoIme":"MEN2","lozinka":"men","ime":"izmenaIme","prezime":"prezimeIzmena","pol":"MUSKI","datumRodjenja":917913600000,"uloga":"MENADZER","restoran":{"id":"e9854e0e-65b0-4a05-bbb7-b3ef8fb29211","logickoBrisanje":0,"naziv":"mrs","tipRestorana":"RAZNO","artikliUPonudi":[],"status":true,"lokacija":{"geografskaDuzina":12.0,"geografskaSirina":12.0,"ulica":"sad","broj":12,"mesto":"sfdsf","postanskiBroj":32434},"logo":"McDonald's.png"}},{"id":"c5585d9d-1efa-40a3-8ac1-f3be1469114e","logickoBrisanje":0,"korisnickoIme":"men","lozinka":"men","ime":"Marko","prezime":"Markovic","pol":"MUSKI","datumRodjenja":920332800000,"uloga":"MENADZER","restoran":null},{"id":"23c955c6-6d27-4687-b839-9a8766d61624","logickoBrisanje":0,"korisnickoIme":"men1","lozinka":"men1","ime":"Petar","prezime":"Petrovic","pol":"MUSKI","datumRodjenja":925603200000,"uloga":"MENADZER","restoran":null},{"id":"eee76e73-88f9-4ee8-9c76-50979d35fa53","logickoBrisanje":0,"korisnickoIme":"nikola","lozinka":"nikola","ime":"Nikola","prezime":"Stojic","pol":"MUSKI","datumRodjenja":1622514000000,"uloga":"MENADZER","restoran":null},{"id":"66a4472e-f58d-4014-9222-5646048c114b","logickoBrisanje":0,"korisnickoIme":"j","lozinka":"j","ime":"m","prezime":"m","pol":"ZENSKI","datumRodjenja":1622576400000,"uloga":"MENADZER","restoran":null}]
 	    }
@@ -84,6 +85,16 @@ Vue.component("sviKorisnici", {
             <dugme class="btn-info btn-sm" @click="sortTable('prezime', 'desc')">Prezime-silazno</dugme>
             <dugme class="btn-info btn-sm" @click="sortTable('korisnickoIme', 'asc')">Korisnicko ime-uzlazno</dugme>
             <dugme class="btn-info btn-sm" @click="sortTable('korisnickoIme', 'desc')">Korisnicko ime - silazno</dugme>
+
+
+            <select class="form-control1" style="font-size: 12px" v-model="filteri">
+              <option value="" selected>Svi</option>
+              <option value="Kupac">Kupac</option>
+              <option value="Administrator">Administratori</option>
+              <option value="Dostavljač">Dostavljaci</option>
+              <option value="Menadžer">Menadzeri</option>
+            </select>
+
             </div>
 
             <div class="row">
@@ -113,9 +124,16 @@ Vue.component("sviKorisnici", {
 
       computed: {
         filteredGames(){
+          console.log(this.search.length)
+          if(this.search.length > 0)
           return this.korisnici.filter((k) => {
-            return (k.korisnickoIme.toLowerCase().includes(this.search.toLowerCase()) || k.ime.toLowerCase().includes(this.search.toLowerCase()) || k.prezime.toLowerCase().includes(this.search.toLowerCase()));
+            return (k.ime.toLowerCase().includes(this.search.toLowerCase()) || k.prezime.toLowerCase().includes(this.search.toLowerCase()));
           })
+          else{
+            return this.korisnici.filter((k) => {
+              return (k.uloga.toLowerCase().includes(this.filteri.toLowerCase()));
+            })
+          }
         }},
 
         /*computed: {
