@@ -115,7 +115,7 @@ Vue.component("licniPodaci", {
                     <label style="color:red;">{{msg}}</label>
                 </div>
                 <div class="form-group">
-                    <button>Izmeni podatke
+                    <button class="button1">Izmeni podatke
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
                     <!--
