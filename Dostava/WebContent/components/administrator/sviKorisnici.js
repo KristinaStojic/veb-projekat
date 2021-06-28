@@ -1,13 +1,14 @@
 Vue.component("sviKorisnici", { 
 	data: function () {
 	    return {
-           
+        korisnici: null 
 	    }
 
       
 	},
 	    template: ` 
 
+      <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
         <a class="navbar-brand" href="#">K&J</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,9 +52,38 @@ Vue.component("sviKorisnici", {
         </div>
 
         <div id="greska" class="snackbar">{{greska}}</div>
+
+
+
+        
+
       </nav>
+
+      <div class="bottom">
+          <div class="container-fluid content-row pagination">
+            <div class="row">
+              <div style="margin: 20px;" v-for="(k, i) in korisnici">
+                  <div class="card" >
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>{{k.imePrezime}}</b></li>
+                        <li class="list-group-item">Uloga: {{k.uloga}}</li>
+                        <li class="list-group-item">Korisničko ime: {{k.korisnickoIme}}</li>
+                        <li class="list-group-item">Pol: {{k.pol}}</li>
+                        <li class="list-group-item">Datum rođenja: {{k.datumRodjenja}}</li>
+                      </ul>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
     	`
     	, 
+
+      mounted() {
+        axios
+          .get('rest/korisnici/')
+          .then(response => (this.korisnici = response.data))
+      },
 	methods : {
 
         odjava : function() {

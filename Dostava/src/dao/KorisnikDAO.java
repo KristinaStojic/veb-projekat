@@ -26,6 +26,8 @@ import beans.Menadzer;
 import beans.Porudzbina;
 import beans.Restoran;
 import beans.TipKupca;
+import beans.Korisnik.Pol;
+import beans.Korisnik.Uloga;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.MenadzerDTO;
@@ -414,6 +416,33 @@ public class KorisnikDAO {
 		}
 
 		return menadzeriNeobrisani;
+	}
+	
+public String nadjiPol(Pol pol) {
+		
+		if(pol.toString().equals("ZENSKI")) {
+			return "Ženski";
+		}
+		else if(pol.toString().equals("MUSKI")) {
+			return "Muški";
+		}
+		
+		return null;
+	}
+	
+	
+	public String nadjiUlogu(Uloga uloga) {
+		if(uloga.toString().equals("ADMINISTRATOR")) {
+			return "Administrator";
+		}else if(uloga.toString().equals("DOSTAVLJAC")) {
+			return "Dostavljač";
+		}else if(uloga.toString().equals("KUPAC")) {
+			return "Kupac";
+		}else if(uloga.toString().equals("MENADZER")) {
+			return "Menadžer";
+		}
+		
+		return null;
 	}
 
 }
