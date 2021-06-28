@@ -108,6 +108,7 @@ Vue.component("sviKorisnici", {
     			.post('/DostavaREST/rest/korisnici/odjava')
     			.then(response => {
 					window.localStorage.removeItem("korisnik");
+					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";

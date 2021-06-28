@@ -11,7 +11,8 @@ public class Restoran implements Serializable {
 	private static final long serialVersionUID = 7705934003444955722L;
 
 	public enum TipRestorana {
-		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO // ako dodajes, dodaj dole u metodu
+		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO // ako dodajes, dodaj dole u
+																						// metodu
 	}
 
 	private String id;
@@ -22,13 +23,14 @@ public class Restoran implements Serializable {
 	private Boolean status;
 	private Lokacija lokacija;
 	private String logo;
+	private Double ocena;
 
 	public Restoran() {
 		super();
 	}
 
 	public Restoran(String id, Integer logickoBrisanje, String naziv, TipRestorana tipRestorana,
-			List<Artikal> artikliUPonudi, Boolean status, Lokacija lokacija, String slika) {
+			List<Artikal> artikliUPonudi, Boolean status, Lokacija lokacija, String slika, Double ocena) {
 		super();
 		this.id = id;
 		this.logickoBrisanje = logickoBrisanje;
@@ -38,6 +40,7 @@ public class Restoran implements Serializable {
 		this.status = status;
 		this.lokacija = lokacija;
 		this.logo = slika;
+		this.ocena = ocena;
 	}
 
 	public String getId() {
@@ -112,8 +115,17 @@ public class Restoran implements Serializable {
 		return "Zatvoreno";
 	}
 
+	public Double getOcena() {
+		return ocena;
+	}
+
+	public void setOcena(Double ocena) {
+		this.ocena = ocena;
+	}
+
 	public String tipString() {
-		// ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO
+		// ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA,
+		// RAZNO
 		switch (tipRestorana) {
 		case ITALIJANSKI:
 			return "Italijanska hrana";

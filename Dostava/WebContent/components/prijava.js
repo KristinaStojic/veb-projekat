@@ -101,19 +101,7 @@ Vue.component("prijava", {
                     console.log(response.data.id);
                     window.localStorage.setItem("korisnik", response.data.id);
                     window.localStorage.setItem("uloga", response.data.uloga);
-                    if(response.data.uloga.localeCompare("KUPAC") == 0){
-                        window.localStorage.setItem("tipKupca",response.data.tipKupca);
-                        this.$router.push("/pocetnaStranaKupac");
-
-                    }
-                    else if(response.data.uloga.localeCompare("MENADZER") == 0){
-                        this.$router.push("/pocetnaStranaMenadzer");
-                    }else if(response.data.uloga.localeCompare("DOSTAVLJAC") == 0){
-                        this.$router.push("/pocetnaStranaDostavljac");
-                    }
-                    else if(response.data.uloga.localeCompare("ADMINISTRATOR") == 0){
-                        this.$router.push("/pocetnaStranaAdministrator");
-                    }
+                    this.$router.push("/");
                     
                   }
                 })

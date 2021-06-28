@@ -77,7 +77,7 @@ public class RestoraniService {
 			String lokacija = r.getLokacija().getUlica() + " " + r.getLokacija().getBroj().toString() + ", "
 					+ r.getLokacija().getMesto();
 			restoraniDTO.add(new RestoranPrikazDTO(r.getId(), r.getNaziv(), r.tipString(), r.statusString(), lokacija,
-					r.getLogo()));
+					r.getLogo(), r.getOcena().toString()));
 		}
 
 		return restoraniDTO;
@@ -100,12 +100,12 @@ public class RestoraniService {
 		Lokacija lokacija = new Lokacija(r.geografskaDuzina, r.geografskaSirina, r.ulica, r.broj, r.mesto,
 				r.postanskiBroj);
 		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString(), 0, r.naziv, r.tipRestorana,
-				new ArrayList<Artikal>(), true, lokacija, r.logo);
+				new ArrayList<Artikal>(), true, lokacija, r.logo, 0.0);
 
 		RestoranDAO restorani = dobaviRestoranDAO();
 		Restoran dodat = restorani.dodajRestoran(noviRestoran);
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		
+
 		if (!r.idMenadzera.equals("")) {
 			String menadzer = korisnici.dodajRestoranMenadzeru(noviRestoran, r.idMenadzera);
 			if (menadzer == null)

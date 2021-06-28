@@ -11,7 +11,8 @@ Vue.component("dodavanjeRestorana", {
 				broj: "",
 				mesto: "",
 				postanskiBroj: "",
-				idMenadzera: ""
+				idMenadzera: "",
+				kj : "slike/logo_final2.png"
 
 			}, izabranFajl : null,
 			menadzeri: null, selektovano: false, promena: false
@@ -23,7 +24,11 @@ Vue.component("dodavanjeRestorana", {
 	template: ` 
 		<div>	
 				<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-					<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/pocetnaStranaAdministrator">K&J</a>
+					
+					<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+						<img :src="kj" alt="" width="100" height="80">
+					</a>
+					
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
@@ -86,7 +91,7 @@ Vue.component("dodavanjeRestorana", {
 		<button class="dugme1" @click="$refs.unos.click()"> Izaberi logo </button>
 		</div>
 	<div class="form-wrapper">
-		<button class="dugme1" @click="ubaciSliku"> Dodaj logo </button>
+		
 	</div>
  	<div class="form-group">
       <input type="number" placeholder="Geografska duzina" v-model="restoran.geografskaDuzina" v-on:click="duzinaPromena" 
@@ -141,9 +146,16 @@ Vue.component("dodavanjeRestorana", {
 		promeniStatus: function(event){
 			event.preventDefault();
 			this.selektovano = !this.selektovano;
+			
 		}
 		,
 		ubaciSliku : function(){
+			
+		}
+		,
+		selektovanFajl : function(event){
+			event.preventDefault();
+			this.izabranFajl = event.target.files[0];
 			if(this.izabranFajl != null){
 			const fd = new FormData();
 			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
@@ -155,10 +167,6 @@ Vue.component("dodavanjeRestorana", {
 					console.log(response);
 				})
 			}
-		}
-		,
-		selektovanFajl : function(event){
-			this.izabranFajl = event.target.files[0];
 		}
 		,
 		nazivPromena: function(event) {
@@ -192,13 +200,14 @@ Vue.component("dodavanjeRestorana", {
 		odjava: function() {
 			axios
 				.post('/DostavaREST/rest/korisnici/odjava')
-				.then(response => {
+    			.then(response => {
 					window.localStorage.removeItem("korisnik");
+					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
-					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-					this.$router.push("/")
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    				this.$router.push("/")
 				})
 				.catch(err => {
 					this.greska = "Neuspjesna odjava!";
@@ -254,7 +263,7 @@ Vue.component("dodavanjeRestorana", {
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 							if(this.selektovano === false){
 								window.localStorage.removeItem("restoran");
-								this.$router.push("/pocetnaStranaAdministrator")
+								this.$router.push("/")
 							}else if (this.selektovano === true){
 								window.localStorage.setItem("restoran", response.data.id);
 								console.log("tu sam" + response.data.id);

@@ -18,14 +18,17 @@ Vue.component("dodavanjeDostavljaca", {
 			korIme: false,
 			datum: false,
 			msg: "",
-			greska: ""
+			greska: "",
+			logo : "slike/logo_final2.jpg" 
 	    }
 	},
 	    template: ` 
 
 		<div>	
 					<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-					<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/pocetnaStranaAdministrator">K&J</a>
+					<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+						<img :src="logo" alt="" width="100" height="80">
+					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
@@ -142,6 +145,7 @@ Vue.component("dodavanjeDostavljaca", {
     			.post('/DostavaREST/rest/korisnici/odjava')
     			.then(response => {
 					window.localStorage.removeItem("korisnik");
+					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
@@ -212,7 +216,7 @@ Vue.component("dodavanjeDostavljaca", {
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-							this.$router.push("/pocetnaStranaAdministrator")
+							this.$router.push("/")
 						}
 					})
 					.catch(err => {

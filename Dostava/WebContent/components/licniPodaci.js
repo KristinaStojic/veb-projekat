@@ -189,6 +189,7 @@ Vue.component("licniPodaci", {
     			.post('/DostavaREST/rest/korisnici/odjava')
     			.then(response => {
 					window.localStorage.removeItem("korisnik");
+					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
@@ -262,19 +263,8 @@ Vue.component("licniPodaci", {
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 						
 						}else{
-                            if(response.data.uloga.localeCompare("KUPAC") == 0){
-                                this.$router.push("/pocetnaStranaKupac")
-                            }
-                            else if(response.data.uloga.localeCompare("MENADZER") == 0){
-                                this.$router.push("/pocetnaStranaMenadzer")
-                            }else if(response.data.uloga.localeCompare("DOSTAVLJAC") == 0){
-                                this.$router.push("/pocetnaStranaDostavljac")
-                            }
-                            else if(response.data.uloga.localeCompare("ADMINISTRATOR") == 0){
-                                this.$router.push("/pocetnaStranaAdministrator")
-                            }
-                            
-                          }
+                           this.$router.push("/")
+                        }
 					})
 					.catch(err => {
 						alert("Nesto je pogresno");

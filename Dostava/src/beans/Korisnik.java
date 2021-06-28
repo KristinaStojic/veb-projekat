@@ -15,7 +15,7 @@ public class Korisnik implements Serializable {
 	}
 
 	public enum Uloga {
-		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC
+		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC, GOST
 	}
 
 	private String id;

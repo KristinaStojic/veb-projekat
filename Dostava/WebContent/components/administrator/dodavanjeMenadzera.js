@@ -26,7 +26,11 @@ Vue.component("dodavanjeMenadzera", {
 
 		<div>	
 					<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-						<a class="navbar-brand" href="#">K&J</a>
+						
+						<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+							<img :src="logo" alt="" width="100" height="80">
+						</a>
+						
 						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
@@ -143,13 +147,14 @@ Vue.component("dodavanjeMenadzera", {
 		odjava: function() {
 			axios
 				.post('/DostavaREST/rest/korisnici/odjava')
-				.then(response => {
+    			.then(response => {
 					window.localStorage.removeItem("korisnik");
+					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
-					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-					this.$router.push("/")
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    				this.$router.push("/")
 				})
 				.catch(err => {
 					this.greska = "Neuspjesna odjava!";
@@ -219,7 +224,7 @@ Vue.component("dodavanjeMenadzera", {
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-							this.$router.push("/pocetnaStranaAdministrator")
+							this.$router.push("/")
 						}
 					})
 					.catch(err => {
