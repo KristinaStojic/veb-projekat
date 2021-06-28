@@ -1,8 +1,9 @@
 Vue.component("pocetna", {
 	data: function() {
 		return {
-			restorani: null,
-			image : ""
+			restorani: [],
+			image : "",
+			search: ""
 		}
 	},
 	template: ` 
@@ -25,24 +26,32 @@ Vue.component("pocetna", {
 						</ul>
 					</div>
 				</nav>
-	<div class="bottom">
-	<div class="container-fluid content-row">
-	<div class="row">
-		<div style="margin: 20px;" v-for="(r, i) in restorani">
-		{{postaviSliku(r.logo)}}
-  		<div class="card" >
-        <img :src="image" class="card-img-top" alt="Nedostaje fotografija">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><b>{{r.naziv}}</b></li>
-              <li class="list-group-item">{{r.tipRestorana}}</li>
-              <li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
-              <li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
-              <li class="list-group-item">{{r.lokacija}}</li>
-            </ul>
-            </div>
-      </div>
-     </div>
-     </div>
+
+
+				
+
+				<div class="bottom">
+				<div class="container-fluid content-row">
+						<div>
+						<input type="text" v-model="search" placeholder="Pretraži restorane"/>
+						</div>
+
+				<div class="row">
+					<div style="margin: 20px;" v-for="(r, i) in pronadjeni">
+					{{postaviSliku(r.logo)}}
+					<div class="card" >
+					<img :src="image" class="card-img-top" alt="Nedostaje fotografija">
+						<ul class="list-group list-group-flush">
+						<li class="list-group-item"><b>{{r.naziv}}</b></li>
+						<li class="list-group-item">{{r.tipRestorana}}</li>
+						<li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
+						<li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
+						<li class="list-group-item">{{r.lokacija}}</li>
+						</ul>
+						</div>
+				</div>
+				</div>
+				</div>
   </div>
 </div>		
     	`
@@ -53,6 +62,14 @@ Vue.component("pocetna", {
 			.then(response => (this.restorani = response.data))
 	}
     ,
+
+	computed: {
+        pronadjeni : function() {
+          return this.restorani.filter((r) => {
+            return (r.naziv.toLowerCase().includes(this.search.toLowerCase()) || r.tipRestorana.toLowerCase().includes(this.search.toLowerCase()) || r.lokacija.toLowerCase().includes(this.search.toLowerCase()));
+          })
+        }},
+
 	methods: {
 	 postaviSliku: function(value) {
       this.image = "slike/restorani-logo/" + value;
