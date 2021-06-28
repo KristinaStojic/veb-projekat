@@ -18,7 +18,9 @@ import javax.ws.rs.core.MediaType;
 import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Menadzer;
+import beans.Restoran;
 import dao.KorisnikDAO;
+import dao.RestoranDAO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
@@ -45,6 +47,18 @@ public class KorisniciService {
 		return korisnici;
 	}
 
+	private RestoranDAO dobaviRestoranDAO() {
+
+		RestoranDAO restorani = (RestoranDAO) sc.getAttribute("restorani");
+
+		if (restorani == null) {
+			restorani = new RestoranDAO(sc.getRealPath("."));
+			sc.setAttribute("restorani", restorani);
+		}
+
+		return restorani;
+	}
+
 	@POST
 	@Path("/registracija")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -63,7 +77,6 @@ public class KorisniciService {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Korisnik prijavljeniKorisnik = korisnici.pronadjiKorisnika(korisnik.korisnickoIme, korisnik.lozinka);
-		
 
 		if (prijavljeniKorisnik != null) {
 			request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik);
@@ -72,12 +85,7 @@ public class KorisniciService {
 		return prijavljeniKorisnik;
 
 	}
-	
-	
-	
-	
-	
-	
+
 	@POST
 	@Path("/odjava")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -85,55 +93,66 @@ public class KorisniciService {
 	public void logout() {
 		System.out.println("uslo");
 		HttpSession session = request.getSession();
-		if(session != null && session.getAttribute("prijavljeniKorisnik") != null) {
+		if (session != null && session.getAttribute("prijavljeniKorisnik") != null) {
 			session.invalidate();
 		}
-		
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		System.out.println(prijavljeniKorisnik);
-		
+
 	}
-	
+
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Korisnik nadjiPrijavljenogKorisnika(@PathParam("id") String id) {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		//Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		// Korisnik prijavljeniKorisnik = (Korisnik)
+		// request.getSession().getAttribute("prijavljeniKorisnik");
 
 		return korisnici.nadjiPoId(id);
 	}
-	
-	
+
 	@POST
 	@Path("/izmeniLicnePodatke")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Korisnik izmeniLicnePodatke(KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");	
+		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 
 		Korisnik izmenjeniKor = korisnici.izmeniLicnePodatke(prijavljeniKorisnik, izmenjeniKorisnik);
 		request.getSession().setAttribute("prijavljeniKorisnik", izmenjeniKor);
-		
+
 		korisnici.sacuvajPodatke();
 		return izmenjeniKor;
 	}
-	
-	
-	
 
 	@POST
 	@Path("/dodajMenadzera")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Menadzer dodajMenadzera(MenadzerDTO menadzer) {
+
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Menadzer noviMenadzer = korisnici.dodajMenadzera(menadzer);
+		
+		if (menadzer.restoran != null) {
+			RestoranDAO restorani = dobaviRestoranDAO();
+			Restoran restoran = restorani.dobaviRestoran(menadzer.restoran);
+
+			String m =null;
+			if (restoran != null) {
+				m = korisnici.dodajRestoranMenadzeru(restoran, noviMenadzer.getId());
+			}
+
+			if (m == null)
+				return null;
+		}
+		
 		return noviMenadzer;
 	}
-	
-	
+
 	@POST
 	@Path("/dodajDostavljaca")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -143,7 +162,7 @@ public class KorisniciService {
 		Dostavljac noviDostavljac = korisnici.dodajDostavljaca(dostavljac);
 		return noviDostavljac;
 	}
-	
+
 	@GET
 	@Path("/menadzeri")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -152,12 +171,12 @@ public class KorisniciService {
 		List<MenadzerPrikazDTO> menadzeri = new ArrayList<MenadzerPrikazDTO>();
 
 		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
-			
-			menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(), (m.getRestoran() != null)));
-			
+
+			menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(),
+					(m.getRestoran() != null)));
+
 		}
 		return menadzeri;
 	}
-
 
 }

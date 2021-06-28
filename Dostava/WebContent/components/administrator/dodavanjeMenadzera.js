@@ -1,6 +1,6 @@
-Vue.component("dodavanjeMenadzera", { 
-	data: function () {
-	    return {
+Vue.component("dodavanjeMenadzera", {
+	data: function() {
+		return {
 			noviKorisnik: {
 				korisnickoIme: "",
 				lozinka: "",
@@ -8,7 +8,8 @@ Vue.component("dodavanjeMenadzera", {
 				prezime: "",
 				pol: 0,
 				datumRodjenja: "",
-				uloga: 1
+				uloga: 1,
+				restoran: ""
 			},
 			lozinka2: "",
 			ime: false,
@@ -19,9 +20,9 @@ Vue.component("dodavanjeMenadzera", {
 			datum: false,
 			msg: "",
 			greska: ""
-	    }
+		}
 	},
-	    template: ` 
+	template: ` 
 
 		<div>	
 					<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
@@ -116,7 +117,7 @@ Vue.component("dodavanjeMenadzera", {
 											<label style="color:red;">{{msg}}</label>
 										</div>
 
-										<button>Potvrdi
+										<button class="button1">Potvrdi
 											<i class="zmdi zmdi-arrow-right"></i>
 										</button>
 										
@@ -129,34 +130,36 @@ Vue.component("dodavanjeMenadzera", {
 	  	</div>
         
     	`
-    	, 
+	,
 
-		components: {
-			vuejsDatepicker
-		}
-		,
-		
-	methods : {
-		odjava : function() {
-    		axios 
-    			.post('/DostavaREST/rest/korisnici/odjava')
-    			.then(response => {
+	components: {
+		vuejsDatepicker
+	}
+	,
+	mounted() {
+		this.noviKorisnik.restoran = window.localStorage.getItem("restoran");
+	},
+	methods: {
+		odjava: function() {
+			axios
+				.post('/DostavaREST/rest/korisnici/odjava')
+				.then(response => {
 					window.localStorage.removeItem("korisnik");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
-					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-    				this.$router.push("/")
-    			})
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+					this.$router.push("/")
+				})
 				.catch(err => {
 					this.greska = "Neuspjesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
-					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 					console.log(err);
-				  })
-    		
-    	},
+				})
+
+		},
 
 
 		imePromena: function(event) {
@@ -185,6 +188,7 @@ Vue.component("dodavanjeMenadzera", {
 		},
 		proveriPodatke: function(event) {
 			event.preventDefault();
+			
 			this.msg = "";
 			if (!this.noviKorisnik.ime) {
 				this.msg = "Obavezno uneti ime!";
@@ -207,8 +211,11 @@ Vue.component("dodavanjeMenadzera", {
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+							window.localStorage.removeItem("restoran");
+							
 						} else {
 							this.greska = "Uspešna registracija!";
+							window.localStorage.removeItem("restoran");
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
@@ -227,6 +234,6 @@ Vue.component("dodavanjeMenadzera", {
 
 		}
 	}
-		
-    
+
+
 });

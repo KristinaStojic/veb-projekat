@@ -84,7 +84,7 @@ Vue.component("registracija", {
     <div class="form-wrapper">
       <label style="color:red;">{{msg}}</label>
     </div>
-    <button>Registracija
+    <button class="button1">Registracija
       <i class="zmdi zmdi-arrow-right"></i>
     </button>
     

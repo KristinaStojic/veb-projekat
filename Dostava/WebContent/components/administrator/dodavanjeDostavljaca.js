@@ -116,7 +116,7 @@ Vue.component("dodavanjeDostavljaca", {
 											<label style="color:red;">{{msg}}</label>
 										</div>
 
-										<button>Potvrdi
+										<button class="button1">Potvrdi
 											<i class="zmdi zmdi-arrow-right"></i>
 										</button>
 										
