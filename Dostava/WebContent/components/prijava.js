@@ -98,7 +98,6 @@ Vue.component("prijava", {
 							      x.className = "snackbar show";
 							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
 						      }else{
-                    console.log(response.data.id);
                     window.localStorage.setItem("korisnik", response.data.id);
                     window.localStorage.setItem("uloga", response.data.uloga);
                     this.$router.push("/");
