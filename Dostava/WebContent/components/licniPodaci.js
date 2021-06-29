@@ -18,13 +18,16 @@ Vue.component("licniPodaci", {
         postojiLozinka : false,
         postojiLozinka2 : false,
         postojiKorIme : false,
-        postojiDatum : false
+        postojiDatum : false,
+        logo : "slike/logo_final2.png"
       }
     },
     template: ` 
   <div>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-  <a class="navbar-brand" href="#">K&J</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
+    <a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+        <img :src="logo" alt="" width="100" height="80">
+    </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>

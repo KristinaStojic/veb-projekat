@@ -5,10 +5,6 @@ Vue.component("pocetna", {
 			image : "",
 			logo : "slike/logo_final2.png",
 			uloga : "",
-			admin : false,
-			menadzer : false,
-			dostavljac : false,
-			kupac : false,
 			prazno : true,
 			search: "",
 		}
@@ -25,7 +21,7 @@ Vue.component("pocetna", {
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
-				<div v-if="admin"  class="collapse navbar-collapse" id="navbarSupportedContent">
+				<div v-if="uloga === 'ADMINISTRATOR'"  class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item nav-link active">
 								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
@@ -58,7 +54,7 @@ Vue.component("pocetna", {
 						</ul>
 				</div>
 
-				<div v-if="dostavljac" class="collapse navbar-collapse" id="navbarSupportedContent">
+				<div v-if="uloga === 'DOSTAVLJAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item dropdown">
 								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -75,7 +71,7 @@ Vue.component("pocetna", {
 						</ul>
 				</div>
 		
-				<div v-if="kupac" class="collapse navbar-collapse" id="navbarSupportedContent">
+				<div v-if="uloga === 'KUPAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
 							<ul class="navbar-nav ml-auto">
 							<li class="nav-item dropdown">
 								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -91,7 +87,7 @@ Vue.component("pocetna", {
 							</ul>
 				</div>
 
-				<div v-if="menadzer" class="collapse navbar-collapse" id="navbarSupportedContent">
+				<div v-if="uloga === 'MENADZER'" class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav ml-auto">
 						<li class="nav-item dropdown">
 							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -108,7 +104,7 @@ Vue.component("pocetna", {
 						</ul>
 				</div>
 				
-				<div v-if="prazno" class="collapse navbar-collapse" id="navbarSupportedContent" >
+				<div v-if="uloga == 0" class="collapse navbar-collapse" id="navbarSupportedContent" >
 					<ul class="navbar-nav ml-auto">
 						<li class="nav-item nav-link active">
 							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
@@ -149,43 +145,17 @@ Vue.component("pocetna", {
     	`
 	,
 	mounted() {
-
-		uloga = window.localStorage.getItem("uloga");
-		console.log(uloga)
-		if(uloga === "ADMINISTRATOR"){
-			this.admin = true;
-			this.kupac = false;
-			this.dostavljac = false;
-			this.menadzer = false;
-			this.prazno = false;
-		}else if(uloga === "KUPAC"){
-			this.kupac = true;
-			this.menadzer = false;
-			this.dostavljac = false;
-			this.admin = false;
-			this.prazno = false;
-
-		}else if(uloga === "MENADZER"){
-			this.menadzer = true;
-			this.admin = false;
-			this.kupac = false;
-			this.dostavljac = false;
-			this.prazno = false;
-
-		}else if(uloga === "DOSTAVLJAC"){
-			this.dostavljac = true;
-			this.menadzer = false;
-			this.admin = false;
-			this.kupac = false;
-			this.prazno = false;
-
-		}
-		
-		console.log(this.admin);
-		console.log(this.kupac);
-		console.log(this.dostavljac);
-		console.log(this.menadzer);
-		console.log(this.prazno);
+		axios
+			.get('rest/korisnici/prijavljenKorisnik')
+			.then(response => {
+				if(response.data.length == 0){
+                    this.uloga = "";
+                    console.log(this.uloga)
+				}else{
+					this.uloga = response.data.uloga;
+					console.log(this.uloga)
+				}
+			})
 
 		axios
 			.get('rest/restorani/')

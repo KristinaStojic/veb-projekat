@@ -11,10 +11,9 @@ Vue.component("dodavanjeRestorana", {
 				broj: "",
 				mesto: "",
 				postanskiBroj: "",
-				idMenadzera: "",
-				kj : "slike/logo_final2.png"
+				idMenadzera: ""
 
-			}, izabranFajl : null,
+			}, izabranFajl : null, kj : "slike/logo_final2.png",
 			menadzeri: null, selektovano: false, promena: false
 			, naziv: false, sirina: false, duzina: false, ulica: false, broj: false, mesto: false, posta: false,
 			msg: "",
@@ -24,7 +23,6 @@ Vue.component("dodavanjeRestorana", {
 	template: ` 
 		<div>	
 				<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-					
 					<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
 						<img :src="kj" alt="" width="100" height="80">
 					</a>

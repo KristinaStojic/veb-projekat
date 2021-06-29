@@ -19,14 +19,14 @@ Vue.component("dodavanjeMenadzera", {
 			korIme: false,
 			datum: false,
 			msg: "",
+			logo: "slike/logo_final2.png",
 			greska: ""
 		}
 	},
 	template: ` 
 
 		<div>	
-					<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-						
+			<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
 						<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
 							<img :src="logo" alt="" width="100" height="80">
 						</a>

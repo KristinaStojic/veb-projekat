@@ -8,6 +8,7 @@ Vue.component("sviKorisnici", {
         filterText: '',
         sort: '',
         filteri: "",
+        logo : "slike/logo_final2.png"
         
         //kor : [{"id":"7446a900-1c64-448f-86cf-ad8703ac8ecb","logickoBrisanje":0,"korisnickoIme":"MEN2","lozinka":"men","ime":"izmenaIme","prezime":"prezimeIzmena","pol":"MUSKI","datumRodjenja":917913600000,"uloga":"MENADZER","restoran":{"id":"e9854e0e-65b0-4a05-bbb7-b3ef8fb29211","logickoBrisanje":0,"naziv":"mrs","tipRestorana":"RAZNO","artikliUPonudi":[],"status":true,"lokacija":{"geografskaDuzina":12.0,"geografskaSirina":12.0,"ulica":"sad","broj":12,"mesto":"sfdsf","postanskiBroj":32434},"logo":"McDonald's.png"}},{"id":"c5585d9d-1efa-40a3-8ac1-f3be1469114e","logickoBrisanje":0,"korisnickoIme":"men","lozinka":"men","ime":"Marko","prezime":"Markovic","pol":"MUSKI","datumRodjenja":920332800000,"uloga":"MENADZER","restoran":null},{"id":"23c955c6-6d27-4687-b839-9a8766d61624","logickoBrisanje":0,"korisnickoIme":"men1","lozinka":"men1","ime":"Petar","prezime":"Petrovic","pol":"MUSKI","datumRodjenja":925603200000,"uloga":"MENADZER","restoran":null},{"id":"eee76e73-88f9-4ee8-9c76-50979d35fa53","logickoBrisanje":0,"korisnickoIme":"nikola","lozinka":"nikola","ime":"Nikola","prezime":"Stojic","pol":"MUSKI","datumRodjenja":1622514000000,"uloga":"MENADZER","restoran":null},{"id":"66a4472e-f58d-4014-9222-5646048c114b","logickoBrisanje":0,"korisnickoIme":"j","lozinka":"j","ime":"m","prezime":"m","pol":"ZENSKI","datumRodjenja":1622576400000,"uloga":"MENADZER","restoran":null}]
 	    }
@@ -26,8 +27,10 @@ Vue.component("sviKorisnici", {
 	    template: ` 
 
       <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija">
-        <a class="navbar-brand" href="#">K&J</a>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
+        <a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+          <img :src="logo" alt="" width="100" height="80">
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -73,6 +76,7 @@ Vue.component("sviKorisnici", {
       </nav>
 
       
+      <div class="bottom">
       <div>
           <label>Pretraga: </label>
           <input v-model="search" placeholder="Pretražite korisnike">
@@ -112,6 +116,7 @@ Vue.component("sviKorisnici", {
             </div>
         </div>
     </div>
+   </div>
     	`
     	, 
       
