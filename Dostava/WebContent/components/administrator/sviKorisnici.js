@@ -8,7 +8,8 @@ Vue.component("sviKorisnici", {
         filterText: '',
         sort: '',
         filteri: "",
-        logo : "slike/logo_final2.png"
+        logo : "slike/logo_final2.png",
+        filterTip : ""
         
         //kor : [{"id":"7446a900-1c64-448f-86cf-ad8703ac8ecb","logickoBrisanje":0,"korisnickoIme":"MEN2","lozinka":"men","ime":"izmenaIme","prezime":"prezimeIzmena","pol":"MUSKI","datumRodjenja":917913600000,"uloga":"MENADZER","restoran":{"id":"e9854e0e-65b0-4a05-bbb7-b3ef8fb29211","logickoBrisanje":0,"naziv":"mrs","tipRestorana":"RAZNO","artikliUPonudi":[],"status":true,"lokacija":{"geografskaDuzina":12.0,"geografskaSirina":12.0,"ulica":"sad","broj":12,"mesto":"sfdsf","postanskiBroj":32434},"logo":"McDonald's.png"}},{"id":"c5585d9d-1efa-40a3-8ac1-f3be1469114e","logickoBrisanje":0,"korisnickoIme":"men","lozinka":"men","ime":"Marko","prezime":"Markovic","pol":"MUSKI","datumRodjenja":920332800000,"uloga":"MENADZER","restoran":null},{"id":"23c955c6-6d27-4687-b839-9a8766d61624","logickoBrisanje":0,"korisnickoIme":"men1","lozinka":"men1","ime":"Petar","prezime":"Petrovic","pol":"MUSKI","datumRodjenja":925603200000,"uloga":"MENADZER","restoran":null},{"id":"eee76e73-88f9-4ee8-9c76-50979d35fa53","logickoBrisanje":0,"korisnickoIme":"nikola","lozinka":"nikola","ime":"Nikola","prezime":"Stojic","pol":"MUSKI","datumRodjenja":1622514000000,"uloga":"MENADZER","restoran":null},{"id":"66a4472e-f58d-4014-9222-5646048c114b","logickoBrisanje":0,"korisnickoIme":"j","lozinka":"j","ime":"m","prezime":"m","pol":"ZENSKI","datumRodjenja":1622576400000,"uloga":"MENADZER","restoran":null}]
 	    }
@@ -98,7 +99,8 @@ Vue.component("sviKorisnici", {
                     <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'desc')">Prezime-silazno</dugme>
                     <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'asc')">Korisničko ime-uzlazno</dugme>
                     <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'desc')">Korisničko ime-silazno</dugme>
-
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('brojBodova', 'asc')">Broj bodova kupca-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('brojBodova', 'desc')">Broj bodova kupca-silazno</dugme>
                   </div>
                   </div>
                   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -127,10 +129,10 @@ Vue.component("sviKorisnici", {
                       Izaberite tip kupca
                   </dugme>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('')">Svi</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Kupac')">Kupac</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Administrator')">Administrator</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Menadžer')">Menadžer</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Bronzani')">Bronzani</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Srebrni')">Srebrni</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Zlatni')">Zlatni</dugme>
 
                 
                   </div>
@@ -142,7 +144,9 @@ Vue.component("sviKorisnici", {
                     <div class="card">
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item"><b>{{k.imePrezime}}</b></li>
-                          <li class="list-group-item">Uloga: {{k.uloga}}</li>
+                          <li v-if="k.uloga === 'Kupac'" class="list-group-item">Uloga: {{k.uloga}} (Tip: {{k.tipKupca}}, Broj bodova: {{k.brojBodova}})</li>
+                          <li v-else class="list-group-item">Uloga: {{k.uloga}}</li>
+
                           <li class="ime list-group-item">Korisničko ime: {{k.korisnickoIme}}</li>
                           <li class="list-group-item">Pol: {{k.pol}}</li>
                           <li class="list-group-item">Datum rođenja: {{k.datumRodjenja}}</li>
@@ -165,11 +169,19 @@ Vue.component("sviKorisnici", {
 
       computed: {
         filteredGames(){
-          console.log(this.search.length)
+          console.log(this.filteri);
+          console.log(this.filterTip);
           if(this.search.length > 0)
           return this.korisnici.filter((k) => {
             return (k.ime.toLowerCase().includes(this.search.toLowerCase()) || k.prezime.toLowerCase().includes(this.search.toLowerCase()));
           })
+          else if(this.filterTip.length > 0){
+            return this.korisnici.filter((k) => {
+              if(k.tipKupca !== null){
+              return (k.tipKupca.toLowerCase().includes(this.filterTip.toLowerCase()));
+              }
+            })
+          }
           else{
             return this.korisnici.filter((k) => {
               return (k.uloga.toLowerCase().includes(this.filteri.toLowerCase()));
@@ -219,7 +231,11 @@ Vue.component("sviKorisnici", {
 
       postaviFilter(value){
         this.filteri = value;
-     }
+     },
+
+     postaviFilterTip(value){
+      this.filterTip = value;
+   }
 
 
 	},
