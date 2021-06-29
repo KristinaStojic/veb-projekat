@@ -7,6 +7,7 @@ Vue.component("pocetna", {
 			uloga : "",
 			prazno : true,
 			search: "",
+			greska: "" 
 		}
 	},
 	template: ` 
@@ -138,6 +139,8 @@ Vue.component("pocetna", {
 						</ul>
 					</div>
 				</div>
+				
+			<div id="greska" class="snackbar">{{greska}}</div>
 			</div>
 		</div>
 	</div>
@@ -184,7 +187,7 @@ Vue.component("pocetna", {
 				var x = document.getElementById("greska");
 				x.className = "snackbar show";
 				setTimeout(function(){x.className = x.className.replace("show","");},1800);
-				this.$router.push("/")
+				this.$router.go()
 			})
 			.catch(err => {
 				this.greska = "Neuspjesna odjava!";

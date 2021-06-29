@@ -26,6 +26,11 @@ const router = new VueRouter({
 	  ]
 });
 
+
+
+window.localStorage.removeItem("korisnik");
+window.localStorage.removeItem("uloga");
+
 var app = new Vue({
 	router,
 	el: '#app'

@@ -19,60 +19,119 @@ Vue.component("licniPodaci", {
         postojiLozinka2 : false,
         postojiKorIme : false,
         postojiDatum : false,
-        logo : "slike/logo_final2.png"
+        logo : "slike/logo_final2.png", uloga : ""
       }
     },
     template: ` 
   <div>
   <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-    <a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
-        <img :src="logo" alt="" width="100" height="80">
-    </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-  </button>
+			<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+				<img :src="logo" alt="" width="100" height="80">
+			</a>
+						
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-          <li class="nav-item nav-link active">
-              <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
-            </li>
+				<div v-if="uloga === 'ADMINISTRATOR'"  class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
+							</li>
 
-          <li class="nav-item nav-link active">
-              <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
-            </li>
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+							</li>
 
-          <li class="nav-item nav-link active">
-            <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
-          </li>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+							</li>
 
-          <li class="nav-item nav-link active">
-            <a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
-          </li>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
+							</li>
 
-          
+							<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+								<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+						</li>
 
 
-          <li class="nav-item dropdown">
-              <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                  <i class="zmdi zmdi-account zmdi-hc-2x"></i>
-              </div>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
-                  <div class="dropdown-divider"></div>
-                  <label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
-              </div>
-          </li>
+						</ul>
+				</div>
 
-          
-      </ul>
-  </div>
+				<div v-if="uloga === 'DOSTAVLJAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+								</div>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+									<div class="dropdown-divider"></div>
+									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+								</div>
+							</li>
 
-  <div id="greska" class="snackbar">{{greska}}</div>
-</nav>
+							
+						</ul>
+				</div>
+		
+				<div v-if="uloga === 'KUPAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
+							<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+								</div>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+									<div class="dropdown-divider"></div>
+									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+								</div>
+							</li>
+
+							</ul>
+				</div>
+
+				<div v-if="uloga === 'MENADZER'" class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+						<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+								<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+						</li>
+
+							
+						</ul>
+				</div>
+				
+				<div v-if="uloga == 0" class="collapse navbar-collapse" id="navbarSupportedContent" >
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
+						</li>
+						<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/registracija">Registracija</a>
+						</li>
+					</ul>
+				</div>
+
+	</nav>
 
 
 <div class="bottom">
+  <div id="greska" class="snackbar">{{greska}}</div>
   <div class="slika-registracija" >
     <div class="inner">
         <div class="image-holder">
@@ -156,9 +215,19 @@ Vue.component("licniPodaci", {
     }
     ,
 
-
-
     mounted () {
+    	axios
+			.get('rest/korisnici/prijavljenKorisnik')
+			.then(response => {
+				if(response.data.length == 0){
+                    this.uloga = "";
+                    console.log(this.uloga)
+				}else{
+					this.uloga = response.data.uloga;
+					console.log(this.uloga)
+				}
+			})
+			
         axios 
         .get('rest/korisnici/' + window.localStorage.getItem("korisnik"))
         .then(response => {
