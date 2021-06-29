@@ -91,7 +91,6 @@ public class RestoranDAO {
 		ObjectMapper maper = new ObjectMapper();
 		try {
 			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
-			System.out.println("upisao");
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}

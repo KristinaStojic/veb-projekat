@@ -136,9 +136,9 @@ Vue.component("pocetna", {
 			</div>
 
 			<div class="row">
-				<div style="margin: 20px;" v-for="(r, i) in pronadjeni"> {{postaviSliku(r.logo)}}
+				<div style="margin: 20px;" v-for="(r, i) in pronadjeni">
 					<div class="card" >
-						<img :src="image" class="card-img-top" alt="Nedostaje fotografija">
+						<img :src="r.logo" class="card-img-top" alt="Nedostaje fotografija">
 						<ul class="list-group list-group-flush">
 						<li class="list-group-item"><b>{{r.naziv}}</b></li>
 						<li class="list-group-item">{{r.tipRestorana}}</li>
@@ -193,9 +193,6 @@ Vue.component("pocetna", {
                }
            })
         },
-	 postaviSliku: function(value) {
-      this.image = "slike/restorani-logo/" + value;
-    },
 	odjava : function() {
 		axios 
 			.post('/DostavaREST/rest/korisnici/odjava')

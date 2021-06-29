@@ -470,11 +470,47 @@ dugme {
 }
 /*# sourceMappingURL=style.css.map */
 
+.slikaRestoran{
+	object-fit: cover; 
+	border-radius: 50%; 
+	width: 300px; 
+	height: 300px; 
+	border: 7px solid white;
+}
 
+.top1{
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 40%;
+    top: 8%;
+}
 
+.bottom1{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top:48%;
+}
 
+.desno{
+    float:left;
+    width: 70%;
+}
 
+.levo{
+    float:right;
+    width:30%
+}
 
+.info-restoran {
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center; 
+  background-image: url('../slike/restoranPozadina.jpeg');
+  }
 
 
 

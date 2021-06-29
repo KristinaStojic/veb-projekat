@@ -16,10 +16,29 @@ Vue.component("pregledRestorana", {
 				postanskiBroj: "",
 				ocena: ""
 
-		},
+		}, image: "",
         greska: "",
-        logo : "slike/logo_final2.png", uloga : ""
-      }
+        logo : "slike/logo_final2.png",
+		tabs: {
+			'Tab 1': {
+			  title: 'Cao TAB1',
+			  body: 'Evo u tabu 1',
+			},
+			'Tab 2': {
+			  title: 'Cao TAB2',
+			  body: 'Evo u tabu 2',
+			},
+			'Tab 3': {
+			  title: 'Cao TAB3',
+			  body: 'Evo u tabu 3',
+			},
+			'Tab 4': {
+			  title: 'Cao TAB4',
+			  body: 'Evo me u tabu 4'
+			},
+		},
+		  activeTab: 'Tab 1',
+		}
     },
     template: ` 
   <div>
@@ -50,16 +69,65 @@ Vue.component("pregledRestorana", {
 			</ul>
 			
 		</div>
-
+		
 	</nav>
 
-
+	
 	<div class="bottom">
-  		<div id="greska" class="snackbar">{{greska}}</div>
-  	<div class="slika-registracija" >
-
+  		<div class="top1 info-restoran">
+			<div class="desno"> sad</div
+			<div class="levo">
+			<img :src="image" class="slikaRestoran">
+			<div/>
+			
+		</div>
+		<div class="bottom1">
+			<nav>
+					<ul class="nav nav-tabs">
+						<li
+							v-for="(tab, tabName) in tabs"
+							:key="tabName"
+							
+							>
+						<a href="#" 
+							class="tab dugmeTab nav-link" 
+							@click="setTabActive(tabName)"
+							:class="{'active': tabName === activeTab}"
+						>
+							<span class="tab-copy">{{ tabName }}</span>
+							<span class="tab-background">
+							<span class="tab-rounding left"></span>
+							<span class="tab-rounding right"></span>
+							</span>
+						</a>
+						</li>
+					</ul>
+			</nav>
+			<div>
+					<transition
+						name="fade"
+						mode="out-in"
+						appear
+						:duration="500"
+					>
+					<tab-content
+						v-for="(tabContent, t) in tabs" 
+						:data="tabContent"
+						:key="'content'+t"
+						v-if="t === activeTab"
+						inline-template
+					>
+						<div class="content">
+						<h3>{{data.title}}</h3>
+						<p>{{data.body}}</p>
+						
+						</div>
+					</tab-content>
+					</transition>
+					</div>
+		</div>	
   	</div>
-  	</div>
+	
 	</div>
   `
     ,
@@ -67,19 +135,34 @@ Vue.component("pregledRestorana", {
       vuejsDatepicker
     }
     ,
+	computed:{
+		tabContent() {
+		  return this.tabs[this.activeTab];
+		},
+	  },
 
+	components:{
+		'TabContent': {
+		  props: {
+			data: Object,
+		  },
+		}
+	},
     mounted () {
-		console.log("evo me")
         axios 
         .get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
         .then(response => {
             if(response.data != null)
             {     
                 this.restoran = response.data;
+				this.image = "slike/restorani-logo/" + response.data.logo;
             }
         })
     },
     methods: {
+		setTabActive(tab) {
+			this.activeTab = tab; 
+		  },
         odjava : function() {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')

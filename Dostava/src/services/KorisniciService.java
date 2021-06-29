@@ -95,14 +95,13 @@ public class KorisniciService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void logout() {
-		System.out.println("uslo");
+
 		HttpSession session = request.getSession();
 		if (session != null && session.getAttribute("prijavljeniKorisnik") != null) {
 			session.invalidate();
 		}
 
 		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
-		System.out.println(prijavljeniKorisnik);
 
 	}
 	
@@ -185,9 +184,9 @@ public class KorisniciService {
 		List<MenadzerPrikazDTO> menadzeri = new ArrayList<MenadzerPrikazDTO>();
 
 		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
-			if(m.getRestoran() == null || m.getRestoran().getLogickoBrisanje() == 1) continue;
+			if(m.getRestoran() == null || m.getRestoran().getLogickoBrisanje() == 1) {
 			menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(),
-					(m.getRestoran() != null)));
+					(m.getRestoran() != null)));}
 
 		}
 		return menadzeri;
