@@ -115,6 +115,16 @@ public class KorisniciService {
 
 		return korisnici.nadjiPoId(id);
 	}
+	
+	@GET
+	@Path("/prijavljenKorisnik")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Korisnik dobaviPrijavljenogKorisnika() {
+
+		Korisnik prijavljen = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
+
+		return prijavljen;
+	}
 
 	@POST
 	@Path("/izmeniLicnePodatke")

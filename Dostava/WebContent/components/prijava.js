@@ -10,7 +10,8 @@ Vue.component("prijava", {
               korIme: false,
               lozinka: false,
               msg: "",
-              greska: ""
+              greska: "",
+              logo: "slike/logo_final2.png"
 	    }
 
       
@@ -19,7 +20,9 @@ Vue.component("prijava", {
 
 	  <div>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-							<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/" >K&J</a>
+			<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+				<img :src="logo" alt="" width="100" height="80">
+			</a>
 							<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 								<span class="navbar-toggler-icon"></span>
 							</button>
@@ -98,22 +101,9 @@ Vue.component("prijava", {
 							      x.className = "snackbar show";
 							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
 						      }else{
-                    console.log(response.data.id);
                     window.localStorage.setItem("korisnik", response.data.id);
                     window.localStorage.setItem("uloga", response.data.uloga);
-                    if(response.data.uloga.localeCompare("KUPAC") == 0){
-                        window.localStorage.setItem("tipKupca",response.data.tipKupca);
-                        this.$router.push("/pocetnaStranaKupac");
-
-                    }
-                    else if(response.data.uloga.localeCompare("MENADZER") == 0){
-                        this.$router.push("/pocetnaStranaMenadzer");
-                    }else if(response.data.uloga.localeCompare("DOSTAVLJAC") == 0){
-                        this.$router.push("/pocetnaStranaDostavljac");
-                    }
-                    else if(response.data.uloga.localeCompare("ADMINISTRATOR") == 0){
-                        this.$router.push("/pocetnaStranaAdministrator");
-                    }
+                    this.$router.push("/");
                     
                   }
                 })

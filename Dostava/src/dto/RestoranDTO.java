@@ -17,6 +17,6 @@ public class RestoranDTO {
 	public String mesto;
 	public Integer postanskiBroj;
 	public String idMenadzera;
-
+	public Double ocena;
 
 }
