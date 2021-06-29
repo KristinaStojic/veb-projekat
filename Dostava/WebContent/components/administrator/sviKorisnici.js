@@ -27,95 +27,131 @@ Vue.component("sviKorisnici", {
 	    template: ` 
 
       <div>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-        <a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
-          <img :src="logo" alt="" width="100" height="80">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item nav-link active">
-                    <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
-                  </li>
-
-                <li class="nav-item nav-link active">
-                    <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
-                  </li>
-
-                <li class="nav-item nav-link active">
-                  <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
-                </li>
-
-                <li class="nav-item nav-link active">
-                  <a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
-                </li>
-
-                
-
-
-                <li class="nav-item dropdown">
-                    <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                        <i class="zmdi zmdi-account zmdi-hc-2x"></i>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
-                        <div class="dropdown-divider"></div>
-                        <label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
-                    </div>
-                </li>
-
-                
-            </ul>
-        </div>
-
-        <div id="greska" class="snackbar">{{greska}}</div>
-
-      </nav>
-
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
+          <a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+            <img :src="logo" alt="" width="100" height="80">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
       
-      <div class="bottom">
-      <div>
-          <label>Pretraga: </label>
-          <input v-model="search" placeholder="Pretražite korisnike">
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-           <label>Sortiranje: </label>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item nav-link active">
+                      <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
+                    </li>
 
-            <dugme class="btn-info btn-sm" @click="sortTable('ime', 'asc')">Ime-uzlazno</dugme>
-            <dugme class="btn-info btn-sm" @click="sortTable('ime', 'desc')">Ime-silazno</dugme>
-            <dugme class="btn-info btn-sm" @click="sortTable('prezime', 'asc')">Prezime-uzlazno</dugme>
-            <dugme class="btn-info btn-sm" @click="sortTable('prezime', 'desc')">Prezime-silazno</dugme>
-            <dugme class="btn-info btn-sm" @click="sortTable('korisnickoIme', 'asc')">Korisnicko ime-uzlazno</dugme>
-            <dugme class="btn-info btn-sm" @click="sortTable('korisnickoIme', 'desc')">Korisnicko ime - silazno</dugme>
+                  <li class="nav-item nav-link active">
+                      <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+                    </li>
+
+                  <li class="nav-item nav-link active">
+                    <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+                  </li>
+
+                  <li class="nav-item nav-link active">
+                    <a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
+                  </li>
+
+                  
 
 
-            <select class="form-control1" style="font-size: 12px" v-model="filteri">
-              <option value="" selected>Svi</option>
-              <option value="Kupac">Kupac</option>
-              <option value="Administrator">Administratori</option>
-              <option value="Dostavljač">Dostavljaci</option>
-              <option value="Menadžer">Menadzeri</option>
-            </select>
+                  <li class="nav-item dropdown">
+                      <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                          <i class="zmdi zmdi-account zmdi-hc-2x"></i>
+                      </div>
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+								<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+                  </li>
 
+                  
+              </ul>
+          </div>
+
+          <div id="greska" class="snackbar">{{greska}}</div>
+
+        </nav>
+
+        
+        <div class="bottom ">
+            <div >
+            &nbsp&nbsp
+              <label style="font-size:15px">Pretraga: </label>
+              <input v-model="search" style="height:36px; width:260px" placeholder="Pretražite korisnike">
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              
+                  <label style="font-size:15px;">Sortiranje: </label>
+                   <div class="btn-group">
+                  <dugme class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                      Izaberite kriterijum
+                  </dugme>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ime', 'asc')">Ime-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ime', 'desc')">Ime-silazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'asc')">Prezime-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'desc')">Prezime-silazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'asc')">Korisničko ime-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'desc')">Korisničko ime-silazno</dugme>
+
+                  </div>
+                  </div>
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  
+                  <label style="font-size:15px">Filtriranje: </label>
+                  <div class="btn-group">
+                  <dugme class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Izaberite ulogu
+                  </dugme>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('')">Svi</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Kupac')">Kupac</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Administrator')">Administrator</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Menadžer')">Menadžer</dugme>
+
+                
+                  </div>
+
+
+
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  
+ 
+                  <div class="btn-group">
+                  <dugme class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Izaberite tip kupca
+                  </dugme>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('')">Svi</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Kupac')">Kupac</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Administrator')">Administrator</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Menadžer')">Menadžer</dugme>
+
+                
+                  </div>
+                  </div>
             </div>
 
             <div class="row">
-              <div style="margin: 20px;" v-for="k in filteredGames">
-                  <div class="card">
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><b>{{k.imePrezime}}</b></li>
-                        <li class="list-group-item">Uloga: {{k.uloga}}</li>
-                        <li class="ime list-group-item">Korisničko ime: {{k.korisnickoIme}}</li>
-                        <li class="list-group-item">Pol: {{k.pol}}</li>
-                        <li class="list-group-item">Datum rođenja: {{k.datumRodjenja}}</li>
-                      </ul>
-                  </div>
-              </div>
+                <div style="margin: 20px;" v-for="k in filteredGames">
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item"><b>{{k.imePrezime}}</b></li>
+                          <li class="list-group-item">Uloga: {{k.uloga}}</li>
+                          <li class="ime list-group-item">Korisničko ime: {{k.korisnickoIme}}</li>
+                          <li class="list-group-item">Pol: {{k.pol}}</li>
+                          <li class="list-group-item">Datum rođenja: {{k.datumRodjenja}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
-    </div>
    </div>
     	`
     	, 
@@ -180,6 +216,10 @@ Vue.component("sviKorisnici", {
           this.korisnici.sort((a, b) => a[key] < b[key] ? 1: -1)
         }
       },
+
+      postaviFilter(value){
+        this.filteri = value;
+     }
 
 
 	},
