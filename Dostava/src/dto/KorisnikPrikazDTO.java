@@ -19,8 +19,8 @@ public class KorisnikPrikazDTO {
 	public String ime;
 	public String prezime;
 	
-	
-	
+	String tipKupca;
+	Double brojBodova;
 
 	public KorisnikPrikazDTO() {
 		super();
@@ -113,6 +113,42 @@ public class KorisnikPrikazDTO {
 		this.uloga = uloga;
 		this.ime = ime;
 		this.prezime = prezime;
+	}
+
+
+	public String getTipKupca() {
+		return tipKupca;
+	}
+
+
+	public void setTipKupca(String tipKupca) {
+		this.tipKupca = tipKupca;
+	}
+
+
+	public Double getBrojBodova() {
+		return brojBodova;
+	}
+
+
+	public void setBrojBodova(Double brojBodova) {
+		this.brojBodova = brojBodova;
+	}
+
+
+	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
+			String uloga, String ime, String prezime, String tipKupca, Double brojBodova) {
+		super();
+		this.id = id;
+		this.korisnickoIme = korisnickoIme;
+		this.imePrezime = imePrezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.tipKupca = tipKupca;
+		this.brojBodova = brojBodova;
 	}
 
 

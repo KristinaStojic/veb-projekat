@@ -20,6 +20,7 @@ import beans.Korisnik;
 import beans.Lokacija;
 import beans.Menadzer;
 import beans.Restoran;
+import beans.TipKupca;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
 import dto.KorisnikDTO;
@@ -192,22 +193,41 @@ public class KorisniciService {
 		return menadzeri;
 	}
 	
-	
-	
-	
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KorisnikPrikazDTO> nadjiKorisnike() {
 		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
+		
+		String tipKupca = null;
+		Double brojBodovaKupca = 0.0;
 		List<KorisnikPrikazDTO> korisniciDTO = new ArrayList<KorisnikPrikazDTO>();
 
 		for (Korisnik k : korisniciDAO.dobaviSve()) {
 			String imePrz = k.getIme() + " " + k.getPrezime();
-			korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
-					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));
 			
+			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
+					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime());
+			
+			if(k.getUloga().toString().equals("KUPAC")) {
+				tipKupca = korisniciDAO.nadjiTipKupca(k);
+				brojBodovaKupca = korisniciDAO.nadjiBrojBodovaKupca(k);
+				
+				korDTO.setBrojBodova(brojBodovaKupca);
+				korDTO.setTipKupca(tipKupca);
+				
+			}
+			
+			/*korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
+					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));*/
+			
+			
+			
+			
+			korisniciDTO.add(korDTO);
 		}
+		
+		
 		
 		return korisniciDTO;
 	}
