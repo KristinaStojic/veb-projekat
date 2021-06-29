@@ -28,8 +28,7 @@ const router = new VueRouter({
 
 
 
-window.localStorage.removeItem("korisnik");
-window.localStorage.removeItem("uloga");
+window.localStorage.clear()
 
 var app = new Vue({
 	router,
