@@ -17,8 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import beans.Dostavljac;
 import beans.Korisnik;
-import beans.Korisnik.Pol;
-import beans.Korisnik.Uloga;
+import beans.Lokacija;
 import beans.Menadzer;
 import beans.Restoran;
 import dao.KorisnikDAO;
@@ -29,6 +28,7 @@ import dto.KorisnikPrijavaDTO;
 import dto.KorisnikPrikazDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
+import dto.RestoranDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -104,7 +104,7 @@ public class KorisniciService {
 		System.out.println(prijavljeniKorisnik);
 
 	}
-
+	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -184,7 +184,7 @@ public class KorisniciService {
 		List<MenadzerPrikazDTO> menadzeri = new ArrayList<MenadzerPrikazDTO>();
 
 		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
-
+			if(m.getRestoran() == null || m.getRestoran().getLogickoBrisanje() == 1) continue;
 			menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(),
 					(m.getRestoran() != null)));
 
@@ -212,5 +212,21 @@ public class KorisniciService {
 		return korisniciDTO;
 	}
 
+	@GET
+	@Path("/restoranMenadzera/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public RestoranDTO restoranMenadzera(@PathParam("id") String id) {
+		KorisnikDAO dao = dobaviKorisnikDAO();
 
+		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
+			if(m.getRestoran() != null && m.getRestoran().getLogickoBrisanje() != 1 && m.getId().equals(id)) {
+				Restoran r = m.getRestoran();
+				Lokacija l = r.getLokacija();
+				return new RestoranDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(), 
+						l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(), r.getOcena());
+			}
+
+		}
+		return null;
+	}
 }

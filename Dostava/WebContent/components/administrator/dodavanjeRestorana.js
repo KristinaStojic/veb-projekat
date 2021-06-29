@@ -115,7 +115,7 @@ Vue.component("dodavanjeRestorana", {
       <select class="form-control" style="font-size: 12px" v-model="restoran.idMenadzera">
         <option value="" disabled select3ed>Menadzeri</option>
 		<option
-		 v-for="m in menadzeri" v-if="m.imaRestoran === false" :value="m.id" >{{m.ime}} {{m.prezime}}, {{m.korisnickoIme}}</option>
+		 v-for="m in menadzeri" :value="m.id" >{{m.ime}} {{m.prezime}}, {{m.korisnickoIme}}</option>
       </select>
       <i class="zmdi zmdi-caret-down" style="font-size: 17px"></i>
      </div>

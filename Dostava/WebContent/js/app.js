@@ -7,7 +7,7 @@ const DodavanjeMenadzera = { template: '<dodavanjeMenadzera></dodavanjeMenadzera
 const DodavanjeRestorana = { template: '<dodavanjeRestorana></dodavanjeRestorana>' }
 const DodavanjeDostavljaca = { template: '<dodavanjeDostavljaca></dodavanjeDostavljaca>' }
 const SviKorisnici = { template: '<sviKorisnici></sviKorisnici>' }
-
+const PregledRestorana = { template: '<pregledRestorana></pregledRestorana>' }
 
 
 const router = new VueRouter({
@@ -21,10 +21,9 @@ const router = new VueRouter({
 		{ path: '/dodavanjeMenadzera', component: DodavanjeMenadzera},
 		{ path: '/dodavanjeRestorana', component: DodavanjeRestorana},
 		{ path: '/dodavanjeDostavljaca', component: DodavanjeDostavljaca},
-		{ path: '/sviKorisnici', component: SviKorisnici}
+		{ path: '/sviKorisnici', component: SviKorisnici},
+		{ path: '/pregledRestorana', component: PregledRestorana}
 
-		
-		
 	  ]
 });
 
@@ -36,3 +35,5 @@ var app = new Vue({
 	router,
 	el: '#app'
 });
+
+router.push("/")
