@@ -46,6 +46,8 @@ Vue.component("pocetna", {
 							</div>
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
 								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 							</div>
@@ -64,6 +66,8 @@ Vue.component("pocetna", {
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
 									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 								</div>
 							</li>
@@ -81,6 +85,8 @@ Vue.component("pocetna", {
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
 									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 								</div>
 							</li>
@@ -96,6 +102,8 @@ Vue.component("pocetna", {
 							</div>
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
 								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 							</div>
@@ -105,7 +113,7 @@ Vue.component("pocetna", {
 						</ul>
 				</div>
 				
-				<div v-if="uloga == 0" class="collapse navbar-collapse" id="navbarSupportedContent" >
+				<div v-if="uloga === null" class="collapse navbar-collapse" id="navbarSupportedContent" >
 					<ul class="navbar-nav ml-auto">
 						<li class="nav-item nav-link active">
 							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
@@ -148,17 +156,9 @@ Vue.component("pocetna", {
     	`
 	,
 	mounted() {
-		axios
-			.get('rest/korisnici/prijavljenKorisnik')
-			.then(response => {
-				if(response.data.length == 0){
-                    this.uloga = "";
-                    console.log(this.uloga)
-				}else{
-					this.uloga = response.data.uloga;
-					console.log(this.uloga)
-				}
-			})
+		
+		this.uloga = window.localStorage.getItem("uloga")
+		console.log(this.uloga)
 
 		axios
 			.get('rest/restorani/')

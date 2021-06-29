@@ -2,6 +2,7 @@ const PocetnaStrana = { template: '<pocetna></pocetna>' }
 const Prijava = { template: '<prijava></prijava>' }
 const Registracija = { template: '<registracija></registracija>' }
 const LicniPodaci = { template: '<licniPodaci></licniPodaci>' }
+const IzmenaPodataka = { template: '<izmenaPodataka></izmenaPodataka>' }
 const DodavanjeMenadzera = { template: '<dodavanjeMenadzera></dodavanjeMenadzera>' }
 const DodavanjeRestorana = { template: '<dodavanjeRestorana></dodavanjeRestorana>' }
 const DodavanjeDostavljaca = { template: '<dodavanjeDostavljaca></dodavanjeDostavljaca>' }
@@ -16,6 +17,7 @@ const router = new VueRouter({
 		{ path: '/prijava', component: Prijava},
 		{ path: '/registracija', component: Registracija},
 		{ path: '/licniPodaci', component: LicniPodaci},
+		{ path: '/izmenaPodataka', component: IzmenaPodataka},
 		{ path: '/dodavanjeMenadzera', component: DodavanjeMenadzera},
 		{ path: '/dodavanjeRestorana', component: DodavanjeRestorana},
 		{ path: '/dodavanjeDostavljaca', component: DodavanjeDostavljaca},
@@ -28,8 +30,7 @@ const router = new VueRouter({
 
 
 
-window.localStorage.removeItem("korisnik");
-window.localStorage.removeItem("uloga");
+window.localStorage.clear()
 
 var app = new Vue({
 	router,
