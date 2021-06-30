@@ -6,7 +6,7 @@ Vue.component("pregledRestorana", {
 				naziv: "",
 				tipRestorana: 7,
 				logo: "",
-				artikli: [],
+				
 				status: "",
 				geografskaDuzina: "",
 				geografskaSirina: "",
@@ -16,7 +16,7 @@ Vue.component("pregledRestorana", {
 				postanskiBroj: "",
 				ocena: ""
 
-		},
+		},artikli: null,
         greska: "",
         kj : "slike/logo_final2.png",
 		tabs: {
@@ -69,7 +69,8 @@ Vue.component("pregledRestorana", {
 	</nav>
 
 	
-	<div class="bottom">
+	<div class="bottomRestorani">
+		
   		<div class="top1 info-restoran">
 			<div class="desno">
 				
@@ -138,32 +139,42 @@ Vue.component("pregledRestorana", {
 						name="fade"
 						mode="out-in"
 						appear
-						:duration="500"
+						:duration="10"
 					>
-					<tab-content
-						v-for="(tabContent, t) in tabs" 
-						:data="tabContent"
-						:key="'content'+t"
-						v-if="t === activeTab"
-						inline-template
-					>
+					<tab-content v-if="activeTab === 'Artikli'" inline-template >
 						<div class="content">
-						<h3>{{data.title}}</h3>
-						<p>{{data.body}}</p>
-						
+						<button class="dugme2" @click="$router.push('/dodavanjeArtikla')">Dodaj novi artikal</button>
+						<div class="row">
+						<div style="margin: 20px;" v-for="(a, i) in this.artikli">
+							<div class="card" >
+								<img :src="a.slika" class="card-img-top" alt="Nedostaje fotografija">
+								<ul class="list-group list-group-flush">
+								<li v-if="a.tipArtikla === 'Jelo'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}g)</b></li>
+								<li v-else class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}ml)</b></li>
+								<li class="list-group-item"><b>Naziv: {{a.naziv}} ({{a.kolicina}})</b></li>
+								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
+								<li class="list-group-item">{{a.opis}}</li>
+								<li class="list-group-item nav-item nav-link active">
+										<a class="nav-link" href="#">Izmeni artikal</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						</div>
+						</div>
+					</tab-content>
+					<tab-content v-if="activeTab === 'Komentari'" inline-template >
+						<div class="content">
+						cao ja sam ovde i pokusavam da radi komentar
 						</div>
 					</tab-content>
 					</transition>
 					</div>
 		</div>	
   	</div>
-	
+		
 	</div>
   `
-    ,
-    components: {
-      vuejsDatepicker
-    }
     ,
 	computed:{
 		tabContent() {
@@ -185,18 +196,33 @@ Vue.component("pregledRestorana", {
             if(response.data != null)
             {     
                 this.restoran = response.data;
-                console.log(this.restoran);
+                this.artikli = response.data.artikli;
+                console.log(this.artikli);
+                console.log(response.data.artikli);
+                window.localStorage.setItem("trenutniRestoran", this.restoran.id);
+				window.localStorage.setItem("imeRestorana", this.restoran.naziv);
             }
         })
+        
+        
     },
     methods: {
 		setTabActive(tab) {
 			this.activeTab = tab; 
 		  },
+		dodajArtikal(){
+			event.preventDefault();
+			window.localStorage.setItem("trenutniRestoran", this.restoran.id);
+			window.localStorage.setItem("imeRestorana", this.restoran.naziv);
+			this.$router.push("/dodavanjeArtikla")
+		
+		},
         odjava : function() {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')
     			.then(response => {
+    				window.localStorage.removeItem("trenutniRestoran");
+					window.localStorage.removeItem("imeRestorana");
 					window.localStorage.removeItem("korisnik");
 					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";

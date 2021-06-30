@@ -1,9 +1,10 @@
 package dto;
 
-import beans.Lokacija;
-import beans.Restoran.TipRestorana;
+import java.util.List;
 
-public class RestoranInformacijeDTO {
+import beans.Lokacija;
+
+public class RestoranMenadzerDTO {
 
 	public String id;
 	public String naziv;
@@ -16,11 +17,12 @@ public class RestoranInformacijeDTO {
 	public String mesto;
 	public Integer postanskiBroj;
 	public String idMenadzera;
-	public Double ocena;
+	public String ocena;
 	public Boolean status;
+	public List<ArtikliDTO> artikli;
 	
-	public RestoranInformacijeDTO(String id, String naziv, String tipRestorana, String logo, Double geografskaDuzina,
-			Double geografskaSirina, String ulica, Integer broj, String mesto, Integer postanskiBroj, Double ocenaS,Boolean status) {
+	public RestoranMenadzerDTO(String id, String naziv, String tipRestorana, String logo, Double geografskaDuzina,
+			Double geografskaSirina, String ulica, Integer broj, String mesto, Integer postanskiBroj, String ocenaS,Boolean status, List<ArtikliDTO> artikli) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -34,6 +36,7 @@ public class RestoranInformacijeDTO {
 		this.postanskiBroj = postanskiBroj;
 		this.ocena = ocenaS;
 		this.status = status;
+		this.artikli = artikli;
 	}
 
 }

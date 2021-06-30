@@ -429,22 +429,6 @@ input::-webkit-inner-spin-button {
   padding: 0;
   color: black;
   margin-bottom: 10px;}
-  .form-control::-webkit-input-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
-  .form-control::-moz-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
-  .form-control:-ms-input-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
-  .form-control:-moz-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
     
 dugme {
   background-color: #4CAF50; /* Green */
@@ -541,11 +525,36 @@ dugme {
   display: inline-block;
 }
 
+.dugme2 {
+  border: 1px solid #333;
+  background: white;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  color: black;
+  width:200px;
+  margin:20px;
+  margin-right:40px; 
+  right:10;
+  float:right;
+ }
 
+.bottomRestorani {
+	z-index: 1;
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 92%;
+    bottom: 0;
+     
+}
 
-
-
-
+.artikli{
+	width: 100%;
+	height: 100%;
+	content:url('../slike/artikli.jpeg');
+}
 
 
 
