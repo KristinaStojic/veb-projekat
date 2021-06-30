@@ -142,7 +142,7 @@ public class Restoran implements Serializable {
 		case BRZA_HRANA:
 			return "Brza hrana";
 		default:
-			return "Raznolika huhinja";
+			return "Raznolika kuhinja";
 		}
 	}
 }

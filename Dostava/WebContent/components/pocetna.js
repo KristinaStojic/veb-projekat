@@ -14,7 +14,8 @@ Vue.component("pocetna", {
 			sort: '',
 			filterTip : "",
 			checked: "",
-			otvoreni : "Otvoreno"
+			otvoreni : "",
+			trazi : ""
 		}
 	},
 	template: ` 
@@ -238,44 +239,47 @@ Vue.component("pocetna", {
 			.then(response => (this.restorani = response.data))
 	}
     ,
+computed: {
+		pronadjeni() {
+			console.log(this.search)
+            let filter1 = new RegExp(this.search, 'i');
+			let filter2 = new RegExp(this.searchLok, 'i');
+			let filter3 = new RegExp(this.searchTip, 'i');
+			let filter4 = new RegExp(this.filterTip, 'i');
+			let filter5 = new RegExp(this.searchOcena, 'i');
+			if(this.checked){
+				this.otvoreni = "Otvoreno";
+			}else{
+				this.otvoreni = "";
+			}
+			let filter6 = new RegExp(this.otvoreni, 'i');
 
-	computed: {
+            return ( this.restorani.filter(el => el.naziv.match(filter1) 
+			&& el.lokacija.match(filter2)
+			&& el.tipRestorana.match(filter3)
+			&& el.tipRestorana.match(filter4)
+			&& el.ocena.match(filter5)
+			&& el.status.match(filter6)
+			));
+          }
+        },
+	/*computed: {
         pronadjeni : function() {
-			
-		  if(this.search.length > 0)
+			console.log(this.search.length)
+		  if(this.searchOcena.length > 0)
 			return this.restorani.filter((r) => {	
-				return (r.naziv.toLowerCase().includes(this.search.toLowerCase()));
+				return (r.naziv.toLowerCase().includes(this.search.toLowerCase()) 
+				&& r.lokacija.toLowerCase().includes(this.searchLok.toLowerCase())
+				 && r.tipRestorana.toLowerCase().includes(this.searchTip.toLowerCase())
+				  && r.tipRestorana.toLowerCase().includes(this.filterTip.toLowerCase())
+				  && r.ocena.toLowerCase().includes(this.searchOcena.toLowerCase())
+				  && r.status.toLowerCase().includes(this.otvoreni.toLowerCase()));
           })
-          else if(this.searchTip.length > 0){
-			console.log(this.checked)
-            return this.restorani.filter((r) => {
-              
-              return (r.tipRestorana.toLowerCase().includes(this.searchTip.toLowerCase()));
-              
-            })
-          }
-		  else if(this.searchLok.length > 0){
-            return this.restorani.filter((r) => {
-              
-              return (r.lokacija.toLowerCase().includes(this.searchLok.toLowerCase()));
-              
-            })
-          } else if(this.filterTip.length > 0){
-            return this.restorani.filter((r) => {
-			 
-              return (r.tipRestorana.toLowerCase().includes(this.filterTip.toLowerCase()));
-              
-            })
-          }else if(this.checked){
-            return this.restorani.filter((r) => {
-			 
-              return (r.status.toLowerCase().includes(this.otvoreni.toLowerCase()));
-              
-            })
-          }
+		 
           else{
+			  console.log("tu sam");
             return this.restorani.filter((r) => {
-              return (r.ocena.toLowerCase().includes(this.searchOcena.toLowerCase()));
+              return (r);
             })
           }
 
@@ -284,7 +288,7 @@ Vue.component("pocetna", {
           
 
           
-        }},
+        }},*/
 
 	methods: {
         menadzerRestoran : function(event){
