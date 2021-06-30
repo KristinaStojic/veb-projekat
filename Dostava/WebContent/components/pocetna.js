@@ -6,8 +6,15 @@ Vue.component("pocetna", {
 			logo : "slike/logo_final2.png",
 			uloga : "",
 			prazno : true,
-			search: "",
-			greska: "" 
+			search: [],
+			searchTip: "",
+			searchLok: "",
+			searchOcena: "",
+			greska: "",
+			sort: '',
+			filterTip : "",
+			checked: "",
+			otvoreni : "Otvoreno"
 		}
 	},
 	template: ` 
@@ -132,9 +139,72 @@ Vue.component("pocetna", {
 	<div class="bottom">
 		<div class="container-fluid content-row">
 			<div>
-				<input type="text" v-model="search" placeholder="Pretraži restorane"/>
-			</div>
+				<label style="font-size:15px">Pretraga: </label>
+				<input type="text" v-model="search" style="height:36px; width:180px" placeholder="Naziv restorana"/>
+			
 
+			
+				<input type="text" v-model="searchTip" style="height:36px; width:180px" placeholder="Tip restorana"/>
+			
+
+			
+				<input type="text" v-model="searchLok" style="height:36px; width:180px" placeholder="Lokacija restorana"/>
+			
+
+
+			
+				<input type="text" v-model="searchOcena" style="height:36px; width:180px" placeholder="Ocena restorana"/>
+			
+				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+			<label style="font-size:15px;">Sortiranje: </label>
+                   <div class="btn-group">
+                  <dugme class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                      Kriterijum
+                  </dugme>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('naziv', 'asc')">Naziv-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('naziv', 'desc')">Naziv-silazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('lokacija', 'asc')">Lokacija-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('lokacija', 'desc')">Prezime-silazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ocena', 'asc')">Prosečna ocena-uzlazno</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ocena', 'desc')">Prosečna ocena-silazno</dugme>
+                  </div>
+                  </div>
+
+				  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  
+                  
+
+                  
+				  <label style="font-size:15px">Filtriranje: </label>
+                  <div class="btn-group">
+                  <dugme class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Tip restorana
+                  </dugme>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Brza hrana')">Brza hrana</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Raznolika kuhinja')">Raznolika kuhinja</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Italijanska hrana')">Italijanska hrana</dugme>
+					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Kineska hrana')">Kineska hrana</dugme>
+					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Jela sa roštilja')">Jela sa roštilja</dugme>
+                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Srpska hrana')">Srpska hrana</dugme>
+					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Grčka hrana')">Grčka hrana</dugme>
+					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Vegetarijanska hrana')">Vegetarijanska hrana</dugme>
+
+                  </div>
+                  </div>
+
+				  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+				  <label style="font-size:15px">Otvoreni: </label>
+                  <input type="checkbox" id="checkbox" value="Otvoreno" v-model="checked" >
+
+
+            </div>
+			</div>
 			<div class="row">
 				<div style="margin: 20px;" v-for="(r, i) in pronadjeni"> {{postaviSliku(r.logo)}}
 					<div class="card" >
@@ -171,9 +241,49 @@ Vue.component("pocetna", {
 
 	computed: {
         pronadjeni : function() {
-          return this.restorani.filter((r) => {
-            return (r.naziv.toLowerCase().includes(this.search.toLowerCase()) || r.tipRestorana.toLowerCase().includes(this.search.toLowerCase()) || r.lokacija.toLowerCase().includes(this.search.toLowerCase()));
+			
+		  if(this.search.length > 0)
+			return this.restorani.filter((r) => {	
+				return (r.naziv.toLowerCase().includes(this.search.toLowerCase()));
           })
+          else if(this.searchTip.length > 0){
+			console.log(this.checked)
+            return this.restorani.filter((r) => {
+              
+              return (r.tipRestorana.toLowerCase().includes(this.searchTip.toLowerCase()));
+              
+            })
+          }
+		  else if(this.searchLok.length > 0){
+            return this.restorani.filter((r) => {
+              
+              return (r.lokacija.toLowerCase().includes(this.searchLok.toLowerCase()));
+              
+            })
+          } else if(this.filterTip.length > 0){
+            return this.restorani.filter((r) => {
+			 
+              return (r.tipRestorana.toLowerCase().includes(this.filterTip.toLowerCase()));
+              
+            })
+          }else if(this.checked){
+            return this.restorani.filter((r) => {
+			 
+              return (r.status.toLowerCase().includes(this.otvoreni.toLowerCase()));
+              
+            })
+          }
+          else{
+            return this.restorani.filter((r) => {
+              return (r.ocena.toLowerCase().includes(this.searchOcena.toLowerCase()));
+            })
+          }
+
+
+		
+          
+
+          
         }},
 
 	methods: {
@@ -216,6 +326,20 @@ Vue.component("pocetna", {
 				console.log(err);
 			  })
 		
-	}
+	},
+
+	sortTable(key, direction){
+        this.sort = `${key} > ${direction}`
+        if (direction === 'asc') {
+          this.restorani.sort((a, b) => a[key] > b[key] ? 1: -1)
+        } else {
+          this.restorani.sort((a, b) => a[key] < b[key] ? 1: -1)
+        }
+      },
+
+	  postaviFilterTip(value){
+		this.filterTip = value;
+	 }
+
 	}
 });

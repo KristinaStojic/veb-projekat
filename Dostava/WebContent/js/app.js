@@ -29,11 +29,11 @@ const router = new VueRouter({
 
 
 
-window.localStorage.clear()
+//window.localStorage.clear()
 
 var app = new Vue({
 	router,
 	el: '#app'
 });
 
-router.push("/")
+//router.push("/")
