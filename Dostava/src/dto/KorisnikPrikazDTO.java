@@ -21,6 +21,7 @@ public class KorisnikPrikazDTO {
 	
 	String tipKupca;
 	Double brojBodova;
+	Integer blokiran;
 
 	public KorisnikPrikazDTO() {
 		super();
@@ -103,7 +104,7 @@ public class KorisnikPrikazDTO {
 	}
 
 	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
-			String uloga, String ime, String prezime) {
+			String uloga, String ime, String prezime, Integer blokiran) {
 		super();
 		this.id = id;
 		this.korisnickoIme = korisnickoIme;
@@ -113,6 +114,8 @@ public class KorisnikPrikazDTO {
 		this.uloga = uloga;
 		this.ime = ime;
 		this.prezime = prezime;
+		this.blokiran = blokiran;
+
 	}
 
 
@@ -138,6 +141,32 @@ public class KorisnikPrikazDTO {
 
 	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
 			String uloga, String ime, String prezime, String tipKupca, Double brojBodova) {
+		super();
+		this.id = id;
+		this.korisnickoIme = korisnickoIme;
+		this.imePrezime = imePrezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.tipKupca = tipKupca;
+		this.brojBodova = brojBodova;
+	}
+
+
+	public Integer getBlokiran() {
+		return blokiran;
+	}
+
+
+	public void setBlokiran(Integer blokiran) {
+		this.blokiran = blokiran;
+	}
+
+
+	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
+			String uloga, String ime, String prezime, String tipKupca, Double brojBodova, Integer blokiran) {
 		super();
 		this.id = id;
 		this.korisnickoIme = korisnickoIme;

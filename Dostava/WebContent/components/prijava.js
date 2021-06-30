@@ -100,7 +100,13 @@ Vue.component("prijava", {
 							      var x = document.getElementById("greska");
 							      x.className = "snackbar show";
 							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
-						      }else{
+						      }else if(response.data.blokiran == 1){
+                    this.greska = "Korisnik je blokiran, nije moguća prijava!";
+							      var x = document.getElementById("greska");
+							      x.className = "snackbar show";
+							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                    
+                  }else{
                     window.localStorage.setItem("korisnik", response.data.id);
                     window.localStorage.setItem("uloga", response.data.uloga);
                     this.$router.push("/");

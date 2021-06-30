@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.Artikal;
 import beans.Dostavljac;
@@ -23,6 +24,7 @@ import beans.Menadzer;
 import beans.Restoran;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
+import dto.KorisnikBlokiranjeDTO;
 import dto.ArtikliDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
@@ -204,9 +206,10 @@ public class KorisniciService {
 		for (Korisnik k : korisniciDAO.dobaviSve()) {
 			String imePrz = k.getIme() + " " + k.getPrezime();
 
-			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(), k.getKorisnickoIme(), imePrz,
-					korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(), korisniciDAO.nadjiUlogu(k.getUloga()),
-					k.getIme(), k.getPrezime());
+			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
+					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime(), k.getBlokiran());
+			
+			
 
 			if (k.getUloga().toString().equals("KUPAC")) {
 				tipKupca = korisniciDAO.nadjiTipKupca(k);
@@ -251,5 +254,21 @@ public class KorisniciService {
 
 		}
 		return null;
+	}
+	
+	
+	@POST
+	@Path("/blokirajKorisnika")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response blokirajKorisnika(KorisnikBlokiranjeDTO korisnik) {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+
+		korisnici.blokirajKorisnika(korisnik);
+		korisnici.sacuvajPodatke();
+		return Response
+				.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!")
+				.build();
+
 	}
 }
