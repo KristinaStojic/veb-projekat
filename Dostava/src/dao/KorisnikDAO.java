@@ -74,8 +74,8 @@ public class KorisnikDAO {
 						korisnici.put(k.getId(), k);
 					}
 					kupci.add(k);
+					System.out.println(k.getBlokiran());
 				}
-				System.out.println(kupci.size());
 			}
 			// dostavljaci
 			file = new File(this.putanja + "\\dostavljaci.json");

@@ -27,6 +27,7 @@ public class Korisnik implements Serializable {
 	private Pol pol;
 	private Date datumRodjenja;
 	private Uloga uloga;
+	private Integer blokiran;
 
 	public Korisnik() {
 		super();
@@ -130,5 +131,30 @@ public class Korisnik implements Serializable {
 	public void setLogickoBrisanje(Integer logickoBrisanje) {
 		this.logickoBrisanje = logickoBrisanje;
 	}
+
+	public Integer getBlokiran() {
+		return blokiran;
+	}
+
+	public void setBlokiran(Integer blokiran) {
+		this.blokiran = blokiran;
+	}
+
+	public Korisnik(String id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
+			String prezime, Pol pol, Date datumRodjenja, Uloga uloga, Integer blokiran) {
+		super();
+		this.id = id;
+		this.logickoBrisanje = logickoBrisanje;
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.blokiran = blokiran;
+	}
+	
+	
 
 }

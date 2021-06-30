@@ -143,13 +143,22 @@ Vue.component("sviKorisnici", {
                 <div style="margin: 20px;" v-for="k in filteredGames">
                     <div class="card">
                         <ul class="list-group list-group-flush">
-                          <li class="list-group-item"><b>{{k.imePrezime}}</b></li>
+                          <li class="list-group-item"><b>{{k.imePrezime}}</b>        
+                          </li>
                           <li v-if="k.uloga === 'Kupac'" class="list-group-item">Uloga: {{k.uloga}} (Tip: {{k.tipKupca}}, Broj bodova: {{k.brojBodova}})</li>
                           <li v-else class="list-group-item">Uloga: {{k.uloga}}</li>
 
                           <li class="ime list-group-item">Korisničko ime: {{k.korisnickoIme}}</li>
                           <li class="list-group-item">Pol: {{k.pol}}</li>
                           <li class="list-group-item">Datum rođenja: {{k.datumRodjenja}}</li>
+                          <li v-if="k.uloga !== 'Administrator' && k.blokiran === 0" class="list-group-item">                         
+                           <button type="button" class="btn btn-info btn-sm" @click="blokirajKorisnika(k.korisnickoIme)>Blokiraj</button>
+                          </li>
+                          <li v-if="k.blokiran === 1" class="list-group-item">                         
+                           Korisnik je već blokiran!
+                          </li>
+                          <li  v-if="k.uloga === 'Administrator'" class="list-group-item">Administratori ne mogu biti blokirani!</li>
+
                         </ul>
                     </div>
                 </div>
@@ -235,6 +244,27 @@ Vue.component("sviKorisnici", {
 
      postaviFilterTip(value){
       this.filterTip = value;
+   }, 
+
+   blokirajKorisnika : function(korIme){
+    axios 
+    .post('/DostavaREST/rest/korisnici/blokirajKorisnika', korIme)
+    .then(response => {
+    window.localStorage.removeItem("korisnik");
+    window.localStorage.removeItem("uloga");
+    this.greska = "Uspesna odjava!";
+    var x = document.getElementById("greska");
+    x.className = "snackbar show";
+    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+      this.$router.push("/")
+    })
+  .catch(err => {
+    this.greska = "Neuspjesna odjava!";
+    var x = document.getElementById("greska");
+    x.className = "snackbar show";
+    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    console.log(err);
+    })
    }
 
 
