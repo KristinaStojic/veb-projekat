@@ -30,6 +30,7 @@ import dto.KorisnikPrikazDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
 import dto.RestoranDTO;
+import dto.RestoranInformacijeDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -234,15 +235,15 @@ public class KorisniciService {
 	@GET
 	@Path("/restoranMenadzera/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public RestoranDTO restoranMenadzera(@PathParam("id") String id) {
+	public RestoranInformacijeDTO restoranMenadzera(@PathParam("id") String id) {
 		KorisnikDAO dao = dobaviKorisnikDAO();
 
 		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
 			if(m.getRestoran() != null && m.getRestoran().getLogickoBrisanje() != 1 && m.getId().equals(id)) {
 				Restoran r = m.getRestoran();
 				Lokacija l = r.getLokacija();
-				return new RestoranDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(), 
-						l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(), r.getOcena());
+				return new RestoranInformacijeDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(), 
+						l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(), r.getOcena(),r.getStatus());
 			}
 
 		}

@@ -16,35 +16,31 @@ Vue.component("pregledRestorana", {
 				postanskiBroj: "",
 				ocena: ""
 
-		}, image: "",
+		},
         greska: "",
-        logo : "slike/logo_final2.png",
+        kj : "slike/logo_final2.png",
 		tabs: {
-			'Tab 1': {
-			  title: 'Cao TAB1',
-			  body: 'Evo u tabu 1',
+			'Artikli': {
+			  title: 'Artikli',
+			  body: 'Artikli',
 			},
-			'Tab 2': {
-			  title: 'Cao TAB2',
-			  body: 'Evo u tabu 2',
+			'Komentari': {
+			  title: 'Komentari',
+			  body: 'Komentari',
 			},
-			'Tab 3': {
-			  title: 'Cao TAB3',
-			  body: 'Evo u tabu 3',
-			},
-			'Tab 4': {
-			  title: 'Cao TAB4',
-			  body: 'Evo me u tabu 4'
+			'Lokacija': {
+			  title: 'Lokacija',
+			  body: 'Lokacija',
 			},
 		},
-		  activeTab: 'Tab 1',
+		  activeTab: 'Artikli',
 		}
     },
     template: ` 
   <div>
   <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
 			<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
-				<img :src="logo" alt="" width="100" height="80">
+				<img :src="kj" alt="" width="100" height="80">
 			</a>
 						
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,9 +71,43 @@ Vue.component("pregledRestorana", {
 	
 	<div class="bottom">
   		<div class="top1 info-restoran">
-			<div class="desno"> sad</div
+			<div class="desno">
+				
+				<div class="inner1">
+					<form>
+						<h3>{{restoran.naziv}}  <span v-if="restoran.status == false" class="dot" style="background-color: red;"></span>  
+												<span v-if="restoran.status === true" class="dot" style="background-color: green;"></span>
+						</h3>
+                		<div>
+		                    <label for="tip" >Tip</label>
+		                    <label id="tip" class="form-control">{{restoran.tipRestorana}}</label>
+                		</div>
+                		<div>
+		                    <label for="lokacija" > Adresa</label>
+		                    <label id="lokacija" class="form-control">{{restoran.ulica}} {{restoran.broj}}, {{restoran.mesto}}</label>
+                		</div>
+                		
+					</form>
+					
+					<form>
+						<h3>   </br>    </h3>
+						<div>
+		                    <label for="status" >&nbsp;Status</label>
+		                    <label v-if="restoran.status === true" id="status" style="color: green; width: 230px;" class="form-control">Otvoren&nbsp;</label>
+		                    <label v-if="restoran.status === false" id="status" style="color: red; width: 230px;" class="form-control">Zatvoren&nbsp;</label>
+                		</div>
+                		<div>
+		                    <label for="ocena" >&nbsp;Ocena</label>
+		                    <label v-if="restoran.ocena === '0.0'" id="ocena" style="width: 230px;" class="form-control">Nema ocena za restoran&nbsp;    </label>
+		                    <label v-if="restoran.ocena !== '0.0'" id="ocena" style="width: 230px;" class="form-control">{{restoran.ocena}}&nbsp;      </label>
+                		</div>
+					</form>
+					
+				</div>
+			
+			</div
 			<div class="levo">
-			<img :src="image" class="slikaRestoran">
+			<img :src="restoran.logo" class="slikaRestoran">
 			<div/>
 			
 		</div>
@@ -155,7 +185,7 @@ Vue.component("pregledRestorana", {
             if(response.data != null)
             {     
                 this.restoran = response.data;
-				this.image = "slike/restorani-logo/" + response.data.logo;
+                console.log(this.restoran);
             }
         })
     },
