@@ -16,22 +16,23 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Artikal;
 import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Lokacija;
 import beans.Menadzer;
 import beans.Restoran;
-import beans.TipKupca;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
 import dto.KorisnikBlokiranjeDTO;
+import dto.ArtikliDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
 import dto.KorisnikPrikazDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
-import dto.RestoranDTO;
+import dto.RestoranMenadzerDTO;
 
 @Path("/korisnici")
 public class KorisniciService {
@@ -97,17 +98,13 @@ public class KorisniciService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void logout() {
-		System.out.println("uslo");
+
 		HttpSession session = request.getSession();
 		if (session != null && session.getAttribute("prijavljeniKorisnik") != null) {
 			session.invalidate();
 		}
-
-		Korisnik prijavljeniKorisnik = (Korisnik) request.getSession().getAttribute("prijavljeniKorisnik");
-		System.out.println(prijavljeniKorisnik);
-
 	}
-	
+
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -118,7 +115,7 @@ public class KorisniciService {
 
 		return korisnici.nadjiPoId(id);
 	}
-	
+
 	@GET
 	@Path("/prijavljenKorisnik")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -152,12 +149,12 @@ public class KorisniciService {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Menadzer noviMenadzer = korisnici.dodajMenadzera(menadzer);
-		
+
 		if (menadzer.restoran != null) {
 			RestoranDAO restorani = dobaviRestoranDAO();
 			Restoran restoran = restorani.dobaviRestoran(menadzer.restoran);
 
-			String m =null;
+			String m = null;
 			if (restoran != null) {
 				m = korisnici.dodajRestoranMenadzeru(restoran, noviMenadzer.getId());
 			}
@@ -165,7 +162,7 @@ public class KorisniciService {
 			if (m == null)
 				return null;
 		}
-		
+
 		return noviMenadzer;
 	}
 
@@ -187,65 +184,72 @@ public class KorisniciService {
 		List<MenadzerPrikazDTO> menadzeri = new ArrayList<MenadzerPrikazDTO>();
 
 		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
-			if(m.getRestoran() == null || m.getRestoran().getLogickoBrisanje() == 1) continue;
-			menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(),
-					(m.getRestoran() != null)));
+			if (m.getRestoran() == null || m.getRestoran().getLogickoBrisanje() == 1) {
+				menadzeri.add(new MenadzerPrikazDTO(m.getId(), m.getKorisnickoIme(), m.getIme(), m.getPrezime(),
+						(m.getRestoran() != null)));
+			}
 
 		}
 		return menadzeri;
 	}
-	
+
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KorisnikPrikazDTO> nadjiKorisnike() {
 		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
-		
+
 		String tipKupca = null;
 		Double brojBodovaKupca = 0.0;
 		List<KorisnikPrikazDTO> korisniciDTO = new ArrayList<KorisnikPrikazDTO>();
 
 		for (Korisnik k : korisniciDAO.dobaviSve()) {
 			String imePrz = k.getIme() + " " + k.getPrezime();
-			
+
 			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
 					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime(), k.getBlokiran());
 			
-			if(k.getUloga().toString().equals("KUPAC")) {
+			
+
+			if (k.getUloga().toString().equals("KUPAC")) {
 				tipKupca = korisniciDAO.nadjiTipKupca(k);
 				brojBodovaKupca = korisniciDAO.nadjiBrojBodovaKupca(k);
-				
+
 				korDTO.setBrojBodova(brojBodovaKupca);
 				korDTO.setTipKupca(tipKupca);
-				
+
 			}
-			
-			/*korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
-					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));*/
-			
-			
-			
-			
+
+			/*
+			 * korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(),
+			 * imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
+			 * korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));
+			 */
+
 			korisniciDTO.add(korDTO);
 		}
-		
-		
-		
+
 		return korisniciDTO;
 	}
 
 	@GET
 	@Path("/restoranMenadzera/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public RestoranDTO restoranMenadzera(@PathParam("id") String id) {
+	public RestoranMenadzerDTO restoranMenadzera(@PathParam("id") String id) {
 		KorisnikDAO dao = dobaviKorisnikDAO();
 
 		for (Menadzer m : dao.dobaviNeobrisaneMenadzere()) {
-			if(m.getRestoran() != null && m.getRestoran().getLogickoBrisanje() != 1 && m.getId().equals(id)) {
+			if (m.getRestoran() != null && m.getRestoran().getLogickoBrisanje() != 1 && m.getId().equals(id)) {
 				Restoran r = m.getRestoran();
 				Lokacija l = r.getLokacija();
-				return new RestoranDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(), 
-						l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(), r.getOcena());
+				List<ArtikliDTO> artikli = new ArrayList<>();
+				for (Artikal a : r.getArtikliUPonudi()) {
+					artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
+							a.getKolicina().toString(), a.getOpis(), a.getSlika()));
+				}
+				return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(),
+						l.getGeografskaDuzina(), l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(),
+						l.getPostanskiBroj(), r.getOcena().toString(), r.getStatus(), artikli);
 			}
 
 		}

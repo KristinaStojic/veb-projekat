@@ -429,22 +429,6 @@ input::-webkit-inner-spin-button {
   padding: 0;
   color: black;
   margin-bottom: 10px;}
-  .form-control::-webkit-input-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
-  .form-control::-moz-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
-  .form-control:-ms-input-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
-  .form-control:-moz-placeholder {
-    font-size: 13px;
-    color: #333;
-    font-family: "Poppins-Regular"; }
     
 dugme {
   background-color: #4CAF50; /* Green */
@@ -470,20 +454,107 @@ dugme {
 }
 /*# sourceMappingURL=style.css.map */
 
+.slikaRestoran{
+	object-fit: cover; 
+	border-radius: 50%; 
+	width: 300px; 
+	height: 300px; 
+	border: 7px solid white;
+}
 
+.top1{
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 40%;
+    top: 8%;
+}
 
+.bottom1{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top:48%;
+}
 
+.desno{
+    float:left;
+    width: 65%;
+}
 
+.levo{
+    float:right;
+    width:45%;
+}
 
+.info-restoran {
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center; 
+  background-image: url('../slike/restoranPozadina.jpeg');
+  }
 
+.inner1 {
+  padding: 20px;
+  background: #fff;
+  max-width: 550px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 230px;
+  display: flex;
+   }
+.inner1 form {
+    padding-top: 10x;
+    padding-left: 10px;
+    padding-right: 10px; }
+ .inner1 h3 {
+    text-transform: uppercase;
+    font-size: 25px;
+    font-family: "Poppins-SemiBold";
+    text-align: center;
+    margin-bottom: 28px; }
 
+.dot {
+  height: 10px;
+  width: 10px;
+  
+  border-radius: 50%;
+  display: inline-block;
+}
 
+.dugme2 {
+  border: 1px solid #333;
+  background: white;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  color: black;
+  width:200px;
+  margin:20px;
+  margin-right:40px; 
+  right:10;
+  float:right;
+ }
 
+.bottomRestorani {
+	z-index: 1;
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 92%;
+    bottom: 0;
+     
+}
 
-
-
-
-
+.artikli{
+	width: 100%;
+	height: 100%;
+	content:url('../slike/artikli.jpeg');
+}
 
 
 

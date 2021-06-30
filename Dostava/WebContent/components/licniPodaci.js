@@ -145,7 +145,7 @@ Vue.component("licniPodaci", {
 
                 <div class="form-wrapper">
                     <label for="imeprez" >Ime i prezime</label>
-                    <label class="form-control">{{ime}} {{prezime}}</label>
+                    <label id="imeprez" class="form-control">{{ime}} {{prezime}}</label>
                     <i class="zmdi zmdi-account-circle"></i>
                 </div>
 

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Administrator;
+import beans.Artikal;
 import beans.ArtikalKorpa;
 import beans.Dostavljac;
 import beans.Korisnik;
@@ -155,7 +156,7 @@ public class KorisnikDAO {
 
 		return null;
 	}
-	
+
 	public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) {
 
 		for (Korisnik k : dobaviSve()) {
@@ -190,7 +191,7 @@ public class KorisnikDAO {
 
 		return noviKorisnik;
 	}
-	
+
 	public void sacuvajPodatke() {
 		ObjectMapper maper = new ObjectMapper();
 		try {
@@ -198,21 +199,21 @@ public class KorisnikDAO {
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
+
 		ObjectMapper maper1 = new ObjectMapper();
 		try {
 			maper1.writeValue(Paths.get(this.putanja + "\\administratori.json").toFile(), administratori);
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
+
 		ObjectMapper maper2 = new ObjectMapper();
 		try {
 			maper2.writeValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), dostavljaci);
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
+
 		ObjectMapper maper3 = new ObjectMapper();
 		try {
 			maper3.writeValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), menadzeri);
@@ -234,94 +235,84 @@ public class KorisnikDAO {
 		}
 		return false;
 	}
-	
+
 	public Korisnik izmeniLicnePodatke(Korisnik prijavljeniKorisnik, KorisnikIzmenaPodatakaDTO izmenjeniKorisnik) {
 
 		for (Korisnik k : dobaviSve()) {
-			if(k.getId().equals(prijavljeniKorisnik.getId())) {
+			if (k.getId().equals(prijavljeniKorisnik.getId())) {
 				k.setIme(izmenjeniKorisnik.ime);
 				k.setPrezime(izmenjeniKorisnik.prezime);
 				k.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 				k.setLozinka(izmenjeniKorisnik.lozinka);
 				k.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 				k.setPol(izmenjeniKorisnik.pol);
-				
+
 				for (Kupac kupac : kupci) {
-					if(kupac.getId().equals(prijavljeniKorisnik.getId())) {
+					if (kupac.getId().equals(prijavljeniKorisnik.getId())) {
 						kupac.setIme(izmenjeniKorisnik.ime);
 						kupac.setPrezime(izmenjeniKorisnik.prezime);
 						kupac.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						kupac.setLozinka(izmenjeniKorisnik.lozinka);
 						kupac.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						kupac.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
-				
+
 				for (Menadzer men : menadzeri) {
-					if(men.getId().equals(prijavljeniKorisnik.getId())) {
+					if (men.getId().equals(prijavljeniKorisnik.getId())) {
 						men.setIme(izmenjeniKorisnik.ime);
 						men.setPrezime(izmenjeniKorisnik.prezime);
 						men.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						men.setLozinka(izmenjeniKorisnik.lozinka);
 						men.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						men.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
-				
+
 				for (Administrator admin : administratori) {
-					if(admin.getId().equals(prijavljeniKorisnik.getId())) {
+					if (admin.getId().equals(prijavljeniKorisnik.getId())) {
 						admin.setIme(izmenjeniKorisnik.ime);
 						admin.setPrezime(izmenjeniKorisnik.prezime);
 						admin.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						admin.setLozinka(izmenjeniKorisnik.lozinka);
 						admin.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						admin.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
-				
+
 				for (Dostavljac dost : dostavljaci) {
-					if(dost.getId().equals(prijavljeniKorisnik.getId())) {
+					if (dost.getId().equals(prijavljeniKorisnik.getId())) {
 						dost.setIme(izmenjeniKorisnik.ime);
 						dost.setPrezime(izmenjeniKorisnik.prezime);
 						dost.setKorisnickoIme(izmenjeniKorisnik.korisnickoIme);
 						dost.setLozinka(izmenjeniKorisnik.lozinka);
 						dost.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						dost.setPol(izmenjeniKorisnik.pol);
-						//kupac.getKorpa().setKorisnik(null);
-						//kupac.getKorpa().setKorisnik(k);
-						
+						// kupac.getKorpa().setKorisnik(null);
+						// kupac.getKorpa().setKorisnik(k);
+
 					}
 				}
-				
+
 				return k;
 			}
 		}
-		
-		
-		
+
 		return null;
 	}
-	
-	
+
 	public Korisnik nadjiPoId(String id) {
 		return korisnici.containsKey(id) ? korisnici.get(id) : null;
 	}
-	
-	
-	
-	///MenadzerDAO
 
 	public Menadzer dodajMenadzera(MenadzerDTO menadzer) {
 		if (daLiPostojiKorIme(menadzer.korisnickoIme))
@@ -343,9 +334,7 @@ public class KorisnikDAO {
 
 		return noviMenadzer;
 	}
-	
-	
-	
+
 	public Menadzer dobaviMenadzeraPoKorisnickomImenu(String korisnickoIme) {
 
 		for (Menadzer m : menadzeri) {
@@ -356,16 +345,15 @@ public class KorisnikDAO {
 
 		return null;
 	}
-	
-	
-	
-	
+
 	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
 		if (daLiPostojiKorIme(dostavljac.korisnickoIme))
 			return null;
 
+
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
 				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga, 0);
+
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
 		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
 		dostavljaci.add(noviDostavljac);
@@ -380,9 +368,7 @@ public class KorisnikDAO {
 
 		return noviDostavljac;
 	}
-	
-	
-	
+
 	public Dostavljac dobaviDostavljacaPoKorisnickomImenu(String korisnickoIme) {
 
 		for (Dostavljac d : dostavljaci) {
@@ -393,7 +379,7 @@ public class KorisnikDAO {
 
 		return null;
 	}
-	
+
 	public String dodajRestoranMenadzeru(Restoran r, String idMenadzera) {
 
 		for (Menadzer men : menadzeri) {
@@ -418,64 +404,60 @@ public class KorisnikDAO {
 
 		return menadzeriNeobrisani;
 	}
-	
-public String nadjiPol(Pol pol) {
-		
-		if(pol.toString().equals("ZENSKI")) {
+
+	public String nadjiPol(Pol pol) {
+
+		if (pol.toString().equals("ZENSKI")) {
 			return "Ženski";
-		}
-		else if(pol.toString().equals("MUSKI")) {
+		} else if (pol.toString().equals("MUSKI")) {
 			return "Muški";
 		}
-		
+
 		return null;
 	}
-	
-	
+
 	public String nadjiUlogu(Uloga uloga) {
-		if(uloga.toString().equals("ADMINISTRATOR")) {
+		if (uloga.toString().equals("ADMINISTRATOR")) {
 			return "Administrator";
-		}else if(uloga.toString().equals("DOSTAVLJAC")) {
+		} else if (uloga.toString().equals("DOSTAVLJAC")) {
 			return "Dostavljač";
-		}else if(uloga.toString().equals("KUPAC")) {
+		} else if (uloga.toString().equals("KUPAC")) {
 			return "Kupac";
-		}else if(uloga.toString().equals("MENADZER")) {
+		} else if (uloga.toString().equals("MENADZER")) {
 			return "Menadžer";
 		}
-		
+
 		return null;
 	}
-	
-	
+
 	public String nadjiTipKupca(Korisnik k) {
 		for (Kupac kupac : kupci) {
-			if(kupac.getId().equals(k.getId())) {
-				if(kupac.getTipKupca().getImeTipa().toString().equals("ZLATNI")) {
+			if (kupac.getId().equals(k.getId())) {
+				if (kupac.getTipKupca().getImeTipa().toString().equals("ZLATNI")) {
 					return "Zlatni";
-				}else if(kupac.getTipKupca().getImeTipa().toString().equals("SREBRNI")) {
+				} else if (kupac.getTipKupca().getImeTipa().toString().equals("SREBRNI")) {
 					return "Srebrni";
-				}else if(kupac.getTipKupca().getImeTipa().toString().equals("BRONZANI")) {
+				} else if (kupac.getTipKupca().getImeTipa().toString().equals("BRONZANI")) {
 					return "Bronzani";
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
-	
-	
+
 	public Double nadjiBrojBodovaKupca(Korisnik k) {
 		for (Kupac kupac : kupci) {
-			if(kupac.getId().equals(k.getId())) {
-	
+			if (kupac.getId().equals(k.getId())) {
+
 				return kupac.getSakupljeniBodovi();
 			}
 		}
-		
+
 		return null;
 	}
 	
+
 	public void blokirajKorisnika(KorisnikBlokiranjeDTO kor) {
 		for (Korisnik korisnik : dobaviSve()) {
 			if(korisnik.getKorisnickoIme().equals(kor.getKorisnickoIme())) {
@@ -489,6 +471,21 @@ public String nadjiPol(Pol pol) {
 				}
 			}
 		}
+	}
+	public Boolean dodarArtikal(Artikal a, String idRestorana) {
+
+		for (Menadzer men : menadzeri) {
+				Restoran r = men.getRestoran();
+				if (r.getId().equals(idRestorana)) {
+					r.dodajArtikal(a);
+					sacuvajPodatke();
+					return true;
+				}
+			
+		}
+
+		return false;
+
 	}
 
 }

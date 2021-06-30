@@ -1,10 +1,6 @@
 package services;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,21 +10,20 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.Artikal;
-import beans.Korisnik;
 import beans.Lokacija;
 import beans.Restoran;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
-import dto.KorisnikDTO;
-import dto.RestoranDTO;
+import dto.Artikli2DTO;
+import dto.ArtikliDTO;
+import dto.RestoranDodavanjeDTO;
 import dto.RestoranPrikazDTO;
-import sun.invoke.empty.Empty;
 
 @Path("/restorani")
 public class RestoraniService {
@@ -88,15 +83,14 @@ public class RestoraniService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void dodajSliku() {
-		System.out.println("uspeo");
+		System.out.println("slika upisana");
 	}
 
 	@POST
 	@Path("/dodajRestoran")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public RestoranDTO dodajRestoran(RestoranDTO r) {
-
+	public RestoranDodavanjeDTO dodajRestoran(RestoranDodavanjeDTO r) {
 		Lokacija lokacija = new Lokacija(r.geografskaDuzina, r.geografskaSirina, r.ulica, r.broj, r.mesto,
 				r.postanskiBroj);
 		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString(), 0, r.naziv, r.tipRestorana,
@@ -111,12 +105,32 @@ public class RestoraniService {
 			if (menadzer == null)
 				return null;
 		}
-
 		if (dodat == null) {
 			return null;
 		}
 		r.id = dodat.getId();
 		return r;
+	}
+
+	@POST
+	@Path("/dodajArtikal")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response dodajArtikal(Artikli2DTO a) {
+
+		RestoranDAO restorani = dobaviRestoranDAO();
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Double kolicina = 0.0;
+		if (!a.kolicina.equals(""))
+			kolicina = Double.parseDouble(a.kolicina);
+		Artikal artikal = new Artikal(a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
+				a.slika);
+
+		if (!restorani.dodajArtikal(a.restoran, artikal) || !korisnici.dodarArtikal(artikal, a.restoran)) {
+			return Response.status(400).build();
+		}
+
+		return Response.status(200).build();
 	}
 
 }
