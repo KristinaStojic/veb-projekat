@@ -108,13 +108,10 @@ public class RestoranDAO {
 		
 		for (Restoran r : dobaviRestorane()) {
 			if(r.getId().equals(idRestorana)) {
-				System.out.println("nasao" + r.getNaziv());
 				if(r == null || r.getLogickoBrisanje() == 1) return false;
 				for(Artikal ar : r.getArtikliUPonudi()){
-					System.out.println("ima taj artikal");
 					if (ar.getNaziv().equals(a.getNaziv())) return false;
 				}
-				System.out.println("dodao sam");
 				r.dodajArtikal(a);
 				break;
 			}
@@ -127,7 +124,6 @@ public class RestoranDAO {
 			System.out.println("Greska");
 			return false;
 		}
-		System.out.println("vracam true");
 		return true;
 	}
 

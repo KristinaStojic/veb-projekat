@@ -99,7 +99,7 @@ public class RestoraniService {
 		RestoranDAO restorani = dobaviRestoranDAO();
 		Restoran dodat = restorani.dodajRestoran(noviRestoran);
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		
+
 		if (!r.idMenadzera.equals("")) {
 			String menadzer = korisnici.dodajRestoranMenadzeru(noviRestoran, r.idMenadzera);
 			if (menadzer == null)
@@ -117,18 +117,20 @@ public class RestoraniService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response dodajArtikal(Artikli2DTO a) {
-		
+
 		RestoranDAO restorani = dobaviRestoranDAO();
-		System.out.println("restoran" + a.restoran);
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Double kolicina = 0.0;
-		if(!a.kolicina.equals("")) kolicina = Double.parseDouble(a.kolicina);
-		if(!restorani.dodajArtikal(a.restoran, new Artikal(a.naziv,Double.parseDouble(a.cena), a.tip, a.restoran, kolicina,a.opis,a.slika))) {
-			System.out.println("ne radi");
-			return null;
+		if (!a.kolicina.equals(""))
+			kolicina = Double.parseDouble(a.kolicina);
+		Artikal artikal = new Artikal(a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
+				a.slika);
+
+		if (!restorani.dodajArtikal(a.restoran, artikal) || !korisnici.dodarArtikal(artikal, a.restoran)) {
+			return Response.status(400).build();
 		}
-		System.out.println("radi");
-		
+
 		return Response.status(200).build();
 	}
-	
+
 }
