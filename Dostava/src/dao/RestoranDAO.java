@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.Response;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+import beans.Artikal;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -91,7 +93,6 @@ public class RestoranDAO {
 		ObjectMapper maper = new ObjectMapper();
 		try {
 			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
-			System.out.println("upisao");
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
@@ -101,6 +102,33 @@ public class RestoranDAO {
 
 	public Restoran dobaviRestoran(String id) {
 		return restorani.containsKey(id) ? restorani.get(id) : null;
+	}
+	
+	public Boolean dodajArtikal(String idRestorana, Artikal a) {
+		
+		for (Restoran r : dobaviRestorane()) {
+			if(r.getId().equals(idRestorana)) {
+				System.out.println("nasao" + r.getNaziv());
+				if(r == null || r.getLogickoBrisanje() == 1) return false;
+				for(Artikal ar : r.getArtikliUPonudi()){
+					System.out.println("ima taj artikal");
+					if (ar.getNaziv().equals(a.getNaziv())) return false;
+				}
+				System.out.println("dodao sam");
+				r.dodajArtikal(a);
+				break;
+			}
+		}
+		
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+		} catch (IOException e) {
+			System.out.println("Greska");
+			return false;
+		}
+		System.out.println("vracam true");
+		return true;
 	}
 
 //

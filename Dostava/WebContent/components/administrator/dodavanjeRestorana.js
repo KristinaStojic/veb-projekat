@@ -87,8 +87,8 @@ Vue.component("dodavanjeRestorana", {
       <i class="zmdi zmdi-caret-down" style="font-size: 17px"></i>
     </div>
     <div class="form-wrapper">
-		<input style="display:none" ref="unos" id="fajl" type="file" @change="selektovanFajl" accept="image/*">
-		<button class="dugme1" @click="$refs.unos.click()"> Izaberi logo </button>
+		<input style="display:none" ref="unos" id="fajl" type="file" v-on:change="selektovanFajl" accept="image/*">
+		<button class="dugme1" v-on:click="$refs.unos.click()"> Izaberi logo </button>
 		</div>
 	<div class="form-wrapper">
 		
@@ -149,13 +149,10 @@ Vue.component("dodavanjeRestorana", {
 			
 		}
 		,
-		ubaciSliku : function(){
-			
-		}
-		,
 		selektovanFajl : function(event){
 			event.preventDefault();
 			this.izabranFajl = event.target.files[0];
+			
 			if(this.izabranFajl != null){
 			const fd = new FormData();
 			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
@@ -246,7 +243,7 @@ Vue.component("dodavanjeRestorana", {
 				if(this.selektovano === true){
 					this.restoran.idMenadzera = "";
 				}
-				
+				this.restoran.logo = "slike/restorani-logo/" + this.izabranFajl.name;
 				axios
 					.post('/DostavaREST/rest/restorani/dodajRestoran', this.restoran)
 					.then(response => {

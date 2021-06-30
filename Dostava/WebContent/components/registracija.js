@@ -19,27 +19,41 @@ Vue.component("registracija", {
 			datum: false,
 			msg: "",
 			greska: "",
-			logo : "slike/logo_final2.png"
+			kj : "slike/logo_final2.png"
 		}
 	},
 	template: ` 
 <div>
-<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-		<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
-			<img :src="logo" alt="" width="100" height="80">
-		</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-				
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav ml-auto">
-							<li class="nav-item nav-link active">
-								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
+			<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+				<img :src="kj" alt="" width="100" height="80">
+			</a>
+						
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+
+				<li class="nav-item dropdown">
+				<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+					<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+				</div>
+				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+					<div class="dropdown-divider"></div>
+					<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+				</div>
+			</li>
+			</ul>
+			
+		</div>
+		
+	</nav>
 <div class="bottom">
 <div class="slika-registracija" >
 <div class="inner">
@@ -47,7 +61,7 @@ Vue.component("registracija", {
     <div class="pica"></div>
   </div>
   <form @submit="proveriPodatke" method='post'>
-    <h3>Registracija</h3>
+    <h3>Dodavanje artikla</h3>
     <div class="form-group">
       <input type="text" placeholder="Ime" v-model="noviKorisnik.ime" v-on:click="imePromena" 
       v-bind:class="[{ invalid: ime && !this.noviKorisnik.ime}, { 'form-control': !ime || this.noviKorisnik.ime}]" >

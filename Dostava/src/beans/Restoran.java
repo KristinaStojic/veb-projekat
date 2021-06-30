@@ -145,4 +145,8 @@ public class Restoran implements Serializable {
 			return "Raznolika kuhinja";
 		}
 	}
+	
+	public void dodajArtikal(Artikal a) {
+		this.artikliUPonudi.add(a);
+	}
 }
