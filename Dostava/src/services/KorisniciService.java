@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.Dostavljac;
 import beans.Korisnik;
@@ -23,6 +24,7 @@ import beans.Restoran;
 import beans.TipKupca;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
+import dto.KorisnikBlokiranjeDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
@@ -248,5 +250,21 @@ public class KorisniciService {
 
 		}
 		return null;
+	}
+	
+	
+	@POST
+	@Path("/blokirajKorisnika")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response blokirajKorisnika(KorisnikBlokiranjeDTO korisnik) {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+
+		korisnici.blokirajKorisnika(korisnik);
+		korisnici.sacuvajPodatke();
+		return Response
+				.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!")
+				.build();
+
 	}
 }

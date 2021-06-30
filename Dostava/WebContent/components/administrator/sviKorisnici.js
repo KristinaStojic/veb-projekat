@@ -9,7 +9,8 @@ Vue.component("sviKorisnici", {
         sort: '',
         filteri: "",
         logo : "slike/logo_final2.png",
-        filterTip : ""
+        filterTip : "",
+        sakrij : false
         
         //kor : [{"id":"7446a900-1c64-448f-86cf-ad8703ac8ecb","logickoBrisanje":0,"korisnickoIme":"MEN2","lozinka":"men","ime":"izmenaIme","prezime":"prezimeIzmena","pol":"MUSKI","datumRodjenja":917913600000,"uloga":"MENADZER","restoran":{"id":"e9854e0e-65b0-4a05-bbb7-b3ef8fb29211","logickoBrisanje":0,"naziv":"mrs","tipRestorana":"RAZNO","artikliUPonudi":[],"status":true,"lokacija":{"geografskaDuzina":12.0,"geografskaSirina":12.0,"ulica":"sad","broj":12,"mesto":"sfdsf","postanskiBroj":32434},"logo":"McDonald's.png"}},{"id":"c5585d9d-1efa-40a3-8ac1-f3be1469114e","logickoBrisanje":0,"korisnickoIme":"men","lozinka":"men","ime":"Marko","prezime":"Markovic","pol":"MUSKI","datumRodjenja":920332800000,"uloga":"MENADZER","restoran":null},{"id":"23c955c6-6d27-4687-b839-9a8766d61624","logickoBrisanje":0,"korisnickoIme":"men1","lozinka":"men1","ime":"Petar","prezime":"Petrovic","pol":"MUSKI","datumRodjenja":925603200000,"uloga":"MENADZER","restoran":null},{"id":"eee76e73-88f9-4ee8-9c76-50979d35fa53","logickoBrisanje":0,"korisnickoIme":"nikola","lozinka":"nikola","ime":"Nikola","prezime":"Stojic","pol":"MUSKI","datumRodjenja":1622514000000,"uloga":"MENADZER","restoran":null},{"id":"66a4472e-f58d-4014-9222-5646048c114b","logickoBrisanje":0,"korisnickoIme":"j","lozinka":"j","ime":"m","prezime":"m","pol":"ZENSKI","datumRodjenja":1622576400000,"uloga":"MENADZER","restoran":null}]
 	    }
@@ -152,8 +153,8 @@ Vue.component("sviKorisnici", {
                           <li class="list-group-item">Pol: {{k.pol}}</li>
                           <li class="list-group-item">Datum rođenja: {{k.datumRodjenja}}</li>
                           <li v-if="k.uloga !== 'Administrator' && k.blokiran === 0" class="list-group-item">                         
-                           <button type="button" class="btn btn-info btn-sm" @click="blokirajKorisnika(k.korisnickoIme)>Blokiraj</button>
-                          </li>
+                           <button type="button" id="dugme" class="btn btn-info btn-sm" @click="blokirajKorisnika(k.korisnickoIme)">Blokiraj</button>
+                          </li>                 
                           <li v-if="k.blokiran === 1" class="list-group-item">                         
                            Korisnik je već blokiran!
                           </li>
@@ -246,17 +247,18 @@ Vue.component("sviKorisnici", {
       this.filterTip = value;
    }, 
 
-   blokirajKorisnika : function(korIme){
+   blokirajKorisnika : function(korisnickoIme){
+     this.sakrij = true;
+    var k = {
+      "korisnickoIme": korisnickoIme
+      }
     axios 
-    .post('/DostavaREST/rest/korisnici/blokirajKorisnika', korIme)
+    .post('/DostavaREST/rest/korisnici/blokirajKorisnika', k)
     .then(response => {
-    window.localStorage.removeItem("korisnik");
-    window.localStorage.removeItem("uloga");
-    this.greska = "Uspesna odjava!";
-    var x = document.getElementById("greska");
-    x.className = "snackbar show";
-    setTimeout(function(){x.className = x.className.replace("show","");},1800);
-      this.$router.push("/")
+      this.greska = "Korisnik uspjesno blokiran!";
+      var x = document.getElementById("greska");
+      x.className = "snackbar show";
+      setTimeout(function(){x.className = x.className.replace("show","");},1800);
     })
   .catch(err => {
     this.greska = "Neuspjesna odjava!";
@@ -265,9 +267,11 @@ Vue.component("sviKorisnici", {
     setTimeout(function(){x.className = x.className.replace("show","");},1800);
     console.log(err);
     })
+    this.$router.go()
+
    }
 
-
+   
 	},
 
   

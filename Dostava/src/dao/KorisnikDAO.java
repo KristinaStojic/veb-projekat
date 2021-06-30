@@ -20,14 +20,15 @@ import beans.Administrator;
 import beans.ArtikalKorpa;
 import beans.Dostavljac;
 import beans.Korisnik;
+import beans.Korisnik.Pol;
+import beans.Korisnik.Uloga;
 import beans.Korpa;
 import beans.Kupac;
 import beans.Menadzer;
 import beans.Porudzbina;
 import beans.Restoran;
 import beans.TipKupca;
-import beans.Korisnik.Pol;
-import beans.Korisnik.Uloga;
+import dto.KorisnikBlokiranjeDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.MenadzerDTO;
@@ -172,7 +173,7 @@ public class KorisnikDAO {
 
 		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0.0, 500.0);
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, korisnik.korisnickoIme, korisnik.lozinka,
-				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga);
+				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga, 0);
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
 
@@ -327,7 +328,7 @@ public class KorisnikDAO {
 			return null;
 
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, menadzer.korisnickoIme, menadzer.lozinka,
-				menadzer.ime, menadzer.prezime, menadzer.pol, menadzer.datumRodjenja, menadzer.uloga);
+				menadzer.ime, menadzer.prezime, menadzer.pol, menadzer.datumRodjenja, menadzer.uloga, 0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
 		korisnici.put(menadzer.korisnickoIme, noviKorisnik);
 		menadzeri.add(noviMenadzer);
@@ -364,7 +365,7 @@ public class KorisnikDAO {
 			return null;
 
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
-				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga);
+				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga, 0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
 		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
 		dostavljaci.add(noviDostavljac);
@@ -473,6 +474,21 @@ public String nadjiPol(Pol pol) {
 		}
 		
 		return null;
+	}
+	
+	public void blokirajKorisnika(KorisnikBlokiranjeDTO kor) {
+		for (Korisnik korisnik : dobaviSve()) {
+			if(korisnik.getKorisnickoIme().equals(kor.getKorisnickoIme())) {
+				korisnik.setBlokiran(1);
+				
+				
+				for (Kupac kupac : kupci) {
+					if(kupac.getKorisnickoIme().equals(kor.getKorisnickoIme())) {
+						kupac.setBlokiran(1);
+					}
+				}
+			}
+		}
 	}
 
 }
