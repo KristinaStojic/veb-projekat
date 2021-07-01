@@ -264,6 +264,22 @@ Vue.component("informacijeRestoran", {
         
     },
     methods: {
+    	menadzerRestoran : function(event){
+            event.preventDefault();
+            axios 
+           .get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
+           .then(response => {
+               if(response.data.length == 0)
+               {     
+                   this.greska = "Trenutno Vam nije dodeljen nijedan restoran!";
+                   var x = document.getElementById("greska");
+                   x.className = "snackbar show";
+                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
+               }else{
+                   this.$router.push("/pregledRestorana")
+               }
+           })
+        },
 		promeniTabKomentar() {
 			this.komentarTab = true;
 			this.artikalTab = false; 

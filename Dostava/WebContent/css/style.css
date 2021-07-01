@@ -430,8 +430,7 @@ input::-webkit-inner-spin-button {
   color: black;
   margin-bottom: 10px;}
     
-dugme {
-  background-color: #4CAF50; /* Green */
+.dugme {
   border: none;
   color: white;
   padding: 16px 32px;
