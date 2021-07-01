@@ -58,6 +58,7 @@ Vue.component("pregledKorpe", {
 				  <th scope="col">Cena po porciji</th>
 				  <th scope="col">Količina</th>
 				  <th scope="col">Ukupna cena</th>
+		
 			    </tr>
 			  </thead>
 			  <tbody>
@@ -66,11 +67,22 @@ Vue.component("pregledKorpe", {
 			      <td>{{a.naziv}}</td>
 			      <td>{{a.tipArtikla}}</td>
 			      <td>{{a.kolicina}}</td>
-			      <td>{{a.cena}}</td>
+			      <td>{{a.cena}} RSD</td>
 			      <td>{{a.kolicinaKorpa}}</td>
-			      <td>{{a.ukupnoCena}}</td>
+			      <td>{{a.ukupnoCena}} RSD</td>
+				  <td style="border-style:none" v-if="a.kolicinaKorpa > '1'"><button  @click="a.kolicinaKorpa--; a.ukupnoCena -= a.cena ;korpa.cena -= a.cena"  
+							 class="okruglo">-</button></td>
+     			  <td style="border-style:none" v-else><button class="okruglo">-</button></td>
+				  <td style="border-style:none"><input type="number" min="0" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa"></td>
+				  <td style="border-style:none"><button @click="a.kolicinaKorpa++; a.ukupnoCena += a.cena; korpa.cena += a.cena" class="okruglo">+</button></td>
+				  <td style="border-style:none"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" style="text-decoration: underline; color:black;">Ukloni</a></td>
 			    </tr>
 			  </tbody>
+			  <tfoot>
+					<td colspan="3"><td/>
+   					<td style="font-size: large;"><b>Ukupno:</b> </td>
+					<td colspan="2" style="color:coral; font-size: large;text-align:right;"><b>{{this.korpa.cena}} RSD</b></td>
+  			  </tfoot>
 			</table>
 		</div>
   		</div>
