@@ -210,20 +210,29 @@ Vue.component("informacijeRestoran", {
 						<span class="tab-rounding right"></span>
 						</span> </a></li>
 					</ul>
+					
 			</nav>
 						<div class="scroll" v-if="this.artikalTab === true">
-						<div class="row">
-						<div style="margin: 20px;" v-for="(a, i) in this.artikli">
+						<div v-if="uloga === 'KUPAC'"><button  class="dugme2" @click="pregledKorpe">Pregled korpe</button></br></br></br></br></div>
+						<div class="red">
+						<div style="margin: 10px; margin-top:10" v-for="(a, i) in this.artikli">
 							<div class="kartica" >
 								<img :src="a.slika" class="slikaKartice" alt="Nedostaje fotografija">
 								<ul class="list-group list-group-flush">
 								<li v-if="a.tipArtikla === 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}g)</b></li>
 								<li v-if="a.tipArtikla !== 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}ml)</b></li>
-								<li v-else class="list-group-item"><b>{{a.naziv}}</b></li>
+								<li v-if="a.kolicina === '0.0'" class="list-group-item"><b>{{a.naziv}}</b></li>
 								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
 								<li v-if="a.opis !== ''" class="list-group-item">{{a.opis}}</li>
-								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li>
-								</ul>
+								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li></ul>
+								<li  v-if="uloga === 'KUPAC'" class="list-group-item"> 
+									
+									<button  v-if="a.kolicinaKorpa > '0'" @click="a.kolicinaKorpa--"  style="margin-left:50px" class="okruglo">-</button>
+									<button  v-else  style="margin-left:50px" class="okruglo">-</button>
+									<input type="number" min="0" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa">
+									<button @click="a.kolicinaKorpa++" class="okruglo">+</button>
+								
+								</li>
 							</div>
 						</div>
 						</div>
@@ -264,6 +273,33 @@ Vue.component("informacijeRestoran", {
         
     },
     methods: {
+		pregledKorpe : function(event){
+				console.log(this.artikli)
+				event.preventDefault();
+			    axios 
+			   .post('rest/korisnici/popunjavanjeKorpe', this.artikli)
+			   .then(response => {
+			        	
+					if(response.data.length == 1)
+		            {     
+		                   this.greska = "Morate dodati barem jedan artikal!";
+		                   var x = document.getElementById("greska");
+		                   x.className = "snackbar show";
+		                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
+		            }else{
+			           this.greska = "Uspešno!";
+			           var x = document.getElementById("greska");
+			           x.className = "snackbar show";
+			           setTimeout(function(){x.className = x.className.replace("show","");},1800);
+			           this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))}
+   				})
+				.catch(err => {
+					this.greska = "Neuspešno popunjavanje korpe!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+				  })
+		},
     	menadzerRestoran : function(event){
             event.preventDefault();
             axios 

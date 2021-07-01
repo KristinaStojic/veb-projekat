@@ -207,10 +207,10 @@ Vue.component("pocetna", {
 
             </div>
 			</div>
-			<div class="row">
-				<div style="margin: 20px;" v-for="(r, i) in pronadjeni">
+			<div class="row" style="margin-left: 10px;">
+				<div style="margin: 20px; " v-for="(r, i) in pronadjeni">
 					<div class="card" >
-						<img :src="r.logo" class="card-img-top" alt="Nedostaje fotografija">
+						<img :src="r.logo" class="card-img-top" sty alt="Nedostaje fotografija">
 						<ul class="list-group list-group-flush">
 						<li class="list-group-item"><b>{{r.naziv}}</b></li>
 						<li class="list-group-item">{{r.tipRestorana}}</li>
@@ -219,9 +219,13 @@ Vue.component("pocetna", {
 						<li class="list-group-item">{{r.lokacija}}</li>
 						<li v-if="r.ocena !== '0.0'" class="list-group-item">Prosečna ocena: {{r.ocena}}</li>
 						<li v-else class="list-group-item">Restoran nema nijednu ocenu</li>
-						<li class="list-group-item">
-						<button class="dugme3" @click="informacije(r.id)">Više informacija</button>
+						<li v-if="uloga === 'KUPAC' && r.status === 'Otvoreno'" class="list-group-item">
+						<button class="dugme3" style="margin-left: 45px;" @click="informacije(r.id)">Informacije i naručivanje</button>
 						</li>
+						<li v-else class="list-group-item">
+						<button class="dugme3" style="margin-left: 45px;" @click="informacije(r.id)">Više informacija</button>
+						</li>
+						
 						</ul>
 					</div>
 				</div>

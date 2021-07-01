@@ -13,6 +13,12 @@ public class ArtikliDTO {
 	public String kolicina; // grami ili milimetri
 	public String opis;
 	public String slika;
+	public Integer kolicinaKorpa;
+	
+	
+	public ArtikliDTO() {
+		super();
+	}
 
 	public ArtikliDTO(String naziv, String cena, String tipArtikla, String restoran, String kolicina, String opis,
 			String slika) {
@@ -24,6 +30,7 @@ public class ArtikliDTO {
 		this.kolicina = kolicina;
 		this.opis = opis;
 		this.slika = slika;
+		this.kolicinaKorpa = 0;
 	}
 
 }

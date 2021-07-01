@@ -602,17 +602,26 @@ input::-webkit-inner-spin-button {
   
 }
 
+.red {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-left:10px;
+}
+
 .izmena {
   padding: 20px;
   background: #fff;
   max-width: 850px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: auto;
+  margin-top: 20px;
   margin-bottom: 80px;
   display: flex;
    }
-  .izmena form {
+  .izmena .tabela {
     padding-top: 20px;
     padding-left: 45px;
     padding-right: 45px; }
@@ -623,6 +632,36 @@ input::-webkit-inner-spin-button {
     text-align: center;
     margin-bottom: 20px; }
 
+.korpa {
+  padding: 20px;
+  background: #fff;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 80px;
+  display: flex;
+   }
+.korpa .zaglavlje {
+    height: 20%;
+     }
+  .korpa .tabela {
+  	height: 80%;
+    padding-top: 20px;
+    padding-left: 45px;
+    padding-right: 45px; }
+  .korpa h3 {
+    text-transform: uppercase;
+    font-size: 25px;
+    font-family: "Poppins-SemiBold";
+    text-align: center;
+    margin-bottom: 20px; }
+    .korpa h4 {
+    font-size: 20px;
+    font-family: "Poppins-SemiBold";
+    text-align: center;
+    margin-bottom: 20px; }
+    
+
 .slikaArtikal{
 	margin-top:25%;
 	padding:20px;
@@ -630,5 +669,11 @@ input::-webkit-inner-spin-button {
 	border-radius: 50%; 
 	width: 300px; 
 	height: 300px; 
+}
+
+.okruglo{
+  border-radius: 50%;
+  padding: 0.25em 0.8em;
+  color:red;
 }
 
