@@ -26,6 +26,7 @@ import beans.Kupac;
 import beans.Lokacija;
 import beans.Menadzer;
 import beans.Restoran;
+import beans.TipKupca.ImeTipa;
 import beans.Artikal.TipArtikla;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
@@ -331,11 +332,18 @@ public class KorisniciService {
 		povratna.artikli = new ArrayList<ArtikliKorpaDTO>();
 		for(ArtikalKorpa ak : korpa.getArtikli()) {
 			Artikal a = ak.getArtikal();
-			povratna.artikli.add(new ArtikliKorpaDTO(a.getNaziv(),a.tipString(),a.getKolicina(),a.getCena(),ak.getKolicina(), ak.getKolicina()*a.getCena()));
+			povratna.artikli.add(new ArtikliKorpaDTO(a.getNaziv(),a.tipString(),a.getKolicina(),a.getCena(),ak.getKolicina(), ak.getKolicina()*a.getCena(), a.getRestoran()));
 		}
 		povratna.korisnik = id;
-		povratna.cena = korpa.getCena();
-
+		povratna.tipKupca = k.getTipKupca().getImeTipa();
+		if(k.getTipKupca().getImeTipa() == ImeTipa.SREBRNI) {
+			povratna.cena = korpa.getCena() * 0.95;
+		}else if(k.getTipKupca().getImeTipa() == ImeTipa.ZLATNI) {
+			povratna.cena = korpa.getCena() * 0.9;
+		}else {
+			povratna.cena = korpa.getCena();
+		}
+		
 		return povratna;
 
 	}

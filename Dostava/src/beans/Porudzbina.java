@@ -20,11 +20,23 @@ public class Porudzbina implements Serializable {
 	private Restoran restoran;
 	private Date datumVreme;
 	private Double cena;
-	private Kupac kupac;
+	private String kupac;
 	private Status status;
 
 	public Porudzbina() {
 		super();
+	}
+
+	public Porudzbina(String id, List<Artikal> poruceniArtikli, Restoran restoran, Date datumVreme, Double cena,
+			String kupac, Status status) {
+		super();
+		this.id = id;
+		this.poruceniArtikli = poruceniArtikli;
+		this.restoran = restoran;
+		this.datumVreme = datumVreme;
+		this.cena = cena;
+		this.kupac = kupac;
+		this.status = status;
 	}
 
 	public String getId() {
@@ -68,11 +80,11 @@ public class Porudzbina implements Serializable {
 		this.cena = cena;
 	}
 
-	public Kupac getKupac() {
+	public String getKupac() {
 		return kupac;
 	}
 
-	public void setKupac(Kupac kupac) {
+	public void setKupac(String kupac) {
 		this.kupac = kupac;
 	}
 

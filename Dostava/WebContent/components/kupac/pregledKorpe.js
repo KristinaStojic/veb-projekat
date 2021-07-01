@@ -4,7 +4,8 @@ Vue.component("pregledKorpe", {
 		korpa : {
 			artikli:[],
 			korisnik : "",
-			cena : 0.0
+			cena : 0.0,
+			tipKupca : 0
 		},
         greska: "",
         logo : "slike/logo_final2.png"
@@ -46,9 +47,9 @@ Vue.component("pregledKorpe", {
 	<div class="bottom">
 		<div class="slika-registracija">
   		<div id="greska" class="snackbar">{{greska}}</div>
-		<div class="izmena">
+		<div style="padding-right:30px;" class="izmena">
 			<h3>Pregled korpe</h3>
-			<table class="table table-hover">
+			<table  class="table table-hover">
 			  <thead>
 			    <tr>
 			      <th scope="col">#</th>
@@ -78,10 +79,12 @@ Vue.component("pregledKorpe", {
 				  <td style="border-style:none"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" style="text-decoration: underline; color:black;">Ukloni</a></td>
 			    </tr>
 			  </tbody>
-			  <tfoot>
+			  <tfoot style="margin-top:20px;">
 					<td colspan="3"><td/>
    					<td style="font-size: large;"><b>Ukupno:</b> </td>
 					<td colspan="2" style="color:coral; font-size: large;text-align:right;"><b>{{this.korpa.cena}} RSD</b></td>
+					<td style="border-style:none"></td>
+					<td style="border-style:none" colspan="3"><button @click="poruci" class="dugme1" style=" width:170px" >Poruči</button> <td/>
   			  </tfoot>
 			</table>
 		</div>
@@ -96,6 +99,7 @@ Vue.component("pregledKorpe", {
     			.then(response => {
 					this.korpa = response.data;
 					console.log(this.korpa)
+					
     			})
 				.catch(err => {
 					this.greska = "Neuspesno!";
@@ -106,6 +110,39 @@ Vue.component("pregledKorpe", {
 				  })
     },
     methods: {
+		poruci : function(event) {
+			event.preventDefault();
+			
+			if(this.korpa.artikli.length === 0){
+					console.log("radi")
+					this.greska = "Korpa ne može biti prazna!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+			}else{
+				
+				axios 
+    			.post('/DostavaREST/rest/porudzbine/', this.korpa)
+    			.then(response => {
+					
+					this.greska = "Uspešno izvršena porudžbina!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspešno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+				
+			}
+    	},
         odjava : function() {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')

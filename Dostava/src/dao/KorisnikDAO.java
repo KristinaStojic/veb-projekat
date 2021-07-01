@@ -172,7 +172,7 @@ public class KorisnikDAO {
 		if (daLiPostojiKorIme(korisnik.korisnickoIme))
 			return null;
 
-		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0.0, 500.0);
+		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0, 0);
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, korisnik.korisnickoIme, korisnik.lozinka,
 				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga, 0);
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0);
@@ -546,5 +546,34 @@ public class KorisnikDAO {
 		}
 
 		return null;
+	}
+
+	public boolean dodajPorudzbinu(Porudzbina p) {
+		
+		for (Kupac k : kupci) {
+			if (k.getId().equals(p.getKupac())) {
+				k.setKorpa(null);
+				k.dodajPorudzbinu(p);
+				Double trenutniBodovi = k.getSakupljeniBodovi();
+				k.setSakupljeniBodovi(trenutniBodovi + (p.getCena()/1000*133));
+				k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public TipKupca proveriTip(Double bodovi) {
+		
+		if(bodovi > 3000) {
+			return new TipKupca(TipKupca.ImeTipa.SREBRNI, 5, 2000 );
+		}else if(bodovi > 3000) {
+			return new TipKupca(TipKupca.ImeTipa.ZLATNI, 10, 4000);
+		}else {
+			return new TipKupca(TipKupca.ImeTipa.BRONZANI, 0, 0);
+		}
+		
 	}
 }
