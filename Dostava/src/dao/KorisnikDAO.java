@@ -541,35 +541,36 @@ public class KorisnikDAO {
 		
 		for (Menadzer men : menadzeri) {
 			if(men.getId().equals(idKorisnika)) {
-				menadzeri.remove(men);
+				men.setLogickoBrisanje(1);
 			}
 		}
 		
 		for (Administrator admin : administratori) {
 			if(admin.getId().equals(idKorisnika)) {
-				administratori.remove(admin);
+				admin.setLogickoBrisanje(1);
 			}
 		}
 		
 		
 		for (Kupac kupac : kupci) {
 			if(kupac.getId().equals(idKorisnika)) {
-				kupci.remove(kupac);
+				kupac.setLogickoBrisanje(1);
 			}
 		}
 		
 		
 		for (Dostavljac dostavljac : dostavljaci) {
 			if(dostavljac.getId().equals(idKorisnika)) {
-				dostavljaci.remove(dostavljac);
+				dostavljac.setLogickoBrisanje(1);
 			}
 		}
+		
 		
 		sacuvajPodatke();
 	}
 	
 	
-	public void obrisiArtikleuRestoranu(String nazivArtikla,String idRestorana) {
+	public void obrisiArtikleuMenadzeru(String nazivArtikla,String idRestorana) {
 		for (Menadzer menadzer : menadzeri) {
 			if(menadzer.getRestoran() != null) {
 				if(menadzer.getRestoran().getId().equals(idRestorana)) {

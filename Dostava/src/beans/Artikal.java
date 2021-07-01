@@ -1,6 +1,5 @@
 package beans;
 
-import java.awt.Image;
 import java.io.Serializable;
 
 public class Artikal implements Serializable {
@@ -13,7 +12,8 @@ public class Artikal implements Serializable {
 	public enum TipArtikla {
 		JELO, PICE
 	}
-
+	
+	private Integer logickoBrisanje;
 	private String naziv;
 	private Double cena;
 	private TipArtikla tipArtikla;
@@ -101,5 +101,30 @@ public class Artikal implements Serializable {
 			return "Piće";
 		}
 	}
+
+	
+	
+	public Integer getLogickoBrisanje() {
+		return logickoBrisanje;
+	}
+
+	public void setLogickoBrisanje(Integer logickoBrisanje) {
+		this.logickoBrisanje = logickoBrisanje;
+	}
+
+	public Artikal(Integer logickoBrisanje, String naziv, Double cena, TipArtikla tipArtikla, String restoran,
+			Double kolicina, String opis, String slika) {
+		super();
+		this.logickoBrisanje = logickoBrisanje;
+		this.naziv = naziv;
+		this.cena = cena;
+		this.tipArtikla = tipArtikla;
+		this.restoran = restoran;
+		this.kolicina = kolicina;
+		this.opis = opis;
+		this.slika = slika;
+	}
+	
+	
 
 }

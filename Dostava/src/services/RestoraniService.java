@@ -128,7 +128,7 @@ public class RestoraniService {
 		Double kolicina = 0.0;
 		if (!a.kolicina.equals(""))
 			kolicina = Double.parseDouble(a.kolicina);
-		Artikal artikal = new Artikal(a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
+		Artikal artikal = new Artikal(0,a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
 				a.slika);
 
 		if (!restorani.dodajArtikal(a.restoran, artikal) || !korisnici.dodarArtikal(artikal, a.restoran)) {
@@ -229,7 +229,7 @@ public class RestoraniService {
 		RestoranDAO restorani = dobaviRestoranDAO();
 		restorani.obrisiArtikal(nazivArtikla, idRestorana);
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		korisnici.obrisiArtikleuRestoranu(nazivArtikla,idRestorana);
+		korisnici.obrisiArtikleuMenadzeru(nazivArtikla,idRestorana);
 		return Response.status(200).build();
 	}
 }
