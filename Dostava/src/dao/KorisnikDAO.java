@@ -529,8 +529,10 @@ public class KorisnikDAO {
 		for (Menadzer menadzer : menadzeri) {
 			if(menadzer.getRestoran().getId().equals(idRestorana)) {
 				menadzer.setRestoran(null);
+				//menadzer.getRestoran().setLogickoBrisanje(1);
 			}
 		}
+		sacuvajPodatke();
 	}
 	
 	

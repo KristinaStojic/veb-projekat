@@ -50,7 +50,9 @@ public class RestoranDAO {
 				Map<String, Restoran> postojeciRestorani = 
 						mapper.readValue(Paths.get(this.putanja + "\\restorani.json").toFile(), typeRef);
 				for (Restoran r : postojeciRestorani.values()) {
-					restorani.put(r.getId(), r);
+					if(r.getLogickoBrisanje() == 0) {
+						restorani.put(r.getId(), r);
+					}
 				}
 			}
 			
@@ -194,12 +196,20 @@ public class RestoranDAO {
 	
 	
 	public void obrisiRestoran(String idRestorana) {
-		if(restorani.containsKey(idRestorana)) {
-			restorani.remove(idRestorana);
-		}
-		
+	
+		 for (Restoran r : dobaviRestorane()) {
+				if(r.getId().equals(idRestorana)) {
+					r.setLogickoBrisanje(1);
+				}
+			}
+		 
 		 sacuvajPodatke();
-		
+		 
+		 
+		 if(restorani.containsKey(idRestorana)) {
+				restorani.remove(idRestorana);
+			}
+		 
 	}
 	
 	
