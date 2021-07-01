@@ -161,17 +161,17 @@ Vue.component("pocetna", {
 
 			<label style="font-size:15px;">Sortiranje: </label>
                    <div class="btn-group">
-                  <dugme class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  <button class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                       Kriterijum
-                  </dugme>
+                  </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('naziv', 'asc')">Naziv-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('naziv', 'desc')">Naziv-silazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('lokacija', 'asc')">Lokacija-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('lokacija', 'desc')">Prezime-silazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ocena', 'asc')">Prosečna ocena-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ocena', 'desc')">Prosečna ocena-silazno</dugme>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('naziv', 'asc')">Naziv-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('naziv', 'desc')">Naziv-silazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('lokacija', 'asc')">Lokacija-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('lokacija', 'desc')">Prezime-silazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('ocena', 'asc')">Prosečna ocena-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('ocena', 'desc')">Prosečna ocena-silazno</button>
                   </div>
                   </div>
 
@@ -182,19 +182,19 @@ Vue.component("pocetna", {
                   
 				  <label style="font-size:15px">Filtriranje: </label>
                   <div class="btn-group">
-                  <dugme class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Tip restorana
-                  </dugme>
+                  </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Brza hrana')">Brza hrana</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Raznolika kuhinja')">Raznolika kuhinja</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Italijanska hrana')">Italijanska hrana</dugme>
-					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Kineska hrana')">Kineska hrana</dugme>
-					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Jela sa roštilja')">Jela sa roštilja</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Srpska hrana')">Srpska hrana</dugme>
-					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Grčka hrana')">Grčka hrana</dugme>
-					<dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Vegetarijanska hrana')">Vegetarijanska hrana</dugme>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Brza hrana')">Brza hrana</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Raznolika kuhinja')">Raznolika kuhinja</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Italijanska hrana')">Italijanska hrana</button>
+					<button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Kineska hrana')">Kineska hrana</button>
+					<button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Jela sa roštilja')">Jela sa roštilja</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Srpska hrana')">Srpska hrana</button>
+					<button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Grčka hrana')">Grčka hrana</button>
+					<button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Vegetarijanska hrana')">Vegetarijanska hrana</button>
 
                   </div>
                   </div>
