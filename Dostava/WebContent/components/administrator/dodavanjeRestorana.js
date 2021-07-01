@@ -154,6 +154,10 @@ Vue.component("dodavanjeRestorana", {
 			this.izabranFajl = event.target.files[0];
 			
 			if(this.izabranFajl != null){
+				this.greska = "Uspešno dodata fotografija!";
+                var x = document.getElementById("greska");
+                x.className = "snackbar show";
+                setTimeout(function(){x.className = x.className.replace("show","");},1800);
 			const fd = new FormData();
 			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
 			
@@ -163,6 +167,11 @@ Vue.component("dodavanjeRestorana", {
 				.then(response => {
 					console.log(response);
 				})
+			}else{
+				this.greska = "Neuspešno dodata fotografija! Pokušajte ponovo!";
+                var x = document.getElementById("greska");
+                x.className = "snackbar show";
+                setTimeout(function(){x.className = x.className.replace("show","");},1800);
 			}
 		}
 		,

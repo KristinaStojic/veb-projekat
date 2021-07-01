@@ -127,6 +127,44 @@ public class RestoranDAO {
 		return true;
 	}
 
+	public Boolean izmeniArtikal(String idRestorana, String stariNaziv,Artikal a) {
+		
+		for (Restoran r : dobaviRestorane()) {
+			if(r.getId().equals(idRestorana)) {
+				if(r == null || r.getLogickoBrisanje() == 1) return false;
+				if(!stariNaziv.equals(a.getNaziv()) && proveriPostojanjeNaziva(r, a.getNaziv())) return false;
+				for(Artikal ar : r.getArtikliUPonudi()){
+					if (ar.getNaziv().equals(stariNaziv)) {
+						ar.setNaziv(a.getNaziv());
+						ar.setCena(a.getCena());
+						ar.setKolicina(a.getKolicina());
+						ar.setOpis(a.getOpis());
+						ar.setSlika(a.getSlika());
+						ar.setTipArtikla(a.getTipArtikla());
+					}
+				}
+				break;
+			}
+		}
+	
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+		} catch (IOException e) {
+			System.out.println("Greska");
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean proveriPostojanjeNaziva(Restoran r, String naziv) {
+		
+		for(Artikal ar : r.getArtikliUPonudi()){
+			if (ar.getNaziv().equals(naziv)) return true;
+		}
+		
+		return false;
+	}
 //
 //	public Restoran update(String id, Restoran restoran) {
 //		Restoran restoranToUpdate = this.findRestoran(id);

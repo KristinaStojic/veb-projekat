@@ -1,15 +1,8 @@
-Vue.component("dodavanjeArtikla", {
+Vue.component("izmenaArtikla", {
 	data: function() {
 		return {
-			artikal: {
-				naziv: "",
-				cena: "",
-				tip: "",
-				restoran: "",
-				kolicina: "",
-				opis: "",
-				slika: ""
-			},
+			artikal: {naziv:"",cena:"", tip:"", restoran:"", kolicina:"", opis:"", slika:""},
+			idRestorana: "",
 			naziv: false,
 			cena: false,
 			slika: false,
@@ -17,6 +10,7 @@ Vue.component("dodavanjeArtikla", {
 			greska: "",
 			nazivRestorana: "",
 			izabranFajl: "",
+			stariNaziv:"",
 			logo: "slike/logo_final2.png"
 		}
 	},
@@ -57,38 +51,42 @@ Vue.component("dodavanjeArtikla", {
 	</nav>
 	<div class="bottom">
 		<div class="slika-registracija" >
-			<div class="inner">
-			<div class="image-holder">
-				<div class="artikli"></div>
-			</div>
+			<div class="izmena">
+			<img :src="this.artikal.slika" class="slikaArtikal">
 			<form>
-				<h3>Dodavanje artikla u '{{nazivRestorana}}'</h3>
+				<h3>Izmena artikla '{{this.stariNaziv}}'</h3>
 				<div class="form-wrapper">
+					<label >Naziv artikla*</label>
 					<input type="text" placeholder="Naziv artikla*" v-model="artikal.naziv" v-on:click="nazivPromena" 
 					v-bind:class="[{ invalid: naziv && !this.artikal.ime}, { 'form-control': !naziv || this.artikal.naziv}]" >
 					<i class="zmdi zmdi-cutlery"></i>
 				</div>
 				<div class="form-wrapper">
+					
 					<input style="display:none" ref="unos" id="fajl" type="file" v-on:change="selektovanFajl" accept="image/*">
 					<button class="dugme1" v-on:click="$refs.unos.click()"> Izaberi fotografiju </button>
 				</div>
 				<div class="form-wrapper">
+					<label>Tip artikla</label>
 					<select name="" id="" class="form-control" style="font-size: 12px" v-model="artikal.tip">
 						<option value="" disabled selected>Tip artikla</option>
-						<option value="0">Jelo</option>
-						<option value="1">Piće</option>
+						<option value="JELO">Jelo</option>
+						<option value="PICE">Piće</option>
 					</select>
 					<i class="zmdi zmdi-caret-down" style="font-size: 17px"></i>
 				</div>
 				<div class="form-wrapper">
+					<label>Cena*</label>
 					<input type="number" placeholder="Cena*" v-model="artikal.cena"  v-on:click="cenaPromena" 
 					v-bind:class="[{ invalid: cena && !this.artikal.cena}, { 'form-control': !cena || this.artikal.cena}]"></input>
 					<i class="zmdi zmdi-money"></i>
 				</div>
 				<div class="form-wrapper">
+					<label >Količina (u gramima ili mililitrima)</label>
 					<input type="number" class="form-control" placeholder="Količina (u gramima ili mililitrima)" v-model="artikal.kolicina"></input>
 				</div>
 				<div class="form-wrapper">
+					<label>Opis</label>
 					<input type="text" class="form-control" placeholder="Opis" v-model="artikal.opis"></input>
 				</div>
 				<div class="form-wrapper">
@@ -107,10 +105,23 @@ Vue.component("dodavanjeArtikla", {
 `
 	,
 	mounted() {
-		this.nazivRestorana = window.localStorage.getItem("imeRestorana");
-		console.log(this.nazivRestorana);
-		this.artikal.restoran = window.localStorage.getItem("trenutniRestoran");
-		console.log(this.artikal.restoran);
+		
+			this.idRestorana = this.$route.params.id;
+			this.stariNaziv = this.$route.params.naziv;
+			axios 
+           .get('rest/restorani/arikli/' + this.idRestorana  + "/" + this.stariNaziv)
+           .then(response => {
+               if(response.data.length == 0)
+               {     
+                   this.greska = "Artikal nije dostupan!";
+                   var x = document.getElementById("greska");
+                   x.className = "snackbar show";
+                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
+               }else{
+                   this.artikal = response.data;
+               }
+           })
+			
 	},
 	methods: {
 	 menadzerRestoran : function(event){
@@ -135,24 +146,19 @@ Vue.component("dodavanjeArtikla", {
 			this.nazivRestorana = window.localStorage.getItem("imeRestorana");
 			this.artikal.restoran = window.localStorage.getItem("trenutniRestoran");
 			if(this.izabranFajl != null){
+				this.artikal.slika = "slike/artikli/" + this.izabranFajl.name;
+			const fd = new FormData();
+			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
 				this.greska = "Uspešno dodata fotografija!";
                 var x = document.getElementById("greska");
                 x.className = "snackbar show";
                 setTimeout(function(){x.className = x.className.replace("show","");},1800);
-			const fd = new FormData();
-			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
-			
 			console.log(this.izabranFajl);
 			axios
 				.post('rest/restorani/dodajSliku')
 				.then(response => {
 					console.log(response);
 				})
-			}else{
-				this.greska = "Neuspešno! Pokušajte ponovo!";
-                var x = document.getElementById("greska");
-                x.className = "snackbar show";
-                setTimeout(function(){x.className = x.className.replace("show","");},1800);
 			}
 		}
 		,odjava : function() {
@@ -187,7 +193,6 @@ Vue.component("dodavanjeArtikla", {
 		potvrdi: function(event) {
 			event.preventDefault();
 			this.msg = "";
-			this.artikal.slika = "slike/artikli/" + this.izabranFajl.name;
 			console.log(this.artikal.restoran);
 			if (!this.artikal.naziv) {
 				this.msg = "Obavezno uneti naziv!";
@@ -199,18 +204,16 @@ Vue.component("dodavanjeArtikla", {
 				this.msg = "Obavezno izabrati fotografiju artikla!";
 			} else {
 				axios
-					.post('/DostavaREST/rest/restorani/dodajArtikal', this.artikal)
+					.post('/DostavaREST/rest/restorani/izmeniArtikal/' +  this.idRestorana + "/" + this.stariNaziv, this.artikal)
 					.then(response => {
-							this.greska = "Uspešno dodavanje!"
+							this.greska = "Uspešna izmena!"
 							var x = document.getElementById("greska");
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-							window.localStorage.removeItem("imeRestorana");
-							window.localStorage.removeItem("trenutniRestoran");
 							this.$router.push("/pregledRestorana")
 					})
 					.catch(err => {
-						this.greska = "Neuspešno dodavanje!"
+						this.greska = "Neuspešna izmena!"
 						var x = document.getElementById("greska");
 						x.className = "snackbar show";
 						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
