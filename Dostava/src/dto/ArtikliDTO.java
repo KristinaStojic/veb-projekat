@@ -9,7 +9,6 @@ public class ArtikliDTO {
 	public String naziv;
 	public String cena;
 	public String tipArtikla;
-	public TipArtikla tip;
 	public String restoran;
 	public String kolicina; // grami ili milimetri
 	public String opis;

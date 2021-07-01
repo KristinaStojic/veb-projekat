@@ -10,19 +10,23 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
+import beans.Korisnik;
 import beans.Lokacija;
+import beans.Menadzer;
 import beans.Restoran;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
 import dto.Artikli2DTO;
 import dto.ArtikliDTO;
 import dto.RestoranDodavanjeDTO;
+import dto.RestoranMenadzerDTO;
 import dto.RestoranPrikazDTO;
 
 @Path("/restorani")
@@ -133,4 +137,25 @@ public class RestoraniService {
 		return Response.status(200).build();
 	}
 
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public RestoranMenadzerDTO nadjiRestoran(@PathParam("id") String id) {
+		RestoranDAO dao = dobaviRestoranDAO();
+		Restoran r = dao.dobaviRestoran(id);
+
+		if (r == null || r.getLogickoBrisanje() == 1) {
+			return null;
+		}
+
+		Lokacija l = r.getLokacija();
+		List<ArtikliDTO> artikli = new ArrayList<>();
+		for (Artikal a : r.getArtikliUPonudi()) {
+			artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
+					a.getKolicina().toString(), a.getOpis(), a.getSlika()));
+		}
+		return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(),
+				l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(),
+				r.getOcena().toString(), r.getStatus(), artikli);
+	}
 }

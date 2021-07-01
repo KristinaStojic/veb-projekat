@@ -1,4 +1,4 @@
-Vue.component("pregledRestorana", {
+Vue.component("informacijeRestoran", {
     data: function () {
       return {
 		restoran: {
@@ -6,7 +6,6 @@ Vue.component("pregledRestorana", {
 				naziv: "",
 				tipRestorana: 7,
 				logo: "",
-				
 				status: "",
 				geografskaDuzina: "",
 				geografskaSirina: "",
@@ -23,7 +22,8 @@ Vue.component("pregledRestorana", {
         kj : "slike/logo_final2.png",
 		 artikalTab : true,
 		 komentarTab : false,
-		 lokacijaTab : false
+		 lokacijaTab : false,
+		uloga: ""
 	}
     },
     template: ` 
@@ -37,25 +37,111 @@ Vue.component("pregledRestorana", {
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav ml-auto">
+				<div v-if="uloga === 'ADMINISTRATOR'"  class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
+							</li>
 
-				<li class="nav-item dropdown">
-				<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-					<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+							</li>
+
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+							</li>
+
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
+							</li>
+
+							<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+								<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+						</li>
+
+
+						</ul>
 				</div>
-				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
-					<div class="dropdown-divider"></div>
-					<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+
+				<div v-if="uloga === 'DOSTAVLJAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+								</div>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+                                    <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+									<div class="dropdown-divider"></div>
+									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+								</div>
+							</li>
+
+							
+						</ul>
 				</div>
-			</li>
-			</ul>
-			
-		</div>
 		
+				<div v-if="uloga === 'KUPAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
+							<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+								</div>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+                                    <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+									<div class="dropdown-divider"></div>
+									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+								</div>
+							</li>
+
+							</ul>
+				</div>
+
+				<div v-if="uloga === 'MENADZER'" class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item nav-link active">
+                        <a class="nav-link" href="" v-on:click="menadzerRestoran">Moj restoran</a>
+                        </li>
+			
+							<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+								<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+						</li>
+					</ul>
+				</div>
+				
+				<div v-if="uloga === null" class="collapse navbar-collapse" id="navbarSupportedContent" >
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/prijava">Prijava</a>
+						</li>
+						<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/registracija">Registracija</a>
+						</li>
+					</ul>
+				</div>
+
 	</nav>
 
 	
@@ -126,7 +212,6 @@ Vue.component("pregledRestorana", {
 					</ul>
 			</nav>
 						<div class="scroll" v-if="this.artikalTab === true">
-						<button class="dugme2" @click="$router.push('/dodavanjeArtikla')">Dodaj novi artikal</button>
 						<div class="row">
 						<div style="margin: 20px;" v-for="(a, i) in this.artikli">
 							<div class="kartica" >
@@ -138,9 +223,6 @@ Vue.component("pregledRestorana", {
 								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
 								<li v-if="a.opis !== ''" class="list-group-item">{{a.opis}}</li>
 								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li>
-								<li class="list-group-item">
-										<button class="dugme3">Izmeni artikal</button>
-									</li>
 								</ul>
 							</div>
 						</div>
@@ -160,22 +242,25 @@ Vue.component("pregledRestorana", {
 </div>
   `
     ,
-	
     mounted () {
+		this.uloga = window.localStorage.getItem("uloga");
+		this.restoran.id = this.$route.path.slice(21,this.$route.path.length);
         axios 
-        .get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
+        .get('rest/restorani/' + this.restoran.id)
         .then(response => {
             if(response.data != null)
             {     
                 this.restoran = response.data;
                 this.artikli = response.data.artikli;
-				console.log("caos")
-                console.log(this.restoran.artikli);
-                window.localStorage.setItem("trenutniRestoran", this.restoran.id);
-				window.localStorage.setItem("imeRestorana", this.restoran.naziv);
             }
         })
-        
+        .catch(err => {
+					this.greska = "Restoran je obrisan!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
         
     },
     methods: {
@@ -194,13 +279,6 @@ Vue.component("pregledRestorana", {
 			this.artikalTab = false; 
 			this.lokacijaTab = true;
 		  },
-		dodajArtikal : function(event){
-			event.preventDefault();
-			window.localStorage.setItem("trenutniRestoran", this.restoran.id);
-			window.localStorage.setItem("imeRestorana", this.restoran.naziv);
-			this.$router.push("/dodavanjeArtikla")
-		
-		},
         odjava : function() {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')
