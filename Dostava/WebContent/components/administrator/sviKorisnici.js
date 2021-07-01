@@ -89,33 +89,33 @@ Vue.component("sviKorisnici", {
               
                   <label style="font-size:15px;">Sortiranje: </label>
                    <div class="btn-group">
-                  <dugme class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  <button class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                       Izaberite kriterijum
-                  </dugme>
+                  </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ime', 'asc')">Ime-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('ime', 'desc')">Ime-silazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'asc')">Prezime-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'desc')">Prezime-silazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'asc')">Korisničko ime-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'desc')">Korisničko ime-silazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('brojBodova', 'asc')">Broj bodova kupca-uzlazno</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="sortTable('brojBodova', 'desc')">Broj bodova kupca-silazno</dugme>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('ime', 'asc')">Ime-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('ime', 'desc')">Ime-silazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'asc')">Prezime-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('prezime', 'desc')">Prezime-silazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'asc')">Korisničko ime-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('korisnickoIme', 'desc')">Korisničko ime-silazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('brojBodova', 'asc')">Broj bodova kupca-uzlazno</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('brojBodova', 'desc')">Broj bodova kupca-silazno</button>
                   </div>
                   </div>
                   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                   
                   <label style="font-size:15px">Filtriranje: </label>
                   <div class="btn-group">
-                  <dugme class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Izaberite ulogu
-                  </dugme>
+                  </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('')">Svi</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Kupac')">Kupac</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Administrator')">Administrator</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilter('Menadžer')">Menadžer</dugme>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('')">Svi</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Kupac')">Kupac</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Administrator')">Administrator</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Menadžer')">Menadžer</button>
 
                 
                   </div>
@@ -126,14 +126,14 @@ Vue.component("sviKorisnici", {
                   
  
                   <div class="btn-group">
-                  <dugme class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Izaberite tip kupca
-                  </dugme>
+                  </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Bronzani')">Bronzani</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Srebrni')">Srebrni</dugme>
-                    <dugme class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Zlatni')">Zlatni</dugme>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Bronzani')">Bronzani</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Srebrni')">Srebrni</button>
+                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('Zlatni')">Zlatni</button>
 
                 
                   </div>
@@ -175,7 +175,7 @@ Vue.component("sviKorisnici", {
           .get('rest/korisnici/')
           .then(response => (this.korisnici = response.data))
       },
-
+      
 
       computed: {
         filteredGames(){
