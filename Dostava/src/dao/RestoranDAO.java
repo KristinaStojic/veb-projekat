@@ -5,12 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
+import beans.Menadzer;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -27,7 +27,6 @@ public class RestoranDAO {
 
 	public RestoranDAO(String putanjaDoFajla) {
 		restorani = new HashMap<>();
-
 		this.putanja = putanjaDoFajla;
 		
 		ucitajPodatke();
@@ -54,7 +53,8 @@ public class RestoranDAO {
 					restorani.put(r.getId(), r);
 				}
 			}
-
+			
+			
 		} catch (
 
 		JsonParseException e) {
@@ -179,5 +179,36 @@ public class RestoranDAO {
 //	public void delete(String id) {
 //		this.restorani.remove(id);
 //	}
+	
+	public void sacuvajPodatke() {
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+		
+	
+	}
+	
+	
+	
+	public void obrisiRestoran(String idRestorana) {
+		if(restorani.containsKey(idRestorana)) {
+			restorani.remove(idRestorana);
+		}
+		
+		
+		/*for (Menadzer menadzer : menadzeri) {
+			if(menadzer.getRestoran().getId().equals(idRestorana)) {
+				menadzer.setRestoran(null);
+			}
+		}*/
+		
+		 sacuvajPodatke();
+		 
+		 
+		
+	}
 
 }

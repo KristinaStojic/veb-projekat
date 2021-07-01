@@ -523,5 +523,14 @@ public class KorisnikDAO {
 		
 		return false;
 	}
+	
+	
+	public void obrisiRestoranMenadzeru(String idRestorana) {
+		for (Menadzer menadzer : menadzeri) {
+			if(menadzer.getRestoran().getId().equals(idRestorana)) {
+				menadzer.setRestoran(null);
+			}
+		}
+	}
 
 }

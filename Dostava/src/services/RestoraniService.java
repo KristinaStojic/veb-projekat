@@ -7,9 +7,9 @@ import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,9 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
-import beans.Korisnik;
 import beans.Lokacija;
-import beans.Menadzer;
 import beans.Restoran;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
@@ -53,6 +51,8 @@ public class RestoraniService {
 
 		return restorani;
 	}
+	
+	
 
 	private KorisnikDAO dobaviKorisnikDAO() {
 
@@ -202,6 +202,21 @@ public class RestoraniService {
 			return Response.status(400).build();
 		}
 
+		return Response.status(200).build();
+	}
+	
+	
+	@DELETE
+	@Path("/obrisiRestoran/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obrisiRestoran(@PathParam("id") String idRestorana) {
+		RestoranDAO restorani = dobaviRestoranDAO();
+		restorani.obrisiRestoran(idRestorana);
+		
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		korisnici.obrisiRestoranMenadzeru(idRestorana);
+		
 		return Response.status(200).build();
 	}
 }

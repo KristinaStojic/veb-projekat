@@ -45,12 +45,12 @@ public class KorisniciService {
 	private KorisnikDAO dobaviKorisnikDAO() {
 
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
-
+		
 		if (korisnici == null) {
 			korisnici = new KorisnikDAO(sc.getRealPath("."));
 			sc.setAttribute("korisnici", korisnici);
 		}
-
+		
 		return korisnici;
 	}
 
