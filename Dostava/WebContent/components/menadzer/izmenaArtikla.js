@@ -149,7 +149,10 @@ Vue.component("izmenaArtikla", {
 				this.artikal.slika = "slike/artikli/" + this.izabranFajl.name;
 			const fd = new FormData();
 			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
-			
+				this.greska = "Uspešno dodata fotografija!";
+                var x = document.getElementById("greska");
+                x.className = "snackbar show";
+                setTimeout(function(){x.className = x.className.replace("show","");},1800);
 			console.log(this.izabranFajl);
 			axios
 				.post('rest/restorani/dodajSliku')
