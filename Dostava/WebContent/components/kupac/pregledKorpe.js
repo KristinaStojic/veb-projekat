@@ -5,7 +5,8 @@ Vue.component("pregledKorpe", {
 			artikli:[],
 			korisnik : "",
 			cena : 0.0,
-			tipKupca : 0
+			tipKupca : 0,
+			nedostaje : 0
 		},
         greska: "",
         logo : "slike/logo_final2.png"
@@ -47,10 +48,24 @@ Vue.component("pregledKorpe", {
 	<div class="bottom">
 		<div class="slika-registracija">
   		<div id="greska" class="snackbar">{{greska}}</div>
-		<div style="padding-right:30px;" class="izmena">
-			<h3>Pregled korpe</h3>
+		<div style="padding-right:30px;" class="korpa">
+			
 			<table  class="table table-hover">
+			   	
+  				<colgroup span="11"></colgroup>
 			  <thead>
+				<tr >
+					<th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
+				<h3>Trenutni status naloga: {{this.korpa.tipKupca}}</h3></br>
+				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' ">Popust koji je obračunat: 5%</h4>
+				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' ">Potrebno bodova za Zlatni status: {{this.korpa.nedostaje}}</h4>
+				<h4 v-if="this.korpa.tipKupca === 'ZLATNI' ">Popust koji je obračunat: 10%</h4>
+				<h4 v-if="this.korpa.tipKupca === 'BRONZANI' ">Potrebno bodova za Srebrni status: {{this.korpa.nedostaje}}</h4>
+				</div></th>
+				</tr>
+				<tr style="border-style:none"><th style="border-style:none" colspan="11" scope="colgroup">
+					<h3>Pregled korpe</h3>
+				</th></tr>
 			    <tr>
 			      <th scope="col">#</th>
 			      <th scope="col">Naziv artikla</th>

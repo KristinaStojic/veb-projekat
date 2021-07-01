@@ -338,10 +338,13 @@ public class KorisniciService {
 		povratna.tipKupca = k.getTipKupca().getImeTipa();
 		if(k.getTipKupca().getImeTipa() == ImeTipa.SREBRNI) {
 			povratna.cena = korpa.getCena() * 0.95;
+			povratna.nedostaje = 4000 - k.getSakupljeniBodovi();
 		}else if(k.getTipKupca().getImeTipa() == ImeTipa.ZLATNI) {
 			povratna.cena = korpa.getCena() * 0.9;
+			
 		}else {
 			povratna.cena = korpa.getCena();
+			povratna.nedostaje = 2000 - k.getSakupljeniBodovi();
 		}
 		
 		return povratna;

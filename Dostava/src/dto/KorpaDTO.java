@@ -11,4 +11,5 @@ public class KorpaDTO {
 	public String korisnik;
 	public Double cena;
 	public TipKupca.ImeTipa tipKupca;
+	public Double nedostaje;
 }
