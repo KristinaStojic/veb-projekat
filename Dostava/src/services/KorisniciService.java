@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -270,5 +271,18 @@ public class KorisniciService {
 				.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!")
 				.build();
 
+	}
+	
+	
+	@DELETE
+	@Path("/obrisiKorisnika/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obrisiRestoran(@PathParam("id") String idKorisnika) {
+		
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		korisnici.obrisiKorisnika(idKorisnika);
+		
+		return Response.status(200).build();
 	}
 }

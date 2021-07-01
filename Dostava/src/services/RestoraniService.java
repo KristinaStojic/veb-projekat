@@ -219,4 +219,17 @@ public class RestoraniService {
 		
 		return Response.status(200).build();
 	}
+	
+	
+	@DELETE
+	@Path("/obrisiArtikal/{id}/{restoran}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obrisiArtikal(@PathParam("id") String nazivArtikla,@PathParam("restoran") String idRestorana) {
+		RestoranDAO restorani = dobaviRestoranDAO();
+		restorani.obrisiArtikal(nazivArtikla, idRestorana);
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		korisnici.obrisiArtikleuRestoranu(nazivArtikla,idRestorana);
+		return Response.status(200).build();
+	}
 }

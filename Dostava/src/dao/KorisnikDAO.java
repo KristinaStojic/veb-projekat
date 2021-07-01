@@ -532,5 +532,73 @@ public class KorisnikDAO {
 			}
 		}
 	}
+	
+	
+	public void obrisiKorisnika(String idKorisnika) {
+		if(korisnici.containsKey(idKorisnika)) {
+			korisnici.remove(idKorisnika);
+		}
+		
+		for (Menadzer men : menadzeri) {
+			if(men.getId().equals(idKorisnika)) {
+				menadzeri.remove(men);
+			}
+		}
+		
+		for (Administrator admin : administratori) {
+			if(admin.getId().equals(idKorisnika)) {
+				administratori.remove(admin);
+			}
+		}
+		
+		
+		for (Kupac kupac : kupci) {
+			if(kupac.getId().equals(idKorisnika)) {
+				kupci.remove(kupac);
+			}
+		}
+		
+		
+		for (Dostavljac dostavljac : dostavljaci) {
+			if(dostavljac.getId().equals(idKorisnika)) {
+				dostavljaci.remove(dostavljac);
+			}
+		}
+		
+		sacuvajPodatke();
+	}
+	
+	
+	public void obrisiArtikleuRestoranu(String nazivArtikla,String idRestorana) {
+		for (Menadzer menadzer : menadzeri) {
+			if(menadzer.getRestoran() != null) {
+				if(menadzer.getRestoran().getId().equals(idRestorana)) {
+					if(menadzer.getRestoran().getArtikliUPonudi() != null) {
+						/*for (Artikal a : menadzer.getRestoran().getArtikliUPonudi()) {
+							if(a.getNaziv().equals(nazivArtikla)) {
+								System.out.println("evo me ovde i brisem: " + nazivArtikla);
+								menadzer.getRestoran().obrisiArtikal(a);
+							}
+							
+						}*/
+						for( int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++ )
+						{
+						    Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
+						    if(zaBrisanje.getNaziv().equals(nazivArtikla)) {
+						    {
+						    	menadzer.getRestoran().obrisiArtikal(zaBrisanje);
+						    }
+						    }  
+						}
+						
+					}
+					
+				}
+			}
+			
+		}
+		
+		sacuvajPodatke();
+	}
 
 }

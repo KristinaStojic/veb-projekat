@@ -198,17 +198,25 @@ public class RestoranDAO {
 			restorani.remove(idRestorana);
 		}
 		
-		
-		/*for (Menadzer menadzer : menadzeri) {
-			if(menadzer.getRestoran().getId().equals(idRestorana)) {
-				menadzer.setRestoran(null);
-			}
-		}*/
-		
 		 sacuvajPodatke();
-		 
-		 
 		
 	}
+	
+	
+	public void obrisiArtikal(String nazivArtikla, String idRestorana) {
+		for (Restoran r : dobaviRestorane()) {
+			if(r.getId().equals(idRestorana)) {
+				for(Artikal ar : r.getArtikliUPonudi()){
+					if (ar.getNaziv().equals(nazivArtikla)) {
+						r.obrisiArtikal(ar);
+					}
+				}
+				break;
+			}
+		}
+		 sacuvajPodatke();
+		
+	}
+
 
 }
