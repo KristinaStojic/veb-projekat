@@ -5,8 +5,6 @@ Vue.component("prijava", {
                 korisnickoIme: "",
                 lozinka: ""             
               },
-
-
               korIme: false,
               lozinka: false,
               msg: "",
