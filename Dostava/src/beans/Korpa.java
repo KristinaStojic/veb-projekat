@@ -11,7 +11,7 @@ public class Korpa implements Serializable {
 	private static final long serialVersionUID = -3592653701792075085L;
 
 	private List<ArtikalKorpa> artikli;
-	private Korisnik korisnik;
+	private String korisnik;
 	private Double cena;
 
 	public Korpa() {
@@ -19,7 +19,7 @@ public class Korpa implements Serializable {
 	}
 
 	
-	public Korpa(List<ArtikalKorpa> artikli, Korisnik korisnik, Double cena) {
+	public Korpa(List<ArtikalKorpa> artikli, String korisnik, Double cena) {
 		super();
 		this.artikli = artikli;
 		this.korisnik = korisnik;
@@ -35,11 +35,11 @@ public class Korpa implements Serializable {
 		this.artikli = artikli;
 	}
 
-	public Korisnik getKorisnik() {
+	public String getKorisnik() {
 		return korisnik;
 	}
 
-	public void setKorisnik(Korisnik korisnik) {
+	public void setKorisnik(String korisnik) {
 		this.korisnik = korisnik;
 	}
 

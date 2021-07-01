@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -17,19 +18,25 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
+import beans.ArtikalKorpa;
 import beans.Dostavljac;
 import beans.Korisnik;
+import beans.Korpa;
+import beans.Kupac;
 import beans.Lokacija;
 import beans.Menadzer;
 import beans.Restoran;
+import beans.Artikal.TipArtikla;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
 import dto.KorisnikBlokiranjeDTO;
 import dto.ArtikliDTO;
+import dto.ArtikliKorpaDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
 import dto.KorisnikPrikazDTO;
+import dto.KorpaDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
 import dto.RestoranMenadzerDTO;
@@ -269,6 +276,67 @@ public class KorisniciService {
 		return Response
 				.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!")
 				.build();
+
+	}
+	
+	@POST
+	@Path("/popunjavanjeKorpe")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response popunjavanjeKorpe(List<ArtikliDTO> artikli) {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
+		if(idKorisnika == null) return Response.status(400).build();
+		
+		List<ArtikalKorpa> proizvodi = new ArrayList<>();
+		Double cena = 0.0;
+		
+		for(ArtikliDTO a : artikli) {
+			if(a.kolicinaKorpa > 0) {
+				proizvodi.add(new ArtikalKorpa(new Artikal(a.naziv,Double.parseDouble(a.cena), tipArtiklaEnum(a.tipArtikla),a.restoran,Double.parseDouble(a.kolicina),a.opis,a.slika), a.kolicinaKorpa));
+				cena += (a.kolicinaKorpa * Double.parseDouble(a.cena));
+			}
+		}
+		
+		Korpa korpa = new Korpa(proizvodi,idKorisnika,cena);
+		if(proizvodi.isEmpty()) {
+			return Response.status(200).entity("a").build();
+		}
+		
+		if(dao.dodajKorpu(korpa)) {
+			
+			return Response.status(200).entity("aa").build();
+		}
+		return Response.status(400).build();
+
+	}
+
+	public TipArtikla tipArtiklaEnum(String tekst) {
+		if (tekst.equals("Jelo")) {
+			return TipArtikla.JELO;
+		} else {
+			return TipArtikla.PICE;
+		}
+	}
+	
+	@GET
+	@Path("/nadjiKorpu/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public KorpaDTO nadjiKorpu(@PathParam("id") String id) {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		Kupac k = dao.dobaviKupca(id);
+		if(k == null) return null;
+		Korpa korpa = k.getKorpa();
+		KorpaDTO povratna = new KorpaDTO();
+		povratna.artikli = new ArrayList<ArtikliKorpaDTO>();
+		for(ArtikalKorpa ak : korpa.getArtikli()) {
+			Artikal a = ak.getArtikal();
+			povratna.artikli.add(new ArtikliKorpaDTO(a.getNaziv(),a.tipString(),a.getKolicina(),a.getCena(),ak.getKolicina(), ak.getKolicina()*a.getCena()));
+		}
+		povratna.korisnik = id;
+		povratna.cena = korpa.getCena();
+
+		return povratna;
 
 	}
 }

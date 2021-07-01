@@ -102,4 +102,5 @@ public class Artikal implements Serializable {
 		}
 	}
 
+	
 }

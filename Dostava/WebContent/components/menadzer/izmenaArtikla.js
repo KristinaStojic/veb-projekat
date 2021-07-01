@@ -204,7 +204,7 @@ Vue.component("izmenaArtikla", {
 				this.msg = "Obavezno izabrati fotografiju artikla!";
 			} else {
 				axios
-					.post('/DostavaREST/rest/restorani/izmeniArtikal/' +  this.idRestorana + "/" + this.stariNaziv, this.artikal)
+					.put('/DostavaREST/rest/restorani/izmeniArtikal/' +  this.idRestorana + "/" + this.stariNaziv, this.artikal)
 					.then(response => {
 							this.greska = "Uspešna izmena!"
 							var x = document.getElementById("greska");
