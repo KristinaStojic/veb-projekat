@@ -487,5 +487,41 @@ public class KorisnikDAO {
 		return false;
 
 	}
+	
+	public Boolean izmeniArtikal(String idRestorana, String stariNaziv, Artikal a) {
+		
+		for (Menadzer men : menadzeri) {
+				Restoran r = men.getRestoran();
+				if (r.getId().equals(idRestorana)) {
+					if(r == null || r.getLogickoBrisanje() == 1) return false;
+					if(!stariNaziv.equals(a.getNaziv()) && proveriPostojanjeNaziva(r, a.getNaziv())) return false;
+					for(Artikal ar : r.getArtikliUPonudi()){
+						if (ar.getNaziv().equals(stariNaziv)) {
+							ar.setNaziv(a.getNaziv());
+							ar.setCena(a.getCena());
+							ar.setKolicina(a.getKolicina());
+							ar.setOpis(a.getOpis());
+							ar.setSlika(a.getSlika());
+							ar.setTipArtikla(a.getTipArtikla());
+						}
+					}
+					sacuvajPodatke();
+					return true;
+				}
+			
+		}
+
+		return false;
+
+	}
+	
+	public Boolean proveriPostojanjeNaziva(Restoran r, String naziv) {
+		
+		for(Artikal ar : r.getArtikliUPonudi()){
+			if (ar.getNaziv().equals(naziv)) return true;
+		}
+		
+		return false;
+	}
 
 }

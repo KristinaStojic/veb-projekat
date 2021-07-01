@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -157,5 +158,50 @@ public class RestoraniService {
 		return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(),
 				l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(),
 				r.getOcena().toString(), r.getStatus(), artikli);
+	}
+	
+	@GET
+	@Path("/arikli/{id}/{naziv}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Artikli2DTO nadjiArtikal(@PathParam("id") String id,@PathParam("naziv") String naziv) {
+		
+		RestoranDAO dao = dobaviRestoranDAO();
+		Restoran r = dao.dobaviRestoran(id);
+
+		if (r == null || r.getLogickoBrisanje() == 1) {
+			return null;
+		}
+
+		for (Artikal a : r.getArtikliUPonudi()) {
+			if(a.getNaziv().equals(naziv)) {
+				return new Artikli2DTO(a.getNaziv(), a.getCena().toString(), a.getTipArtikla(), a.getRestoran(),
+						a.getKolicina().toString(), a.getOpis(), a.getSlika());
+			}
+			
+		}
+		return null;
+	}
+	
+	@POST
+	@Path("/izmeniArtikal/{id}/{naziv}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response izmeniArtikal(@PathParam("id") String id, @PathParam("naziv") String stariNaziv, Artikli2DTO a) {
+		
+		RestoranDAO restorani = dobaviRestoranDAO();
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Double kolicina = 0.0;
+		if (!a.kolicina.equals(""))
+			kolicina = Double.parseDouble(a.kolicina);
+		
+		Artikal artikal = new Artikal(a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
+				a.slika);
+
+		if (!restorani.izmeniArtikal(id, stariNaziv, artikal) || !korisnici.izmeniArtikal(id, stariNaziv, artikal)) {
+			
+			return Response.status(400).build();
+		}
+
+		return Response.status(200).build();
 	}
 }
