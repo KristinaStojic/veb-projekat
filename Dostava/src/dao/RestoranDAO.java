@@ -214,9 +214,11 @@ public class RestoranDAO {
 	
 	
 	public void obrisiArtikal(String nazivArtikla, String idRestorana) {
+		System.out.println("Artikli u restoranu: ");
 		for (Restoran r : restorani.values()) {
 			if(r.getId().equals(idRestorana)) {
 				for(Artikal ar : r.getArtikliUPonudi()){
+					System.out.println(ar.getNaziv());
 					if (ar.getNaziv().equals(nazivArtikla)) {
 						r.obrisiArtikal(ar);
 					}
@@ -231,7 +233,9 @@ public class RestoranDAO {
 					System.out.println("ovoliko ima artikala prije brisanja:" + r.getArtikliUPonudi().size());
 					for(Artikal ar : r.getArtikliUPonudi()){
 						if (ar.getNaziv().equals(nazivArtikla)) {
+							System.out.println(ar.getNaziv());
 							r.obrisiArtikalIzListe(ar);
+							break;
 						}
 					}
 					System.out.println("ovoliko ima artikala posle brisanja:" + r.getArtikliUPonudi().size());

@@ -73,11 +73,11 @@ public class KorisnikDAO {
 				List<Kupac> postojeciKupci = Arrays
 						.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
 				for (Kupac k : postojeciKupci) {
-					if (k.getLogickoBrisanje() == 0) {
+					//if (k.getLogickoBrisanje() == 0) {
 						korisnici.put(k.getId(), k);
-					}
+					//}
 					kupci.add(k);
-					System.out.println(k.getBlokiran());
+					System.out.println(k.getBlokiran() + " kupac");
 				}
 			}
 			// dostavljaci
@@ -91,9 +91,9 @@ public class KorisnikDAO {
 				List<Dostavljac> postojeciDostavljaci = Arrays.asList(
 						mapper.readValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), Dostavljac[].class));
 				for (Dostavljac d : postojeciDostavljaci) {
-					if (d.getLogickoBrisanje() == 0) {
+					//if (d.getLogickoBrisanje() == 0) {
 						korisnici.put(d.getId(), d);
-					}
+					//}
 					dostavljaci.add(d);
 				}
 			}
@@ -108,9 +108,9 @@ public class KorisnikDAO {
 				List<Menadzer> postojeciMenadzeri = Arrays.asList(
 						mapper.readValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), Menadzer[].class));
 				for (Menadzer m : postojeciMenadzeri) {
-					if (m.getLogickoBrisanje() == 0) {
+					//if (m.getLogickoBrisanje() == 0) {
 						korisnici.put(m.getId(), m);
-					}
+					//}
 					menadzeri.add(m);
 				}
 			}
@@ -125,9 +125,9 @@ public class KorisnikDAO {
 				List<Administrator> postojeciAdministratori = Arrays.asList(mapper
 						.readValue(Paths.get(this.putanja + "\\administratori.json").toFile(), Administrator[].class));
 				for (Administrator a : postojeciAdministratori) {
-					if (a.getLogickoBrisanje() == 0) {
+					//if (a.getLogickoBrisanje() == 0) {
 						korisnici.put(a.getId(), a);
-					}
+					//}
 					administratori.add(a);
 				}
 			}
@@ -161,7 +161,7 @@ public class KorisnikDAO {
 	public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) {
 
 		for (Korisnik k : dobaviSve()) {
-			if (k.getKorisnickoIme().equals(korisnickoIme) && k.getLozinka().equals(lozinka)) {
+			if (k.getKorisnickoIme().equals(korisnickoIme) && k.getLozinka().equals(lozinka) && k.getLogickoBrisanje() == 0 && k.getBlokiran()==0) {
 				return k;
 			}
 		}
@@ -177,9 +177,10 @@ public class KorisnikDAO {
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, korisnik.korisnickoIme, korisnik.lozinka,
 				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga, 0);
 		noviKorisnik.setBlokiran(0);
+		System.out.println("novi korisnika: " + noviKorisnik.getBlokiran());
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
-
+		noviKupac.setBlokiran(0);
 		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		kupci.add(noviKupac);
 
@@ -322,7 +323,9 @@ public class KorisnikDAO {
 
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, menadzer.korisnickoIme, menadzer.lozinka,
 				menadzer.ime, menadzer.prezime, menadzer.pol, menadzer.datumRodjenja, menadzer.uloga, 0);
+		noviKorisnik.setBlokiran(0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
+		noviMenadzer.setBlokiran(0);
 		korisnici.put(menadzer.korisnickoIme, noviKorisnik);
 		menadzeri.add(noviMenadzer);
 
@@ -351,12 +354,11 @@ public class KorisnikDAO {
 	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
 		if (daLiPostojiKorIme(dostavljac.korisnickoIme))
 			return null;
-
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, dostavljac.korisnickoIme,
-				dostavljac.lozinka, dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja,
-				dostavljac.uloga, 0);
-
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
+				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga, 0);
+		noviKorisnik.setBlokiran(0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
+		noviDostavljac.setBlokiran(0);
 		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
 		dostavljaci.add(noviDostavljac);
 
@@ -530,10 +532,13 @@ public class KorisnikDAO {
 
 	public void obrisiRestoranMenadzeru(String idRestorana) {
 		for (Menadzer menadzer : menadzeri) {
-			if (menadzer.getRestoran().getId().equals(idRestorana)) {
-				menadzer.setRestoran(null);
-				// menadzer.getRestoran().setLogickoBrisanje(1);
+			if(menadzer.getRestoran() != null) {
+				if(menadzer.getRestoran().getId().equals(idRestorana)) {
+					menadzer.setRestoran(null);
+					//menadzer.getRestoran().setLogickoBrisanje(1);
+				}
 			}
+			
 		}
 		sacuvajPodatke();
 	}
@@ -569,24 +574,25 @@ public class KorisnikDAO {
 
 		sacuvajPodatke();
 	}
-
-	public void obrisiArtikleuMenadzeru(String nazivArtikla, String idRestorana) {
+	
+	public void obrisiArtikleuMenadzeru(String nazivArtikla,String idRestorana) {
+		System.out.println("Artikli u menadzeru");
 		for (Menadzer menadzer : menadzeri) {
-			if (menadzer.getRestoran() != null) {
-				if (menadzer.getRestoran().getId().equals(idRestorana)) {
-					if (menadzer.getRestoran().getArtikliUPonudi() != null) {
-
-						for (int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++) {
-							Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
-							if (zaBrisanje.getNaziv().equals(nazivArtikla)) {
-								{
-									menadzer.getRestoran().obrisiArtikal(zaBrisanje);
-								}
-							}
+			if(menadzer.getRestoran() != null) {
+				if(menadzer.getRestoran().getId().equals(idRestorana)) {
+					if(menadzer.getRestoran().getArtikliUPonudi() != null) {
+					
+						for( int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++ )
+						{
+						    Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
+						    System.out.println(zaBrisanje.getNaziv());
+						    if(zaBrisanje.getNaziv().equals(nazivArtikla)) {
+						    {
+						    	menadzer.getRestoran().obrisiArtikal(zaBrisanje);
+						    }
+						    }  
 						}
-
 					}
-
 				}
 			}
 

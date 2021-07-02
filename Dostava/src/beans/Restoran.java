@@ -175,7 +175,10 @@ public class Restoran implements Serializable {
 		    Artikal zaBrisanje = this.artikliUPonudi.get(i);
 		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
 		    {
+		    	System.out.println("Brisem: " + zaBrisanje.getNaziv());
 		    	this.artikliUPonudi.remove(zaBrisanje);
+		    	System.out.println("Obrisala sam: " + zaBrisanje.getNaziv());
+		    	System.out.println("Ostalo je kod menadzera: " + this.artikliUPonudi.size());
 		    	//this.artikliUPonudi.get(i).setLogickoBrisanje(1);
 		    }
 		      
