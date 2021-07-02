@@ -699,4 +699,9 @@ public class KorisnikDAO {
 
 		return false;
 	}
+	
+	
+	public List<Dostavljac> dobaviSveDostavljace(){
+		return dostavljaci;
+	}
 }

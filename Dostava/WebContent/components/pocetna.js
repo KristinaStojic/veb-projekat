@@ -78,6 +78,8 @@ Vue.component("pocetna", {
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
 									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 								</div>
 							</li>
@@ -290,7 +292,7 @@ computed: {
     		
 
 			axios 
-    			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + window.localStorage.getItem("korisnik"))
+    			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + window.localStorage.getItem("korisnik") + "/" + window.localStorage.getItem("uloga"))
     			.then(response => {
 					console.log(response.data.length)
                     if(response.data.length == 0){
@@ -316,6 +318,7 @@ computed: {
 
 
     	},
+		
 
 		informacije(value){
 			this.$router.push("/informacijeRestoran/" + value)
