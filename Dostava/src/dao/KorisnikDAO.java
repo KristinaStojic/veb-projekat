@@ -659,7 +659,7 @@ public class KorisnikDAO {
 
 	public TipKupca proveriTip(Double bodovi) {
 
-		if (bodovi >= 2000) {
+		if (bodovi >= 2000 && bodovi < 4000) {
 			return new TipKupca(TipKupca.ImeTipa.SREBRNI, 5, 2000);
 		} else if (bodovi >= 4000) {
 			return new TipKupca(TipKupca.ImeTipa.ZLATNI, 10, 4000);

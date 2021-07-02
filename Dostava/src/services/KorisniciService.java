@@ -345,7 +345,7 @@ public class KorisniciService {
 		for (ArtikalKorpa ak : korpa.getArtikli()) {
 			Artikal a = ak.getArtikal();
 			povratna.artikli.add(new ArtikliKorpaDTO(a.getNaziv(), a.tipString(), a.getKolicina(), a.getCena(),
-					ak.getKolicina(), ak.getKolicina() * a.getCena(), a.getRestoran()));
+					ak.getKolicina(), ak.getKolicina() * a.getCena(), a.getRestoran(), a.getSlika()));
 		}
 		povratna.korisnik = id;
 		povratna.tipKupca = k.getTipKupca().getImeTipa();

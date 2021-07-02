@@ -9,13 +9,14 @@ public class ArtikliKorpaDTO {
 	public Integer kolicinaKorpa;
 	public Double ukupnoCena;
 	public String restoran;
+	public String slika;
 
 	public ArtikliKorpaDTO() {
 		super();
 	}
 
 	public ArtikliKorpaDTO(String naziv, String tipArtikla, Double kolicina, Double cena, Integer kolicinaKorpa,
-			Double ukupnoCena, String restoran) {
+			Double ukupnoCena, String restoran, String slika) {
 		super();
 		this.naziv = naziv;
 		this.tipArtikla = tipArtikla;
@@ -24,10 +25,11 @@ public class ArtikliKorpaDTO {
 		this.kolicinaKorpa = kolicinaKorpa;
 		this.ukupnoCena = ukupnoCena;
 		this.restoran = restoran;
+		this.slika = slika;
 	}
 
 	public ArtikliKorpaDTO(Double cena, Double kolicina,Integer kolicinaKorpa, String naziv, String restoran, String tipArtikla,
-			Double ukupnoCena) {
+			Double ukupnoCena, String slika) {
 		super();
 		this.naziv = naziv;
 		this.tipArtikla = tipArtikla;
@@ -36,5 +38,6 @@ public class ArtikliKorpaDTO {
 		this.kolicinaKorpa = kolicinaKorpa;
 		this.ukupnoCena = ukupnoCena;
 		this.restoran = restoran;
+		this.slika = slika;
 	}
 }

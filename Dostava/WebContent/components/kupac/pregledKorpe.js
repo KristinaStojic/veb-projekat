@@ -48,11 +48,12 @@ Vue.component("pregledKorpe", {
 	<div class="bottom">
 		<div class="slika-registracija">
   		<div id="greska" class="snackbar">{{greska}}</div>
-		<div style="padding-right:30px;" class="korpa">
+		<div style="padding-right:30px;" class="korpa ">
 			
-			<table  class="table table-hover">
+			<table  class="table table-hover align-middle">
 			   	
   				<colgroup span="11"></colgroup>
+				<colgroup span="4"></colgroup>
 			  <thead>
 				<tr >
 					<th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
@@ -69,32 +70,33 @@ Vue.component("pregledKorpe", {
 				</th></tr>
 			    <tr>
 			      <th scope="col">#</th>
+				  <th scope="col">Fotografija</th>
 			      <th scope="col">Naziv artikla</th>
-			      <th scope="col">Tip</th>
 			      <th scope="col">Količina po porciji</th>
 				  <th scope="col">Cena po porciji</th>
 				  <th scope="col">Količina</th>
 				  <th scope="col">Ukupna cena</th>
-		
+				  <th colspan="4" scope="colgroup"></th>
 			    </tr>
 			  </thead>
 			  <tbody>
 			    <tr v-for="(a, i) in this.korpa.artikli">
-			      <th scope="row">{{i+1}}</th>
-			      <td>{{a.naziv}}</td>
-			      <td>{{a.tipArtikla}}</td>
-			      <td>{{a.kolicina}}</td>
-			      <td>{{a.cena}} RSD</td>
-			      <td>{{a.kolicinaKorpa}}</td>
-			      <td>{{a.ukupnoCena}} RSD</td>
-				  <td style="border-style:none" v-if="a.kolicinaKorpa > '1'"><button  @click="a.kolicinaKorpa--; a.ukupnoCena -= a.cena ;korpa.cena -= a.cena"  
+			      <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
+				  <td style="vertical-align:middle;text-align: center"><img :src="a.slika" style= "width:100px;height:80px; max-width:100%; max-height:100%;"></td>
+			      <td style="vertical-align:middle;text-align: center">{{a.naziv}}</td>
+			      <td style="vertical-align:middle;text-align: center" v-if="a.tipArtikla === 'Jelo'">{{a.kolicina}}g</td>
+				  <td style="vertical-align:middle;text-align: center" v-else>{{a.kolicina}}ml</td>
+			      <td style="vertical-align:middle;text-align: center">{{a.cena}} RSD</td>
+			      <td style="vertical-align:middle;text-align: center">{{a.kolicinaKorpa}}</td>
+			      <td style="vertical-align:middle;text-align: center">{{a.ukupnoCena}} RSD</td>
+				  <td style="border-style:none;vertical-align:middle" v-if="a.kolicinaKorpa > '1'"><button  @click="a.kolicinaKorpa--; a.ukupnoCena -= a.cena ;korpa.cena -= a.cena"  
 							 v-on:click="azurirajKorpu(a)" class="okruglo">-</button></td>
-     			  <td style="border-style:none" v-else><button class="okruglo">-</button></td>
-				  <td style="border-style:none"><input type="number" min="0" @keyup="korpa.cena -= a.ukupnoCena; a.ukupnoCena = a.kolicinaKorpa * a.cena; korpa.cena += a.ukupnoCena" 
+     			  <td style="border-style:none;vertical-align:middle" v-else><button class="okruglo">-</button></td>
+				  <td style="border-style:none;vertical-align:middle"><input type="number" min="0" @keyup="korpa.cena -= a.ukupnoCena; a.ukupnoCena = a.kolicinaKorpa * a.cena; korpa.cena += a.ukupnoCena" 
 					v-on:keyup="azurirajKorpu(a)" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa"></td>
-				  <td style="border-style:none"><button @click="a.kolicinaKorpa++; a.ukupnoCena += a.cena; korpa.cena += a.cena" 
+				  <td style="border-style:none;vertical-align:middle"><button @click="a.kolicinaKorpa++; a.ukupnoCena += a.cena; korpa.cena += a.cena" 
 					v-on:click="azurirajKorpu(a)" class="okruglo">+</button></td>
-				  <td style="border-style:none"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" 
+				  <td style="border-style:none;vertical-align:middle"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" 
 					v-on:click="brisanje(a.naziv)" style="text-decoration: underline; color:black;">Ukloni</a></td>
 			    </tr>
 			  </tbody>
@@ -102,8 +104,8 @@ Vue.component("pregledKorpe", {
 					<td colspan="3"><td/>
    					<td style="font-size: large;"><b>Ukupno:</b> </td>
 					<td colspan="2" style="color:coral; font-size: large;text-align:right;"><b>{{this.korpa.cena}} RSD</b></td>
-					<td style="border-style:none"></td>
-					<td style="border-style:none" colspan="3"><button @click="poruci" class="dugme1" style=" width:170px" >Poruči</button> <td/>
+					<td></td>
+					<td  colspan="3"><button @click="poruci" class="dugme1" style=" width:170px" >Poruči</button> <td/>
   			  </tfoot>
 			</table>
 		</div>
@@ -136,6 +138,7 @@ Vue.component("pregledKorpe", {
 			
 		},
 		azurirajKorpu(artikal){
+			if(!artikal.kolicinaKorpa) return
 			console.log(this.korpa.cena)
 			axios 
     			.post('/DostavaREST/rest/korisnici/azurirajKorpu/' + this.korpa.korisnik, artikal)
