@@ -134,14 +134,16 @@ Vue.component("pregledRestorana", {
 								<img :src="a.slika" class="slikaKartice" alt="Nedostaje fotografija">
 								<ul class="list-group list-group-flush">
 								<li v-if="a.tipArtikla === 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}g)</b>
-								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši artikal</button>
+								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši</button>
 
 								</li>
 								<li v-if="a.tipArtikla !== 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}ml)</b>
-								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši artikal</button>
+								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši</button>
 
 								</li>
-								<li v-if="a.kolicina === '0.0'" class="list-group-item"><b>{{a.naziv}}</b></li>
+								<li v-if="a.kolicina === '0.0'" class="list-group-item"><b>{{a.naziv}}</b>
+								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši</button>
+								</li>
 								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
 								<li v-if="a.opis !== ''" class="list-group-item">{{a.opis}}</li>
 								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li>

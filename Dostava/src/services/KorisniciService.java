@@ -227,7 +227,6 @@ public class KorisniciService {
 				korDTO.setTipKupca(tipKupca);
 
 			}
-
 			/*
 			 * korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(),
 			 * imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
