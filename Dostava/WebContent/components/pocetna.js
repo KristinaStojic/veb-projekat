@@ -287,7 +287,34 @@ computed: {
 
 	methods: {
 		pregledPorudzbina(){
-    		this.$router.push("/pregledPorudzbina/"+ this.kupac)
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + window.localStorage.getItem("korisnik"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Nemate nijednu porudžbinu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledPorudzbina/"+ this.kupac)
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
     	},
 
 		informacije(value){

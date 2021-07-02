@@ -15,7 +15,16 @@ Vue.component("pregledPorudzbina", {
 			
         },
 
-        pomocnaPorudzbina : []
+        pomocnaPorudzbina : [],
+
+        pomocne: [],
+
+        checked: false,
+        obrada : "",
+        priprema: "",
+        cekaDostavu: "",
+        transport: "",
+        otkazana: ""
 
 
 	}
@@ -72,6 +81,9 @@ Vue.component("pregledPorudzbina", {
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
                                 
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+
                                 </div></th>
                                 </tr>
                                 
@@ -86,7 +98,7 @@ Vue.component("pregledPorudzbina", {
                                 </tr>
                             </thead>
                             <tbody>
-                                    <tr v-for="(p, i) in this.porudzbine">
+                                    <tr v-for="(p, i) in pronadjene">
                                     <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
                                     <td style="vertical-align:middle;text-align: center">{{p.datumVreme}}</td>
                                     <td style="vertical-align:middle;text-align: center">{{p.restoran}}</td>
@@ -180,11 +192,19 @@ Vue.component("pregledPorudzbina", {
         axios 
     			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + this.$route.params.id)
     			.then(response => {
-					
-                    console.log(response.data)
-                    this.porudzbine = response.data
-                    console.log(this.porudzbine)
-                    console.log(this.porudzbine[0].artikli)
+					console.log("dsdsd")
+                    if(response.data.length == 0){
+                        this.greska = "Nemate nijednu porudžbinu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.porudzbine = response.data
+                        this.pomocne = response.data
+                    }
+                   
 					
     			})
 				.catch(err => {
@@ -195,6 +215,37 @@ Vue.component("pregledPorudzbina", {
 					this.$router.push("/")
 				  })
     },
+    computed: {
+		pronadjene() {
+            
+			if(this.checked){
+				this.otkazana = "OTKAZANA";
+                this.priprema = "PRIPREMA";
+                this.cekaDostavu = "CEKA_DOSTAVU";
+                this.transport = "TRANSPORT";
+                this.obrada = "OBRADA"
+			}else{
+				this.otkazana = "";
+                this.priprema = "";
+                this.cekaDostavu = "";
+                this.transport = "";
+                this.obrada = "";
+			}
+			let filter1 = new RegExp(this.otkazana, 'i');
+            let filter2 = new RegExp(this.priprema, 'i');
+            let filter3 = new RegExp(this.cekaDostavu, 'i');
+            let filter4 = new RegExp(this.transport, 'i');
+            let filter5 = new RegExp(this.obrada, 'i');
+
+            return ( this.pomocne.filter(el => el.status.match(filter1) 
+            || el.status.match(filter2)
+			|| el.status.match(filter3)
+			|| el.status.match(filter4)
+			|| el.status.match(filter5)
+			
+			));
+          }
+        },
     methods: {
         odjava : function() {
     		axios 

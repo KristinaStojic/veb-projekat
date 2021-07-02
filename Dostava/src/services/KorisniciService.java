@@ -402,9 +402,10 @@ public class KorisniciService {
 	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id) {
 		System.out.println("ccaoooo");
 		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
+		porudzbineKupca.clear();
 		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
 		PorudzbinePrikazDTO porDTO = null;
-		System.out.println("evo me");
+		System.out.println(porudzbineKupca.size());
 		
 		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
 			if(porudzbina.getKupac().equals(id)) {
@@ -419,10 +420,10 @@ public class KorisniciService {
 				}
 				
 				porDTO.setArtikli(artikli);
-				
+				porudzbineKupca.add(porDTO);
 			}
 			
-			porudzbineKupca.add(porDTO);
+			
 		}
 		
 		return porudzbineKupca;
