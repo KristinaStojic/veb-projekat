@@ -19,6 +19,7 @@ Vue.component("pregledRestorana", {
 
 		},
 		artikli : null,
+		uloga: "",
         greska: "",
         kj : "slike/logo_final2.png",
 		 artikalTab : true,
@@ -132,8 +133,14 @@ Vue.component("pregledRestorana", {
 							<div class="kartica" >
 								<img :src="a.slika" class="slikaKartice" alt="Nedostaje fotografija">
 								<ul class="list-group list-group-flush">
-								<li v-if="a.tipArtikla === 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}g)</b></li>
-								<li v-if="a.tipArtikla !== 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}ml)</b></li>
+								<li v-if="a.tipArtikla === 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}g)</b>
+								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši artikal</button>
+
+								</li>
+								<li v-if="a.tipArtikla !== 'Jelo' && a.kolicina != '0.0'" class="list-group-item"><b>{{a.naziv}} ({{a.kolicina}}ml)</b>
+								<button v-if="uloga==='MENADZER'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiArtikal(a.naziv)">Obriši artikal</button>
+
+								</li>
 								<li v-if="a.kolicina === '0.0'" class="list-group-item"><b>{{a.naziv}}</b></li>
 								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
 								<li v-if="a.opis !== ''" class="list-group-item">{{a.opis}}</li>
@@ -162,6 +169,8 @@ Vue.component("pregledRestorana", {
     ,
 	
     mounted () {
+		this.uloga = window.localStorage.getItem("uloga")
+
         axios 
         .get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
         .then(response => {
@@ -226,7 +235,20 @@ Vue.component("pregledRestorana", {
 					console.log(err);
 				  })
     		
-    	}
+    	},
+		obrisiArtikal : function(nazivArtikla){
+				  axios 
+				 .delete('rest/restorani/obrisiArtikal/' + nazivArtikla + "/" + this.restoran.id)
+				 .then(response => {
+						console.log("cao")
+						 this.greska = "Uspesno ste obrisali artikal!";
+						 var x = document.getElementById("greska");
+						 x.className = "snackbar show";
+						 setTimeout(function(){x.className = x.className.replace("show","");},1800);
+				 this.$router.go();
+	  
+				 })
+			  }
         
     
     }

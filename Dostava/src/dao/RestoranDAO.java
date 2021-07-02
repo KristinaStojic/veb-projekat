@@ -5,12 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
+import beans.Menadzer;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -27,7 +27,6 @@ public class RestoranDAO {
 
 	public RestoranDAO(String putanjaDoFajla) {
 		restorani = new HashMap<>();
-
 		this.putanja = putanjaDoFajla;
 		
 		ucitajPodatke();
@@ -51,10 +50,13 @@ public class RestoranDAO {
 				Map<String, Restoran> postojeciRestorani = 
 						mapper.readValue(Paths.get(this.putanja + "\\restorani.json").toFile(), typeRef);
 				for (Restoran r : postojeciRestorani.values()) {
-					restorani.put(r.getId(), r);
+					if(r.getLogickoBrisanje() == 0) {
+						restorani.put(r.getId(), r);
+					}
 				}
 			}
-
+			
+			
 		} catch (
 
 		JsonParseException e) {
@@ -179,5 +181,66 @@ public class RestoranDAO {
 //	public void delete(String id) {
 //		this.restorani.remove(id);
 //	}
+	
+	public void sacuvajPodatke() {
+		ObjectMapper maper = new ObjectMapper();
+		try {
+			maper.writeValue(Paths.get(this.putanja + "\\restorani.json").toFile(), restorani);
+		} catch (IOException e) {
+			System.out.println("Greska");
+		}
+		
+	
+	}
+	
+	
+	
+	public void obrisiRestoran(String idRestorana) {
+	
+		 for (Restoran r : dobaviRestorane()) {
+				if(r.getId().equals(idRestorana)) {
+					r.setLogickoBrisanje(1);
+				}
+			}
+		 
+		 sacuvajPodatke();
+		 
+		 
+		 if(restorani.containsKey(idRestorana)) {
+				restorani.remove(idRestorana);
+			}
+		 
+	}
+	
+	
+	public void obrisiArtikal(String nazivArtikla, String idRestorana) {
+		for (Restoran r : restorani.values()) {
+			if(r.getId().equals(idRestorana)) {
+				for(Artikal ar : r.getArtikliUPonudi()){
+					if (ar.getNaziv().equals(nazivArtikla)) {
+						r.obrisiArtikal(ar);
+					}
+				}
+				break;
+			}
+		}
+		 sacuvajPodatke();
+		 
+		 for (Restoran r : restorani.values()) {
+				if(r.getId().equals(idRestorana)) {
+					System.out.println("ovoliko ima artikala prije brisanja:" + r.getArtikliUPonudi().size());
+					for(Artikal ar : r.getArtikliUPonudi()){
+						if (ar.getNaziv().equals(nazivArtikla)) {
+							r.obrisiArtikalIzListe(ar);
+						}
+					}
+					System.out.println("ovoliko ima artikala posle brisanja:" + r.getArtikliUPonudi().size());
+
+					break;
+				}
+			}
+		
+	}
+
 
 }

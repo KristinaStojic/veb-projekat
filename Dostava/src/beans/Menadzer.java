@@ -1,7 +1,6 @@
 package beans;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Menadzer extends Korisnik implements Serializable {
 
@@ -28,5 +27,7 @@ public class Menadzer extends Korisnik implements Serializable {
 	public void setRestoran(Restoran restoran) {
 		this.restoran = restoran;
 	}
+	
+	
 
 }

@@ -2,6 +2,7 @@ package beans;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Restoran implements Serializable {
 
@@ -148,5 +149,38 @@ public class Restoran implements Serializable {
 	
 	public void dodajArtikal(Artikal a) {
 		this.artikliUPonudi.add(a);
+	}
+	
+	public void obrisiArtikal(Artikal a) {
+		
+		for( int i = 0; i < this.artikliUPonudi.size(); i++ )
+		{
+		    Artikal zaBrisanje = this.artikliUPonudi.get(i);
+		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
+		    {
+		    	//this.artikliUPonudi.remove(zaBrisanje);
+		    	this.artikliUPonudi.get(i).setLogickoBrisanje(1);
+		    }
+		      
+		}
+	
+	}
+	}
+	
+	
+	public void obrisiArtikalIzListe(Artikal a) {
+		
+		for( int i = 0; i < this.artikliUPonudi.size(); i++ )
+		{
+		    Artikal zaBrisanje = this.artikliUPonudi.get(i);
+		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
+		    {
+		    	this.artikliUPonudi.remove(zaBrisanje);
+		    	//this.artikliUPonudi.get(i).setLogickoBrisanje(1);
+		    }
+		      
+		}
+	
+	}
 	}
 }

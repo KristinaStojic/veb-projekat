@@ -212,19 +212,29 @@ Vue.component("pocetna", {
 					<div class="card" >
 						<img :src="r.logo" class="card-img-top" sty alt="Nedostaje fotografija">
 						<ul class="list-group list-group-flush">
-						<li class="list-group-item"><b>{{r.naziv}}</b></li>
+
+						<li class = "list-group-item">
+						<b>{{r.naziv}}</b>
+						<button v-if="uloga==='ADMINISTRATOR'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiRestoran(r.id)">Obriši restoran</button>
+						</li>
+
 						<li class="list-group-item">{{r.tipRestorana}}</li>
 						<li v-if="r.status === 'Otvoreno'" style="color:green;" class="list-group-item">{{r.status}}</li>
 						<li v-if="r.status === 'Zatvoreno'" style="color:red;" class="list-group-item">{{r.status}}</li>
 						<li class="list-group-item">{{r.lokacija}}</li>
 						<li v-if="r.ocena !== '0.0'" class="list-group-item">Prosečna ocena: {{r.ocena}}</li>
 						<li v-else class="list-group-item">Restoran nema nijednu ocenu</li>
+
+
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						
 						<li v-if="uloga === 'KUPAC' && r.status === 'Otvoreno'" class="list-group-item">
 						<button class="dugme3" style="margin-left: 45px;" @click="informacije(r.id)">Informacije i naručivanje</button>
 						</li>
 						<li v-else class="list-group-item">
 						<button class="dugme3" style="margin-left: 45px;" @click="informacije(r.id)">Više informacija</button>
 						</li>
+
 						
 						</ul>
 					</div>
@@ -311,6 +321,21 @@ computed: {
                }else{
                    this.$router.push("/pregledRestorana")
                }
+           })
+        },
+
+		obrisiRestoran : function(value){
+			console.log(value);
+            axios 
+           .delete('rest/restorani/obrisiRestoran/' + value)
+           .then(response => {
+                  console.log("cao")
+                   this.greska = "Uspesno ste obrisali restoran!";
+                   var x = document.getElementById("greska");
+                   x.className = "snackbar show";
+                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
+				   this.$router.go();
+
            })
         },
 	odjava : function() {

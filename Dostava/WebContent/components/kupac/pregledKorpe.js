@@ -89,7 +89,7 @@ Vue.component("pregledKorpe", {
 				  <td style="border-style:none" v-if="a.kolicinaKorpa > '1'"><button  @click="a.kolicinaKorpa--; a.ukupnoCena -= a.cena ;korpa.cena -= a.cena"  
 							 class="okruglo">-</button></td>
      			  <td style="border-style:none" v-else><button class="okruglo">-</button></td>
-				  <td style="border-style:none"><input type="number" min="0" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa"></td>
+				  <td style="border-style:none"><input type="number" min="0" @keyup="korpa.cena -= a.ukupnoCena; a.ukupnoCena = a.kolicinaKorpa * a.cena; korpa.cena += a.ukupnoCena " style="width:50px; text-align:center;" v-model="a.kolicinaKorpa"></td>
 				  <td style="border-style:none"><button @click="a.kolicinaKorpa++; a.ukupnoCena += a.cena; korpa.cena += a.cena" class="okruglo">+</button></td>
 				  <td style="border-style:none"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" style="text-decoration: underline; color:black;">Ukloni</a></td>
 			    </tr>

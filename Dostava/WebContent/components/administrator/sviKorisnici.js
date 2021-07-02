@@ -10,7 +10,8 @@ Vue.component("sviKorisnici", {
         filteri: "",
         logo : "slike/logo_final2.png",
         filterTip : "",
-        sakrij : false
+        sakrij : false,
+        uloga : ""
         
         //kor : [{"id":"7446a900-1c64-448f-86cf-ad8703ac8ecb","logickoBrisanje":0,"korisnickoIme":"MEN2","lozinka":"men","ime":"izmenaIme","prezime":"prezimeIzmena","pol":"MUSKI","datumRodjenja":917913600000,"uloga":"MENADZER","restoran":{"id":"e9854e0e-65b0-4a05-bbb7-b3ef8fb29211","logickoBrisanje":0,"naziv":"mrs","tipRestorana":"RAZNO","artikliUPonudi":[],"status":true,"lokacija":{"geografskaDuzina":12.0,"geografskaSirina":12.0,"ulica":"sad","broj":12,"mesto":"sfdsf","postanskiBroj":32434},"logo":"McDonald's.png"}},{"id":"c5585d9d-1efa-40a3-8ac1-f3be1469114e","logickoBrisanje":0,"korisnickoIme":"men","lozinka":"men","ime":"Marko","prezime":"Markovic","pol":"MUSKI","datumRodjenja":920332800000,"uloga":"MENADZER","restoran":null},{"id":"23c955c6-6d27-4687-b839-9a8766d61624","logickoBrisanje":0,"korisnickoIme":"men1","lozinka":"men1","ime":"Petar","prezime":"Petrovic","pol":"MUSKI","datumRodjenja":925603200000,"uloga":"MENADZER","restoran":null},{"id":"eee76e73-88f9-4ee8-9c76-50979d35fa53","logickoBrisanje":0,"korisnickoIme":"nikola","lozinka":"nikola","ime":"Nikola","prezime":"Stojic","pol":"MUSKI","datumRodjenja":1622514000000,"uloga":"MENADZER","restoran":null},{"id":"66a4472e-f58d-4014-9222-5646048c114b","logickoBrisanje":0,"korisnickoIme":"j","lozinka":"j","ime":"m","prezime":"m","pol":"ZENSKI","datumRodjenja":1622576400000,"uloga":"MENADZER","restoran":null}]
 	    }
@@ -141,10 +142,13 @@ Vue.component("sviKorisnici", {
             </div>
 
             <div class="row">
-                <div style="margin: 20px;" v-for="k in filteredGames">
+                <div style="margin: 20px;" v-for="k in pronadjeniKorisnici">
                     <div class="card">
                         <ul class="list-group list-group-flush">
-                          <li class="list-group-item"><b>{{k.imePrezime}}</b>        
+                          <li class="list-group-item">
+                          <b>{{k.imePrezime}}</b>    
+                          <button v-if="uloga==='ADMINISTRATOR' && k.uloga !== 'Administrator'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiKorisnika(k.id)">Obriši korisnika</button>
+    
                           </li>
                           <li v-if="k.uloga === 'Kupac'" class="list-group-item">Uloga: {{k.uloga}} (Tip: {{k.tipKupca}}, Broj bodova: {{k.brojBodova}})</li>
                           <li v-else class="list-group-item">Uloga: {{k.uloga}}</li>
@@ -171,6 +175,8 @@ Vue.component("sviKorisnici", {
     	, 
       
       mounted() {
+        this.uloga = window.localStorage.getItem("uloga")
+        console.log(this.uloga)
         axios
           .get('rest/korisnici/')
           .then(response => (this.korisnici = response.data))
@@ -178,7 +184,7 @@ Vue.component("sviKorisnici", {
       
 
       computed: {
-        filteredGames(){
+        pronadjeniKorisnici(){
           console.log(this.filteri);
           console.log(this.filterTip);
           if(this.search.length > 0)
@@ -200,7 +206,7 @@ Vue.component("sviKorisnici", {
         }},
 
         /*computed: {
-          filteredGames() {
+          obrisiKorisnika() {
             let filter = new RegExp(this.filterText, 'i')
             return ( this.korisnici.filter(el => el.ime.match(filter) || el.prezime.match(filter)))
           }
@@ -229,6 +235,21 @@ Vue.component("sviKorisnici", {
 				  })
     		
     	},
+
+      obrisiKorisnika : function(value){
+        console.log(value);
+              axios 
+             .delete('rest/korisnici/obrisiKorisnika/' + value)
+             .then(response => {
+                    console.log("cao")
+                     this.greska = "Uspesno ste obrisali korisnika!";
+                     var x = document.getElementById("greska");
+                     x.className = "snackbar show";
+                     setTimeout(function(){x.className = x.className.replace("show","");},1800);
+             this.$router.go();
+  
+             })
+          },
 
       sortTable(key, direction){
         this.sort = `${key} > ${direction}`

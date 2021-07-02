@@ -1,13 +1,13 @@
 package services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
+import beans.Artikal.TipArtikla;
 import beans.ArtikalKorpa;
 import beans.Dostavljac;
 import beans.Korisnik;
@@ -27,12 +28,11 @@ import beans.Lokacija;
 import beans.Menadzer;
 import beans.Restoran;
 import beans.TipKupca.ImeTipa;
-import beans.Artikal.TipArtikla;
 import dao.KorisnikDAO;
 import dao.RestoranDAO;
-import dto.KorisnikBlokiranjeDTO;
 import dto.ArtikliDTO;
 import dto.ArtikliKorpaDTO;
+import dto.KorisnikBlokiranjeDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
 import dto.KorisnikPrijavaDTO;
@@ -53,12 +53,12 @@ public class KorisniciService {
 	private KorisnikDAO dobaviKorisnikDAO() {
 
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
-
+		
 		if (korisnici == null) {
 			korisnici = new KorisnikDAO(sc.getRealPath("."));
 			sc.setAttribute("korisnici", korisnici);
 		}
-
+		
 		return korisnici;
 	}
 
@@ -278,6 +278,20 @@ public class KorisniciService {
 				.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!")
 				.build();
 
+	}
+	
+
+	
+	@DELETE
+	@Path("/obrisiKorisnika/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obrisiRestoran(@PathParam("id") String idKorisnika) {
+		
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		korisnici.obrisiKorisnika(idKorisnika);
+		
+		return Response.status(200).build();
 	}
 	
 	@POST
