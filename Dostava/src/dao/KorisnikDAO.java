@@ -172,10 +172,11 @@ public class KorisnikDAO {
 		if (daLiPostojiKorIme(korisnik.korisnickoIme))
 			return null;
 
-		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0.0, 500.0);
+		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0, 0);
 		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, korisnik.korisnickoIme, korisnik.lozinka,
 				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga, 0);
-		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik, 0.0);
+		noviKorisnik.setBlokiran(0);
+		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
 
 		korisnici.put(noviKorisnik.getId(), noviKorisnik);
@@ -620,4 +621,56 @@ public class KorisnikDAO {
 		}
 	}
 
+	public boolean dodajKorpu(Korpa korpa) {
+
+		for (Kupac k : kupci) {
+			if (k.getId().equals(korpa.getKorisnik())) {
+				k.setKorpa(korpa);
+				sacuvajPodatke();
+				return true;
+			}
+		
+	}
+		return false;
+	}
+
+	public Kupac dobaviKupca(String id) {
+		
+		for (Kupac k : kupci) {
+			if (k.getId().equals(id)) {
+				return k;
+			}
+		}
+
+		return null;
+	}
+
+	public boolean dodajPorudzbinu(Porudzbina p) {
+		
+		for (Kupac k : kupci) {
+			if (k.getId().equals(p.getKupac())) {
+				k.setKorpa(null);
+				k.dodajPorudzbinu(p);
+				Double trenutniBodovi = k.getSakupljeniBodovi();
+				k.setSakupljeniBodovi(trenutniBodovi + (p.getCena()/1000*133));
+				k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public TipKupca proveriTip(Double bodovi) {
+		
+		if(bodovi >= 2000) {
+			return new TipKupca(TipKupca.ImeTipa.SREBRNI, 5, 2000 );
+		}else if(bodovi >= 4000) {
+			return new TipKupca(TipKupca.ImeTipa.ZLATNI, 10, 4000);
+		}else {
+			return new TipKupca(TipKupca.ImeTipa.BRONZANI, 0, 0);
+		}
+		
+	}
 }

@@ -60,4 +60,7 @@ public class Kupac extends Korisnik implements Serializable {
 		this.tipKupca = tipKupca;
 	}
 
+	public void dodajPorudzbinu(Porudzbina p) {
+		this.svePorudzbine.add(p);
+	}
 }

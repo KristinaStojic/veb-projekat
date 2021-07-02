@@ -10,20 +10,18 @@ public class TipKupca implements Serializable {
 	private static final long serialVersionUID = 4671856578499819260L;
 
 	public enum ImeTipa {
-		ZLATNI, SREBRNI, BRONZANI
+		BRONZANI, SREBRNI, ZLATNI
 	}
 
 	private ImeTipa imeTipa;
-	private Double popust;
-	private Double trazeniBodovi;
+	private Integer popust;
+	private Integer trazeniBodovi;
 
 	public TipKupca() {
 		super();
 	}
-
-	
-	
-	public TipKupca(ImeTipa imeTipa, Double popust, Double trazeniBodovi) {
+ 
+	public TipKupca(ImeTipa imeTipa, Integer popust, Integer trazeniBodovi) {
 		super();
 		this.imeTipa = imeTipa;
 		this.popust = popust;
@@ -40,19 +38,19 @@ public class TipKupca implements Serializable {
 		this.imeTipa = imeTipa;
 	}
 
-	public Double getPopust() {
+	public Integer getPopust() {
 		return popust;
 	}
 
-	public void setPopust(Double popust) {
+	public void setPopust(Integer popust) {
 		this.popust = popust;
 	}
 
-	public Double getTrazeniBodovi() {
+	public Integer getTrazeniBodovi() {
 		return trazeniBodovi;
 	}
 
-	public void setTrazeniBodovi(Double trazeniBodovi) {
+	public void setTrazeniBodovi(Integer trazeniBodovi) {
 		this.trazeniBodovi = trazeniBodovi;
 	}
 

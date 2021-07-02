@@ -14,6 +14,14 @@ public class ArtikalKorpa implements Serializable {
 	public ArtikalKorpa() {
 		super();
 	}
+	
+	public ArtikalKorpa(Artikal artikal, Integer kolicina) {
+		super();
+		this.artikal = artikal;
+		this.kolicina = kolicina;
+	}
+
+
 
 	public Artikal getArtikal() {
 		return artikal;

@@ -127,7 +127,7 @@ Vue.component("pregledRestorana", {
 					</ul>
 			</nav>
 						<div class="scroll" v-if="this.artikalTab === true">
-						<button class="dugme2" @click="$router.push('/dodavanjeArtikla')">Dodaj novi artikal</button>
+						<button class="dugme2" @click="$router.push('/dodavanjeArtikla')">Dodaj novi artikal</button></br></br></br></br>
 						<div class="row">
 						<div style="margin: 20px;" v-for="(a, i) in this.artikli">
 							<div class="kartica" >
