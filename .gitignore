@@ -1,3 +1,7 @@
 /.metadata/
 bin/
 .settings/
+Dostava/build/classes/dao/KorisnikDAO.class
+Dostava/build/classes/beans/Restoran.class
+Dostava/build/classes/dao/RestoranDAO.class
+Dostava/build/classes/service/RestoranService.class
