@@ -91,8 +91,8 @@ Vue.component("pregledPorudzbina", {
                                     <td style="vertical-align:middle;text-align: center">{{p.cena}}</td>
                                     <td style="vertical-align:middle;text-align: center">{{p.status}}</td>
                                     <td style="vertical-align:middle;text-align: center">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
-                                    Open modal
+                                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
+                                    Detalji
                                   </button>                 
                                     </td>
                                     </tr>
@@ -104,14 +104,10 @@ Vue.component("pregledPorudzbina", {
 
 
                 <div class="modal" id="myModal">
-                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" style="max-width: 50%;">
                         <div class="modal-content">
 
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Spisak artikala</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
+                        
 
                         <!-- Modal body -->
                         <div class="modal-body">
@@ -122,7 +118,7 @@ Vue.component("pregledPorudzbina", {
                     <thead>
                         <tr >
                             <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
-                        <h3>Pregled porudžbina:</h3></br>
+                        <h4>Spisak artikala:</h4></br>
                         
                         </div></th>
                         </tr>
@@ -133,7 +129,8 @@ Vue.component("pregledPorudzbina", {
                         <th scope="col">Naziv artikla</th>
                         <th scope="col">Količina po porciji</th>
                         <th scope="col">Cena po porciji</th>
-                        <th scope="col">Količina</th>
+                        <th scope="col">Količina poručenih</th>
+                        <th scope="col">Ukupna cena</th>
                         <th colspan="4" scope="colgroup"></th>
                         </tr>
                     </thead>
@@ -142,9 +139,11 @@ Vue.component("pregledPorudzbina", {
                             <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
                             <td style="vertical-align:middle;text-align: center"><img :src="p.slika" style= "width:100px;height:80px; max-width:100%; max-height:100%;"></td>
                             <td style="vertical-align:middle;text-align: center">{{p.naziv}}</td>
-                            <td style="vertical-align:middle;text-align: center" v-if="p.tipArtikla === 'Jelo'">{{p.kolicina}}g</td>
+                            <td style="vertical-align:middle;text-align: center" v-if="p.tip === 'JELO'">{{p.kolicina}}g</td>
                             <td style="vertical-align:middle;text-align: center" v-else>{{p.kolicina}}ml</td>
                             <td style="vertical-align:middle;text-align: center">{{p.cena}} RSD</td>
+                            <td style="vertical-align:middle;text-align: center">{{p.kolicinaPorucenih}}</td>
+                            <td style="vertical-align:middle;text-align: center">{{p.kolicinaPorucenih * p.cena}} RSD</td>
                             </tr>
                     </tbody>
                     </table>

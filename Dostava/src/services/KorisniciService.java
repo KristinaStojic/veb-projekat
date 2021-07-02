@@ -413,8 +413,9 @@ public class KorisniciService {
 						porudzbina.getDatumVreme(),porudzbina.getStatus());
 				
 				List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
-				for (Artikal a : porudzbina.getPoruceniArtikli()) {
-					artikli.add(new ArtikliPorudzbineDTO(a.getNaziv(), a.getCena(), a.getKolicina(), a.getSlika()));
+				for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+					artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+							a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
 				}
 				
 				porDTO.setArtikli(artikli);
