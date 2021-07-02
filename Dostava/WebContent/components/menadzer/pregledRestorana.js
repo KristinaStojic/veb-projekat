@@ -242,13 +242,13 @@ Vue.component("pregledRestorana", {
 				  axios 
 				 .delete('rest/restorani/obrisiArtikal/' + nazivArtikla + "/" + this.restoran.id)
 				 .then(response => {
-						console.log("cao")
+					this.$router.go();
+	  
 						 this.greska = "Uspesno ste obrisali artikal!";
 						 var x = document.getElementById("greska");
 						 x.className = "snackbar show";
 						 setTimeout(function(){x.className = x.className.replace("show","");},1800);
-				 this.$router.go();
-	  
+				 
 				 })
 			  }
         

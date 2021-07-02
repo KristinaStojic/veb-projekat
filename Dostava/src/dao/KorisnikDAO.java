@@ -532,10 +532,13 @@ public class KorisnikDAO {
 	
 	public void obrisiRestoranMenadzeru(String idRestorana) {
 		for (Menadzer menadzer : menadzeri) {
-			if(menadzer.getRestoran().getId().equals(idRestorana)) {
-				menadzer.setRestoran(null);
-				//menadzer.getRestoran().setLogickoBrisanje(1);
+			if(menadzer.getRestoran() != null) {
+				if(menadzer.getRestoran().getId().equals(idRestorana)) {
+					menadzer.setRestoran(null);
+					//menadzer.getRestoran().setLogickoBrisanje(1);
+				}
 			}
+			
 		}
 		sacuvajPodatke();
 	}
@@ -578,6 +581,7 @@ public class KorisnikDAO {
 	
 	
 	public void obrisiArtikleuMenadzeru(String nazivArtikla,String idRestorana) {
+		System.out.println("Artikli u menadzeru");
 		for (Menadzer menadzer : menadzeri) {
 			if(menadzer.getRestoran() != null) {
 				if(menadzer.getRestoran().getId().equals(idRestorana)) {
@@ -586,6 +590,7 @@ public class KorisnikDAO {
 						for( int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++ )
 						{
 						    Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
+						    System.out.println(zaBrisanje.getNaziv());
 						    if(zaBrisanje.getNaziv().equals(nazivArtikla)) {
 						    {
 						    	menadzer.getRestoran().obrisiArtikal(zaBrisanje);

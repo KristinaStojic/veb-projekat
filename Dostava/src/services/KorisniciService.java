@@ -251,8 +251,11 @@ public class KorisniciService {
 				Lokacija l = r.getLokacija();
 				List<ArtikliDTO> artikli = new ArrayList<>();
 				for (Artikal a : r.getArtikliUPonudi()) {
-					artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
-							a.getKolicina().toString(), a.getOpis(), a.getSlika()));
+					if(a.getLogickoBrisanje() == 0) {
+						artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
+								a.getKolicina().toString(), a.getOpis(), a.getSlika()));
+					}
+					
 				}
 				return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(),
 						l.getGeografskaDuzina(), l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(),
