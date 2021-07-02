@@ -53,12 +53,12 @@ public class KorisniciService {
 	private KorisnikDAO dobaviKorisnikDAO() {
 
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
-		
+
 		if (korisnici == null) {
 			korisnici = new KorisnikDAO(sc.getRealPath("."));
 			sc.setAttribute("korisnici", korisnici);
 		}
-		
+
 		return korisnici;
 	}
 
@@ -214,10 +214,9 @@ public class KorisniciService {
 		for (Korisnik k : korisniciDAO.dobaviSve()) {
 			String imePrz = k.getIme() + " " + k.getPrezime();
 
-			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(), imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
-					korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime(), k.getBlokiran());
-			
-			
+			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(), k.getKorisnickoIme(), imePrz,
+					korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(), korisniciDAO.nadjiUlogu(k.getUloga()),
+					k.getIme(), k.getPrezime(), k.getBlokiran());
 
 			if (k.getUloga().toString().equals("KUPAC")) {
 				tipKupca = korisniciDAO.nadjiTipKupca(k);
@@ -263,8 +262,7 @@ public class KorisniciService {
 		}
 		return null;
 	}
-	
-	
+
 	@POST
 	@Path("/blokirajKorisnika")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -274,26 +272,22 @@ public class KorisniciService {
 
 		korisnici.blokirajKorisnika(korisnik);
 		korisnici.sacuvajPodatke();
-		return Response
-				.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!")
-				.build();
+		return Response.status(Response.Status.ACCEPTED).entity("Uspjesno blokiran korisnik!").build();
 
 	}
-	
 
-	
 	@DELETE
 	@Path("/obrisiKorisnika/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obrisiRestoran(@PathParam("id") String idKorisnika) {
-		
+
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		korisnici.obrisiKorisnika(idKorisnika);
-		
+
 		return Response.status(200).build();
 	}
-	
+
 	@POST
 	@Path("/popunjavanjeKorpe")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -301,25 +295,28 @@ public class KorisniciService {
 	public Response popunjavanjeKorpe(List<ArtikliDTO> artikli) {
 		KorisnikDAO dao = dobaviKorisnikDAO();
 		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
-		if(idKorisnika == null) return Response.status(400).build();
-		
+		if (idKorisnika == null)
+			return Response.status(400).build();
+
 		List<ArtikalKorpa> proizvodi = new ArrayList<>();
 		Double cena = 0.0;
-		
-		for(ArtikliDTO a : artikli) {
-			if(a.kolicinaKorpa > 0) {
-				proizvodi.add(new ArtikalKorpa(new Artikal(a.naziv,Double.parseDouble(a.cena), tipArtiklaEnum(a.tipArtikla),a.restoran,Double.parseDouble(a.kolicina),a.opis,a.slika), a.kolicinaKorpa));
+
+		for (ArtikliDTO a : artikli) {
+			if (a.kolicinaKorpa > 0) {
+				proizvodi.add(
+						new ArtikalKorpa(new Artikal(a.naziv, Double.parseDouble(a.cena), tipArtiklaEnum(a.tipArtikla),
+								a.restoran, Double.parseDouble(a.kolicina), a.opis, a.slika), a.kolicinaKorpa));
 				cena += (a.kolicinaKorpa * Double.parseDouble(a.cena));
 			}
 		}
-		
-		Korpa korpa = new Korpa(proizvodi,idKorisnika,cena);
-		if(proizvodi.isEmpty()) {
+
+		Korpa korpa = new Korpa(proizvodi, idKorisnika, cena);
+		if (proizvodi.isEmpty()) {
 			return Response.status(200).entity("a").build();
 		}
-		
-		if(dao.dodajKorpu(korpa)) {
-			
+
+		if (dao.dodajKorpu(korpa)) {
+
 			return Response.status(200).entity("aa").build();
 		}
 		return Response.status(400).build();
@@ -333,35 +330,50 @@ public class KorisniciService {
 			return TipArtikla.PICE;
 		}
 	}
-	
+
 	@GET
 	@Path("/nadjiKorpu/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public KorpaDTO nadjiKorpu(@PathParam("id") String id) {
 		KorisnikDAO dao = dobaviKorisnikDAO();
 		Kupac k = dao.dobaviKupca(id);
-		if(k == null) return null;
+		if (k == null)
+			return null;
 		Korpa korpa = k.getKorpa();
 		KorpaDTO povratna = new KorpaDTO();
 		povratna.artikli = new ArrayList<ArtikliKorpaDTO>();
-		for(ArtikalKorpa ak : korpa.getArtikli()) {
+		for (ArtikalKorpa ak : korpa.getArtikli()) {
 			Artikal a = ak.getArtikal();
-			povratna.artikli.add(new ArtikliKorpaDTO(a.getNaziv(),a.tipString(),a.getKolicina(),a.getCena(),ak.getKolicina(), ak.getKolicina()*a.getCena(), a.getRestoran()));
+			povratna.artikli.add(new ArtikliKorpaDTO(a.getNaziv(), a.tipString(), a.getKolicina(), a.getCena(),
+					ak.getKolicina(), ak.getKolicina() * a.getCena(), a.getRestoran()));
 		}
 		povratna.korisnik = id;
 		povratna.tipKupca = k.getTipKupca().getImeTipa();
-		if(k.getTipKupca().getImeTipa() == ImeTipa.SREBRNI) {
+		if (k.getTipKupca().getImeTipa() == ImeTipa.SREBRNI) {
 			povratna.cena = korpa.getCena() * 0.95;
 			povratna.nedostaje = 4000 - k.getSakupljeniBodovi();
-		}else if(k.getTipKupca().getImeTipa() == ImeTipa.ZLATNI) {
+		} else if (k.getTipKupca().getImeTipa() == ImeTipa.ZLATNI) {
 			povratna.cena = korpa.getCena() * 0.9;
-			
-		}else {
+
+		} else {
 			povratna.cena = korpa.getCena();
 			povratna.nedostaje = 2000 - k.getSakupljeniBodovi();
 		}
-		
+
 		return povratna;
+
+	}
+
+	@POST
+	@Path("/azurirajKorpu/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response azurirajKorpu(@PathParam("id") String id, ArtikliKorpaDTO promena) {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		System.out.println("došao sam");
+		if (!dao.azurirajKorpu(promena, id)) {
+			return Response.status(400).build();
+		}
+		return Response.status(200).build();
 
 	}
 }

@@ -58,9 +58,10 @@ Vue.component("pregledKorpe", {
 					<th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
 				<h3>Trenutni status naloga: {{this.korpa.tipKupca}}</h3></br>
 				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' ">Popust koji je obračunat: 5%</h4>
-				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' ">Potrebno bodova za Zlatni status: {{this.korpa.nedostaje}}</h4>
+				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' && this.korpa.nedostaje < 0 ">Potrebno bodova za Zlatni status: {{this.korpa.nedostaje}}</h4>
 				<h4 v-if="this.korpa.tipKupca === 'ZLATNI' ">Popust koji je obračunat: 10%</h4>
-				<h4 v-if="this.korpa.tipKupca === 'BRONZANI' ">Potrebno bodova za Srebrni status: {{this.korpa.nedostaje}}</h4>
+				<h4 v-if="this.korpa.tipKupca === 'BRONZANI' && this.korpa.nedostaje > 0">Potrebno bodova za Srebrni status: {{this.korpa.nedostaje}}</h4>
+				<h4 v-if="this.korpa.nedostaje < 0 ">Sakupljeno dovoljno bodova za sledeći nivo!</h4>
 				</div></th>
 				</tr>
 				<tr style="border-style:none"><th style="border-style:none" colspan="11" scope="colgroup">
@@ -87,11 +88,14 @@ Vue.component("pregledKorpe", {
 			      <td>{{a.kolicinaKorpa}}</td>
 			      <td>{{a.ukupnoCena}} RSD</td>
 				  <td style="border-style:none" v-if="a.kolicinaKorpa > '1'"><button  @click="a.kolicinaKorpa--; a.ukupnoCena -= a.cena ;korpa.cena -= a.cena"  
-							 class="okruglo">-</button></td>
+							 v-on:click="azurirajKorpu(a)" class="okruglo">-</button></td>
      			  <td style="border-style:none" v-else><button class="okruglo">-</button></td>
-				  <td style="border-style:none"><input type="number" min="0" @keyup="korpa.cena -= a.ukupnoCena; a.ukupnoCena = a.kolicinaKorpa * a.cena; korpa.cena += a.ukupnoCena " style="width:50px; text-align:center;" v-model="a.kolicinaKorpa"></td>
-				  <td style="border-style:none"><button @click="a.kolicinaKorpa++; a.ukupnoCena += a.cena; korpa.cena += a.cena" class="okruglo">+</button></td>
-				  <td style="border-style:none"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" style="text-decoration: underline; color:black;">Ukloni</a></td>
+				  <td style="border-style:none"><input type="number" min="0" @keyup="korpa.cena -= a.ukupnoCena; a.ukupnoCena = a.kolicinaKorpa * a.cena; korpa.cena += a.ukupnoCena" 
+					v-on:keyup="azurirajKorpu(a)" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa"></td>
+				  <td style="border-style:none"><button @click="a.kolicinaKorpa++; a.ukupnoCena += a.cena; korpa.cena += a.cena" 
+					v-on:click="azurirajKorpu(a)" class="okruglo">+</button></td>
+				  <td style="border-style:none"><a @click="korpa.artikli.splice(i, 1); korpa.cena -= a.ukupnoCena" href="#" 
+					v-on:click="brisanje(a.naziv)" style="text-decoration: underline; color:black;">Ukloni</a></td>
 			    </tr>
 			  </tbody>
 			  <tfoot style="margin-top:20px;">
@@ -125,6 +129,28 @@ Vue.component("pregledKorpe", {
 				  })
     },
     methods: {
+		brisanje(ime){
+			
+			const artikal = {naziv: ime, kolicinaKorpa : 0, ukupnoCena: 0}
+			this.azurirajKorpu(artikal);
+			
+		},
+		azurirajKorpu(artikal){
+			console.log(this.korpa.cena)
+			axios 
+    			.post('/DostavaREST/rest/korisnici/azurirajKorpu/' + this.korpa.korisnik, artikal)
+    			.then(response => {
+					console.log("Uspešno")
+    			})
+				.catch(err => {
+					this.greska = "Neuspešno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+		
+		},
 		poruci : function(event) {
 			event.preventDefault();
 			

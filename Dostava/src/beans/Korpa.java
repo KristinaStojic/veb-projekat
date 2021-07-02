@@ -51,4 +51,12 @@ public class Korpa implements Serializable {
 		this.cena = cena;
 	}
 
+	public void povecajCenu(Double cena) {
+		this.cena += cena;
+	}
+	
+	public void smanjiCenu(Double cena) {
+		this.cena -= cena;
+	}
+	
 }

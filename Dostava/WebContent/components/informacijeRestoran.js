@@ -227,10 +227,11 @@ Vue.component("informacijeRestoran", {
 								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li></ul>
 								<li  v-if="uloga === 'KUPAC'" class="list-group-item"> 
 									
-									<button  v-if="a.kolicinaKorpa > '0'" @click="a.kolicinaKorpa--"  style="margin-left:50px" class="okruglo">-</button>
-									<button  v-else  style="margin-left:50px" class="okruglo">-</button>
+									<button  v-if="a.kolicinaKorpa > '1'" @click="a.kolicinaKorpa--"  style="margin-left:50px" class="okruglo">-</button>
+									<button style="margin-left:50px" v-else class="okruglo">-</button>
 									<input type="number" min="0" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa">
 									<button @click="a.kolicinaKorpa++" class="okruglo">+</button>
+									<a @click="a.kolicinaKorpa = 0" href="#"  style="margin-left:10px; text-decoration: underline; color:black;">Ukloni</a>
 								
 								</li>
 							</div>
