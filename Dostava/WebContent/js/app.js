@@ -12,6 +12,7 @@ const DodavanjeArtikla = { template: '<dodavanjeArtikla></dodavanjeArtikla>' }
 const InformacijeRestoran = { template: '<informacijeRestoran></informacijeRestoran>' }
 const IzmenaArtikla = { template: '<izmenaArtikla></izmenaArtikla>' }
 const PregledKorpe = { template: '<pregledKorpe></pregledKorpe>' }
+const PregledPorudzbina = { template: '<pregledPorudzbina></pregledPorudzbina>' }
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -29,7 +30,9 @@ const router = new VueRouter({
 		{ path: '/dodavanjeArtikla', component: DodavanjeArtikla},
 		{ path: '/informacijeRestoran/:id', component: InformacijeRestoran},
 		{ path: '/izmenaArtikla/:id/:naziv', component: IzmenaArtikla},
-		{ path: '/pregledKorpe/:id', component: PregledKorpe}
+		{ path: '/pregledKorpe/:id', component: PregledKorpe},
+		{ path: '/pregledPorudzbina/:id', component: PregledPorudzbina}
+
 
 	  ]
 });

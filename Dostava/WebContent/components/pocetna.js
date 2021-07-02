@@ -17,6 +17,7 @@ Vue.component("pocetna", {
 			otvoreni : "",
 			trazi : "",
 			putanja : "",
+			kupac : null
 		}
 	},
 	template: ` 
@@ -96,7 +97,10 @@ Vue.component("pocetna", {
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
 									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+									
 								</div>
 							</li>
 
@@ -250,8 +254,7 @@ Vue.component("pocetna", {
 	mounted() {
 		
 		this.uloga = window.localStorage.getItem("uloga")
-		console.log(this.uloga)
-
+		this.kupac = window.localStorage.getItem("korisnik");
 		axios
 			.get('rest/restorani/')
 			.then(response => (this.restorani = response.data))
@@ -259,7 +262,6 @@ Vue.component("pocetna", {
     ,
 computed: {
 		pronadjeni() {
-			console.log(this.search)
             let filter1 = new RegExp(this.search, 'i');
 			let filter2 = new RegExp(this.searchLok, 'i');
 			let filter3 = new RegExp(this.searchTip, 'i');
@@ -281,29 +283,13 @@ computed: {
 			));
           }
         },
-	/*computed: {
-        pronadjeni : function() {
-			console.log(this.search.length)
-		  if(this.searchOcena.length > 0)
-			return this.restorani.filter((r) => {	
-				return (r.naziv.toLowerCase().includes(this.search.toLowerCase()) 
-				&& r.lokacija.toLowerCase().includes(this.searchLok.toLowerCase())
-				 && r.tipRestorana.toLowerCase().includes(this.searchTip.toLowerCase())
-				  && r.tipRestorana.toLowerCase().includes(this.filterTip.toLowerCase())
-				  && r.ocena.toLowerCase().includes(this.searchOcena.toLowerCase())
-				  && r.status.toLowerCase().includes(this.otvoreni.toLowerCase()));
-          })
-		 
-          else{
-			  console.log("tu sam");
-            return this.restorani.filter((r) => {
-              return (r);
-            })
-          }
 
-        }},*/
 
 	methods: {
+		pregledPorudzbina(){
+    		this.$router.push("/pregledPorudzbina/"+ this.kupac)
+    	},
+
 		informacije(value){
 			this.$router.push("/informacijeRestoran/" + value)
 		},
@@ -325,7 +311,6 @@ computed: {
         },
 
 		obrisiRestoran : function(value){
-			console.log(value);
             axios 
            .delete('rest/restorani/obrisiRestoran/' + value)
            .then(response => {

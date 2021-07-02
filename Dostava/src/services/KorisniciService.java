@@ -26,12 +26,15 @@ import beans.Korpa;
 import beans.Kupac;
 import beans.Lokacija;
 import beans.Menadzer;
+import beans.Porudzbina;
 import beans.Restoran;
 import beans.TipKupca.ImeTipa;
 import dao.KorisnikDAO;
+import dao.PorudzbinaDAO;
 import dao.RestoranDAO;
 import dto.ArtikliDTO;
 import dto.ArtikliKorpaDTO;
+import dto.ArtikliPorudzbineDTO;
 import dto.KorisnikBlokiranjeDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
@@ -40,6 +43,7 @@ import dto.KorisnikPrikazDTO;
 import dto.KorpaDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
+import dto.PorudzbinePrikazDTO;
 import dto.RestoranMenadzerDTO;
 
 @Path("/korisnici")
@@ -72,6 +76,18 @@ public class KorisniciService {
 		}
 
 		return restorani;
+	}
+	
+	private PorudzbinaDAO dobaviPorudzbinaDAO() {
+
+		PorudzbinaDAO porudzbine = (PorudzbinaDAO) sc.getAttribute("porudzbine");
+
+		if (porudzbine == null) {
+			porudzbine = new PorudzbinaDAO(sc.getRealPath("."));
+			sc.setAttribute("porudzbine", porudzbine);
+		}
+
+		return porudzbine;
 	}
 
 	@POST
@@ -377,5 +393,37 @@ public class KorisniciService {
 		}
 		return Response.status(200).build();
 
+	}
+	
+	
+	@GET
+	@Path("/nadjiPorudzbine/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id) {
+		System.out.println("ccaoooo");
+		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
+		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
+		PorudzbinePrikazDTO porDTO = null;
+		System.out.println("evo me");
+		
+		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
+			if(porudzbina.getKupac().equals(id)) {
+				System.out.println("uslo");
+				porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
+						porudzbina.getDatumVreme(),porudzbina.getStatus());
+				
+				List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+				for (Artikal a : porudzbina.getPoruceniArtikli()) {
+					artikli.add(new ArtikliPorudzbineDTO(a.getNaziv(), a.getCena(), a.getKolicina(), a.getSlika()));
+				}
+				
+				porDTO.setArtikli(artikli);
+				
+			}
+			
+			porudzbineKupca.add(porDTO);
+		}
+		
+		return porudzbineKupca;
 	}
 }
