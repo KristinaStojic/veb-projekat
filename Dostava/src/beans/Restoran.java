@@ -152,12 +152,23 @@ public class Restoran implements Serializable {
 	}
 	
 	public void obrisiArtikal(Artikal a) {
-		System.out.println("obrisacu:" + a.getNaziv());
-		/*for (Artikal artikal : artikliUPonudi) {
-			if(artikal.getNaziv().equals(a.getNaziv())) {
-				this.artikliUPonudi.remove(a);
-			}
-		}*/
+		
+		for( int i = 0; i < this.artikliUPonudi.size(); i++ )
+		{
+		    Artikal zaBrisanje = this.artikliUPonudi.get(i);
+		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
+		    {
+		    	//this.artikliUPonudi.remove(zaBrisanje);
+		    	this.artikliUPonudi.get(i).setLogickoBrisanje(1);
+		    }
+		      
+		}
+	
+	}
+	}
+	
+	
+	public void obrisiArtikalIzListe(Artikal a) {
 		
 		for( int i = 0; i < this.artikliUPonudi.size(); i++ )
 		{
@@ -165,6 +176,7 @@ public class Restoran implements Serializable {
 		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
 		    {
 		    	this.artikliUPonudi.remove(zaBrisanje);
+		    	//this.artikliUPonudi.get(i).setLogickoBrisanje(1);
 		    }
 		      
 		}

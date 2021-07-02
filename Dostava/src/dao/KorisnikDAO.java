@@ -577,13 +577,7 @@ public class KorisnikDAO {
 			if(menadzer.getRestoran() != null) {
 				if(menadzer.getRestoran().getId().equals(idRestorana)) {
 					if(menadzer.getRestoran().getArtikliUPonudi() != null) {
-						/*for (Artikal a : menadzer.getRestoran().getArtikliUPonudi()) {
-							if(a.getNaziv().equals(nazivArtikla)) {
-								System.out.println("evo me ovde i brisem: " + nazivArtikla);
-								menadzer.getRestoran().obrisiArtikal(a);
-							}
-							
-						}*/
+					
 						for( int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++ )
 						{
 						    Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
@@ -602,6 +596,28 @@ public class KorisnikDAO {
 		}
 		
 		sacuvajPodatke();
+		
+		for (Menadzer menadzer : menadzeri) {
+			if(menadzer.getRestoran() != null) {
+				if(menadzer.getRestoran().getId().equals(idRestorana)) {
+					if(menadzer.getRestoran().getArtikliUPonudi() != null) {
+					
+						for( int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++ )
+						{
+						    Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
+						    if(zaBrisanje.getNaziv().equals(nazivArtikla)) {
+						    {
+						    	menadzer.getRestoran().obrisiArtikalIzListe(zaBrisanje);
+						    }
+						    }  
+						}
+						
+					}
+					
+				}
+			}
+			
+		}
 	}
 
 }
