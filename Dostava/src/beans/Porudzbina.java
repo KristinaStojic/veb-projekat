@@ -17,7 +17,7 @@ public class Porudzbina implements Serializable {
 
 	private String id;
 	private List<ArtikalKorpa> poruceniArtikli;
-	private Restoran restoran;
+	private String restoran;
 	private Date datumVreme;
 	private Double cena;
 	private String kupac;
@@ -27,7 +27,7 @@ public class Porudzbina implements Serializable {
 		super();
 	}
 
-	public Porudzbina(String id, List<ArtikalKorpa> poruceniArtikli, Restoran restoran, Date datumVreme, Double cena,
+	public Porudzbina(String id, List<ArtikalKorpa> poruceniArtikli, String restoran, Date datumVreme, Double cena,
 			String kupac, Status status) {
 		super();
 		this.id = id;
@@ -56,11 +56,11 @@ public class Porudzbina implements Serializable {
 		this.poruceniArtikli = poruceniArtikli;
 	}
 
-	public Restoran getRestoran() {
+	public String getRestoran() {
 		return restoran;
 	}
 
-	public void setRestoran(Restoran restoran) {
+	public void setRestoran(String restoran) {
 		this.restoran = restoran;
 	}
 

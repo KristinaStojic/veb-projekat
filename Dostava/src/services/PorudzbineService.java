@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import beans.Artikal;
 import beans.ArtikalKorpa;
+import beans.Korisnik;
 import beans.Porudzbina;
 import beans.Restoran;
 import dao.KorisnikDAO;
@@ -91,13 +93,28 @@ public class PorudzbineService {
 			}
 		}
 
-		Porudzbina p = new Porudzbina(UUID.randomUUID().toString().replace("-", "").substring(0, 10), artikli, r,
+		Porudzbina p = new Porudzbina(UUID.randomUUID().toString().replace("-", "").substring(0, 10), artikli, r.getId(),
 				new Date(System.currentTimeMillis()), korpa.cena, korpa.korisnik, Porudzbina.Status.OBRADA);
 		
 		if(!korisnici.dodajPorudzbinu(p)) {
 			return Response.status(400).build();
 		}
 		porudzbine.dodajPorudzbinu(p);
+		return Response.status(200).build();
+	}
+	
+	@POST
+	@Path("/otkaziPorudzbinu/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response otkaziPorudzbinu(@PathParam("id") String id) {
+		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
+		if(!porudzbine.otkaziPorudzbinu(id) || !korisnici.otkaziPorudzbinu(id,idKorisnika)) {
+			return Response.status(400).build();
+		}
+		
 		return Response.status(200).build();
 	}
 

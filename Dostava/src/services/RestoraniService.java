@@ -99,7 +99,7 @@ public class RestoraniService {
 	public RestoranDodavanjeDTO dodajRestoran(RestoranDodavanjeDTO r) {
 		Lokacija lokacija = new Lokacija(r.geografskaDuzina, r.geografskaSirina, r.ulica, r.broj, r.mesto,
 				r.postanskiBroj);
-		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString(), 0, r.naziv, r.tipRestorana,
+		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, r.naziv, r.tipRestorana,
 				new ArrayList<Artikal>(), true, lokacija, r.logo, 0.0);
 
 		RestoranDAO restorani = dobaviRestoranDAO();

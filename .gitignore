@@ -5,3 +5,7 @@ Dostava/build/classes/dao/KorisnikDAO.class
 Dostava/build/classes/beans/Restoran.class
 Dostava/build/classes/dao/RestoranDAO.class
 Dostava/build/classes/service/RestoranService.class
+Dostava/build/classes/beans/Porudzbina.class
+Dostava/build/classes/dao/KorisnikDAO.class
+Dostava/build/classes/services/KorisniciService.class
+Dostava/build/classes/services/RestoraniService.class

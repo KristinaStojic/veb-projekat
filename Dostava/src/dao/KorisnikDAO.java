@@ -23,6 +23,7 @@ import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Korisnik.Pol;
 import beans.Korisnik.Uloga;
+import beans.Porudzbina.Status;
 import beans.Korpa;
 import beans.Kupac;
 import beans.Menadzer;
@@ -174,7 +175,7 @@ public class KorisnikDAO {
 			return null;
 
 		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0, 0);
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, korisnik.korisnickoIme, korisnik.lozinka,
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, korisnik.korisnickoIme, korisnik.lozinka,
 				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		System.out.println("novi korisnika: " + noviKorisnik.getBlokiran());
@@ -321,7 +322,7 @@ public class KorisnikDAO {
 		if (daLiPostojiKorIme(menadzer.korisnickoIme))
 			return null;
 
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, menadzer.korisnickoIme, menadzer.lozinka,
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, menadzer.korisnickoIme, menadzer.lozinka,
 				menadzer.ime, menadzer.prezime, menadzer.pol, menadzer.datumRodjenja, menadzer.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
@@ -354,7 +355,7 @@ public class KorisnikDAO {
 	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
 		if (daLiPostojiKorIme(dostavljac.korisnickoIme))
 			return null;
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString(), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
 				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
@@ -707,5 +708,23 @@ public class KorisnikDAO {
 	
 	public List<Menadzer> dobaviSveMenadzere(){
 		return menadzeri;
+	}
+
+	public boolean otkaziPorudzbinu(String id, String idKorisnika) {
+
+		for(Kupac k:kupci) {
+			if(k.getId().equals(idKorisnika)) {
+				for (Porudzbina p : k.getSvePorudzbine()) {
+					if(p.getId().equals(id)) {
+						p.setStatus(Status.OTKAZANA);
+						Double trenutniBodovi = k.getSakupljeniBodovi();
+						k.setSakupljeniBodovi(trenutniBodovi - (p.getCena() / 1000 * 133 * 4));
+						k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -65,9 +65,9 @@ Vue.component("pregledKorpe", {
 					<th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
 				<h3>Trenutni status naloga: {{this.korpa.tipKupca}}</h3></br>
 				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' ">Popust koji je obračunat: 5%</h4>
-				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' && this.korpa.nedostaje < 0 ">Potrebno bodova za Zlatni status: {{this.korpa.nedostaje}}</h4>
+				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' && this.korpa.nedostaje < 0 ">Potrebno bodova za Zlatni status: {{(this.korpa.nedostaje).toFixed(2)}}</h4>
 				<h4 v-if="this.korpa.tipKupca === 'ZLATNI' ">Popust koji je obračunat: 10%</h4>
-				<h4 v-if="this.korpa.tipKupca === 'BRONZANI' && this.korpa.nedostaje > 0">Potrebno bodova za Srebrni status: {{this.korpa.nedostaje}}</h4>
+				<h4 v-if="this.korpa.tipKupca === 'BRONZANI' && this.korpa.nedostaje > 0">Potrebno bodova za Srebrni status: {{(this.korpa.nedostaje).toFixed(2)}}</h4>
 				<h4 v-if="this.korpa.nedostaje < 0 ">Sakupljeno dovoljno bodova za sledeći nivo!</h4>
 				</div></th>
 				</tr>
@@ -180,7 +180,7 @@ Vue.component("pregledKorpe", {
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-					this.$router.push("/")
+					this.$router.push("/pregledPorudzbina/" + window.localStorage.getItem("korisnik"))
 					
     			})
 				.catch(err => {

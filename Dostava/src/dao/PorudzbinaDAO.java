@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Porudzbina;
+import beans.Porudzbina.Status;
 
 public class PorudzbinaDAO {
 
@@ -84,6 +85,17 @@ public class PorudzbinaDAO {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean otkaziPorudzbinu(String id) {
+
+		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
+		if (p == null) return false;
+		
+		p.setStatus(Status.OTKAZANA);
+		if(sacuvajPodatke()) return true;
+		
+		return false;
 	}
 
 }

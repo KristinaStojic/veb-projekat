@@ -10,7 +10,7 @@ Vue.component("pregledPorudzbina", {
             datumVreme : "",
             id: "",
             kupac: "",
-            restoran: null,
+            restoran: "",
 			status: ""
 			
         },
@@ -54,7 +54,7 @@ Vue.component("pregledPorudzbina", {
                                     <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
                                 <div class="dropdown-divider"></div>
-									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+									<a class="dropdown-item">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 								</div>
@@ -112,7 +112,7 @@ Vue.component("pregledPorudzbina", {
                                   </button>                 
                                     </td>
                                     <td style="vertical-align:middle;text-align: center">
-                                    <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
+                                    <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#otkazivanje" @click="posaljiPorudzbinu(p)">
                                     Otkaži
                                   </button>                 
                                     </td>
@@ -238,12 +238,31 @@ Vue.component("pregledPorudzbina", {
                 </div> 
 
 
-                <div class="modal" id="myModal">
+                <div class="modal" id="otkazivanje">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        <div class="modal-content">
+                        <!-- Modal body -->
+                        <div class="modal-body" style="text-align: center">
+							<h5 class="modal-title">Da li ste sigurni da želite da otkažete porudžbinu iz restorana '<b>{{this.pomocnaPorudzbina.restoran}}</b>'?</h5>
+							<hr class="mt-2 mb-3"/>
+                        	<p style="font-size:19px">Izgubićete {{(this.pomocnaPorudzbina.cena/1000*133*4).toFixed(2)}} poena</p>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="otkazi()">Potvrdi</button>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+
+				<div class="modal" id="myModal">
                     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" style="max-width: 50%;">
                         <div class="modal-content">
 
-                        
-
+							
                         <!-- Modal body -->
                         <div class="modal-body">
                         <table  class="table table-hover align-middle">
@@ -293,18 +312,9 @@ Vue.component("pregledPorudzbina", {
                         </div>
                     </div>
                 </div>
+
             </div>
-
-
-
-            
-
         </div>
-
-
-
-        
-
     ` 
     ,
 	
@@ -368,6 +378,25 @@ Vue.component("pregledPorudzbina", {
           }
         },
     methods: {
+		otkazi : function(){
+			axios 
+    			.post('/DostavaREST/rest/porudzbine/otkaziPorudzbinu/' + this.pomocnaPorudzbina.id)
+    			.then(response => {
+					this.greska = "Uspešno otkazana porudžbina!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.go();
+    			})
+				.catch(err => {
+					this.greska = "Neuspešno otkazana porudžbina! Pokušajte ponovo.";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+				
+		},
         odjava : function() {
     		axios 
     			.post('/DostavaREST/rest/korisnici/odjava')
@@ -393,9 +422,6 @@ Vue.component("pregledPorudzbina", {
 
         posaljiPorudzbinu(por){
             this.pomocnaPorudzbina = por;
-            console.log(this.pomocnaPorudzbina.naziv)
-            console.log(this.pomocnaPorudzbina.cena)
-            console.log(this.pomocnaPorudzbina.kolicina)
         }
         
     
