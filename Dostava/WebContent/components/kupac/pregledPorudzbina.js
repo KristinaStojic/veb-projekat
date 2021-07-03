@@ -210,6 +210,26 @@ Vue.component("pregledPorudzbina", {
                                 </div>
                                 </div>
                                 
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tip restorana
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('BRZA_HRANA')">Brza hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('RAZNO')">Raznolika kuhinja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ITALIJANSKI')">Italijanska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('KINESKI')">Kineska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ROSTILJ')">Jela sa roštilja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('SRPSKI')">Srpska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('GRCKI')">Grčka hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('VEGETARIJANSKI')">Vegetarijanska hrana</button>
+
+                                </div>
+
+
+                                
+                                </div>
                                 </div></th>
                                 </tr>
                                 
