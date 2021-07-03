@@ -26,7 +26,9 @@ Vue.component("pregledPorudzbina", {
         transport: "",
         otkazana: "",
         uloga: "",
-        search: ""
+        search: "",
+        filterTip: "",
+        filterStatus: ""
 
 
 	}
@@ -88,7 +90,48 @@ Vue.component("pregledPorudzbina", {
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
+
+
+                                <label style="font-size:15px">Filtriranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tip restorana
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('BRZA_HRANA')">Brza hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('RAZNO')">Raznolika kuhinja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ITALIJANSKI')">Italijanska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('KINESKI')">Kineska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ROSTILJ')">Jela sa roštilja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('SRPSKI')">Srpska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('GRCKI')">Grčka hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('VEGETARIJANSKI')">Vegetarijanska hrana</button>
+
+                                </div>
+
+
+                                
+                                </div>
+                                <label style="font-size:15px">Filtriranje: </label>
+
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Status porudžbine
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OBRADA')">Obrada</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('PRIPREMA')">Priprema</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('CEKA_DOSTAVU')">Čeka dostavu</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('TRANSPORT')">Transport</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
+
+                                </div>
+                                </div>
                                 </div></th>
                                 </tr>
                                 
@@ -150,7 +193,22 @@ Vue.component("pregledPorudzbina", {
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
 
+                                <label style="font-size:15px">Filtriranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Status porudžbine
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OBRADA')">Obrada</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('PRIPREMA')">Priprema</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('CEKA_DOSTAVU')">Čeka dostavu</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('TRANSPORT')">Transport</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
 
+                                </div>
+                                </div>
                                 
                                 </div></th>
                                 </tr>
@@ -204,7 +262,22 @@ Vue.component("pregledPorudzbina", {
                                 <tr >
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
-                                
+                                <label style="font-size:15px">Filtriranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Status porudžbine
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OBRADA')">Obrada</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('PRIPREMA')">Priprema</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('CEKA_DOSTAVU')">Čeka dostavu</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('TRANSPORT')">Transport</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
+
+                                </div>
+                                </div>
                                 
 
                                 </div></th>
@@ -377,15 +450,24 @@ Vue.component("pregledPorudzbina", {
             let filter5 = new RegExp(this.obrada, 'i');
 
             let filter6 = new RegExp(this.search, 'i');
-
-            return ( this.pomocne.filter(el => (el.status.match(filter1) 
-            || el.status.match(filter2)
-			|| el.status.match(filter3)
-			|| el.status.match(filter4)
-			|| el.status.match(filter5))
-            && el.restoran.match(filter6)
-			
-			));
+            let filter7= new RegExp(this.filterTip, 'i');
+            let filter8= new RegExp(this.filterStatus, 'i');
+         
+            if(this.uloga === "KUPAC"){
+                return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                || el.status.match(filter2)
+                || el.status.match(filter3)
+                || el.status.match(filter4)
+                || el.status.match(filter5))
+                && el.restoran.match(filter6)
+                && el.tipRestorana.match(filter7)
+                ));
+            }
+            else if(this.uloga === "MENADZER" || this.uloga === "DOSTAVLJAC"){
+                return ( this.pomocne.filter(el => (el.status.match(filter8))
+                ));
+            }
+            
           }
         },
     methods: {
@@ -433,7 +515,14 @@ Vue.component("pregledPorudzbina", {
 
         posaljiPorudzbinu(por){
             this.pomocnaPorudzbina = por;
-        }
+        },
+
+        postaviFilterTip(value){
+            this.filterTip = value;
+         },
+         postaviFilterStatus(value){
+            this.filterStatus = value;
+         }
         
     
     }
