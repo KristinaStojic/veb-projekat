@@ -165,10 +165,13 @@ public class PorudzbineService {
 	public Response zahtevajPorudzbinu(@PathParam("id") String id) {
 		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
 		String idDostavljaca = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
-		if (!porudzbine.zahtevajPorudzbinu(id,idDostavljaca)) {
+		Integer zahtev = porudzbine.zahtevajPorudzbinu(id,idDostavljaca);
+		if (zahtev == 0) {
 			return Response.status(400).build();
+		}else if(zahtev == 1) {
+			return Response.status(200).entity("Već ste poslali zahtev!").build();
 		}
 
-		return Response.status(200).build();
+		return Response.status(200).entity("Zahtev uspešno poslat!").build();
 	}
 }

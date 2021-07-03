@@ -98,14 +98,18 @@ public class PorudzbinaDAO {
 		return false;
 	}
 
-	public boolean zahtevajPorudzbinu(String id, String idDostavljaca) {
+	public Integer zahtevajPorudzbinu(String id, String idDostavljaca) {
 		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
-		if (p == null) return false;
-		
+		if (p == null) return 0;
+		for (String idd : p.getDostavljaciKojiZahtevaju()) {
+			if(idd.equals(idDostavljaca)) {
+				return 1;
+			}
+		}
 		p.dodajDostavljaca(idDostavljaca);
-		if(sacuvajPodatke()) return true;
+		if(sacuvajPodatke()) return 2;
 		
-		return false;
+		return 0;
 	}
 
 

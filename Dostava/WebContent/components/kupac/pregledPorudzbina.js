@@ -170,9 +170,12 @@ Vue.component("pregledPorudzbina", {
                                   </button>                 
                                     </td>
                                     <td style="vertical-align:middle;text-align: center">
-                                    <button v-if="p.status === 'CEKA_DOSTAVU' || p.status === 'TRANSPORT'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#zahtevanje" @click="posaljiPorudzbinu(p)">
-                                    Promeni status
-                                  </button>                 
+                                    <button v-if="p.status === 'CEKA_DOSTAVU'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#zahtevanje" @click="posaljiPorudzbinu(p)">
+                                     Zahtevaj
+                                  	</button>
+									<button v-if="p.status === 'TRANSPORT'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p)">
+                                     Dostavljena
+                                  	</button>                     
                                     </td>
                                     </tr>
                             </tbody>
@@ -458,14 +461,14 @@ Vue.component("pregledPorudzbina", {
 			axios 
     			.post('/DostavaREST/rest/porudzbine/zahtevajPorudzbinu/' + this.pomocnaPorudzbina.id)
     			.then(response => {
-					this.greska = "Uspešno zatražena porudžbina!";
+					this.greska = response.data;
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
 					this.$router.go();
     			})
 				.catch(err => {
-					this.greska = "Neuspešno! Pokušajte ponovo.";
+					this.greska = "Već ste poslali zahtev!'";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
