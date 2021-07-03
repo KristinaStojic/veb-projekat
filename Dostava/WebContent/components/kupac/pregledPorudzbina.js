@@ -95,6 +95,7 @@ Vue.component("pregledPorudzbina", {
                                 <th scope="col">Ukupna cena</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Detalji</th>
+                                <th scope="col">Otkaži</th>
                                 <th colspan="4" scope="colgroup"></th>
                                 </tr>
                             </thead>
@@ -108,6 +109,11 @@ Vue.component("pregledPorudzbina", {
                                     <td style="vertical-align:middle;text-align: center">
                                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
                                     Detalji
+                                  </button>                 
+                                    </td>
+                                    <td style="vertical-align:middle;text-align: center">
+                                    <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
+                                    Otkaži
                                   </button>                 
                                     </td>
                                     </tr>
@@ -148,6 +154,7 @@ Vue.component("pregledPorudzbina", {
                                 <th scope="col">Ukupna cena</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Detalji</th>
+                                <th scope="col">Promeni status</th>
                                 <th colspan="4" scope="colgroup"></th>
                                 </tr>
                             </thead>
@@ -161,6 +168,11 @@ Vue.component("pregledPorudzbina", {
                                     <td style="vertical-align:middle;text-align: center">
                                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
                                     Detalji
+                                  </button>                 
+                                    </td>
+                                    <td style="vertical-align:middle;text-align: center">
+                                    <button v-if="p.status === 'CEKA_DOSTAVU' || p.status === 'TRANSPORT'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
+                                    Promeni status
                                   </button>                 
                                     </td>
                                     </tr>
@@ -197,6 +209,7 @@ Vue.component("pregledPorudzbina", {
                                 <th scope="col">Ukupna cena</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Detalji</th>
+                                <th scope="col">Promeni status</th>
                                 <th colspan="4" scope="colgroup"></th>
                                 </tr>
                             </thead>
@@ -210,6 +223,11 @@ Vue.component("pregledPorudzbina", {
                                     <td style="vertical-align:middle;text-align: center">
                                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
                                     Detalji
+                                  </button>                 
+                                    </td>
+                                    <td style="vertical-align:middle;text-align: center">
+                                    <button v-if="p.status === 'OBRADA' || p.status === 'PRIPREMA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
+                                    Promeni status
                                   </button>                 
                                     </td>
                                     </tr>
