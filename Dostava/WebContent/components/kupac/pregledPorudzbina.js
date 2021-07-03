@@ -115,7 +115,6 @@ Vue.component("pregledPorudzbina", {
 
                                 
                                 </div>
-                                <label style="font-size:15px">Filtriranje: </label>
 
                                 <div class="btn-group">
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -130,6 +129,26 @@ Vue.component("pregledPorudzbina", {
                                     <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
                                     <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
 
+                                </div>
+                                </div>
+
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+
+                                <label style="font-size:15px;">Sortiranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                    Izaberite kriterijum
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('restoran', 'asc')">Naziv restorana-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('restoran', 'desc')">Naziv restorana-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'asc')">Cena-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'desc')">Cena-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'asc')">Datum-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'desc')">Datum-silazno</button>
+                                 
                                 </div>
                                 </div>
                                 </div></th>
@@ -549,7 +568,16 @@ Vue.component("pregledPorudzbina", {
          },
          postaviFilterStatus(value){
             this.filterStatus = value;
-         }
+         },
+
+         sortTable(key, direction){
+            this.sort = `${key} > ${direction}`
+            if (direction === 'asc') {
+              this.porudzbine.sort((a, b) => a[key] > b[key] ? 1: -1)
+            } else {
+              this.porudzbine.sort((a, b) => a[key] < b[key] ? 1: -1)
+            }
+          },
         
     
     }
