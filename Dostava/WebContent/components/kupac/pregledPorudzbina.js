@@ -434,6 +434,7 @@ Vue.component("pregledPorudzbina", {
                     }
                     else{
                         this.porudzbine = response.data
+                        console.log(this.porudzbine)
                         this.pomocne = response.data
                     }
                    
@@ -481,10 +482,16 @@ Vue.component("pregledPorudzbina", {
                 || el.status.match(filter5))
                 && el.restoran.match(filter6)
                 && el.tipRestorana.match(filter7)
+                && el.status.match(filter8)
                 ));
             }
-            else if(this.uloga === "MENADZER" || this.uloga === "DOSTAVLJAC"){
+            else if(this.uloga === "MENADZER"){
                 return ( this.pomocne.filter(el => (el.status.match(filter8))
+                ));
+            }
+            else if(this.uloga === "DOSTAVLJAC"){
+                return ( this.pomocne.filter(el => (el.status.match(filter8)
+                && el.tipRestorana.match(filter7))
                 ));
             }
             

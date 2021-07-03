@@ -467,7 +467,11 @@ public class KorisniciService {
 					
 					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
 							porudzbina.getDatumVreme(),porudzbina.getStatus());
-					
+					for (Restoran restoran : restoranDAO.dobaviRestorane()) {
+						if(restoran.getId().equals(porudzbina.getRestoran())) {
+							porDTO.setTipRestorana(restoran.getTipRestorana().toString());
+						}
+					}
 					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
 						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
@@ -490,7 +494,11 @@ public class KorisniciService {
 										porDTO = new PorudzbinePrikazDTO(p.getId(),p.getKupac(),naziv2,p.getCena(),
 												p.getDatumVreme(),p.getStatus());
 										
-										
+										for (Restoran restoran : restoranDAO.dobaviRestorane()) {
+											if(restoran.getId().equals(porudzbina.getRestoran())) {
+												porDTO.setTipRestorana(restoran.getTipRestorana().toString());
+											}
+										}
 										List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 										for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
 											artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
