@@ -28,7 +28,15 @@ Vue.component("pregledPorudzbina", {
         uloga: "",
         search: "",
         filterTip: "",
-        filterStatus: ""
+        filterStatus: "",
+        pocCena: "",
+        krajnjaCena: "",
+        pocDatum: "",
+        krajDatum: "",
+        pocetak: false,
+        kraj: false,
+        pocetniDatum: "",
+        krajnjiDatum: ""
 
 
 	}
@@ -86,13 +94,24 @@ Vue.component("pregledPorudzbina", {
                                 <h3>Pregled porudžbina:</h3></br>
                                 
                                 <label style="font-size:15px">Pretraga: </label>
-				                <input type="text" v-model="search" style="height:36px; width:180px" placeholder="Pretražite porudžbine"/>
+				                <input type="text" v-model="search" style="height:36px; width:180px" placeholder="Pretražite naziv restorana"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
-
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <label style="font-size:15px">Filtriranje: </label>
                                 <div class="btn-group">
@@ -525,9 +544,47 @@ Vue.component("pregledPorudzbina", {
             let filter6 = new RegExp(this.search, 'i');
             let filter7= new RegExp(this.filterTip, 'i');
             let filter8= new RegExp(this.filterStatus, 'i');
-         
+
+            let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(this.pocDatum);
+            let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(this.pocDatum);
+            let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(this.pocDatum);
+            this.pocetniDatum = `${ye}-${mo}-${da}`;
+
+            let ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(this.krajDatum);
+            let mo1 = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(this.krajDatum);
+            let da1 = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(this.krajDatum);
+            let sati = new Intl.DateTimeFormat('en', { hour: '2-digit' }).format(00);
+            this.krajnjiDatum = `${ye1}-${mo1}-${da1}`;
+
             if(this.uloga === "KUPAC"){
-                return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
+                    return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
+                    && el.restoran.match(filter6)
+                    && el.tipRestorana.match(filter7)
+                    && el.status.match(filter8)
+                    && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    ));
+                }
+                else if(this.pocDatum !== "" && this.krajDatum !==""){
+                    this.pomocne.filter(el => (console.log(el.datumVreme.slice(0, 10))));
+                    console.log(this.pocetniDatum)
+                    return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
+                    && el.restoran.match(filter6)
+                    && el.tipRestorana.match(filter7)
+                    && el.status.match(filter8)
+                    && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                    ));
+                }
+                else{
+                    return ( this.pomocne.filter(el => (el.status.match(filter1) 
                 || el.status.match(filter2)
                 || el.status.match(filter3)
                 || el.status.match(filter4)
@@ -536,6 +593,8 @@ Vue.component("pregledPorudzbina", {
                 && el.tipRestorana.match(filter7)
                 && el.status.match(filter8)
                 ));
+                }
+                
             }
             else if(this.uloga === "MENADZER"){
                 return ( this.pomocne.filter(el => (el.status.match(filter8))
@@ -548,6 +607,8 @@ Vue.component("pregledPorudzbina", {
             }
             
           }
+        },components: {
+            vuejsDatepicker
         },
     methods: {
 		otkazi : function(){
@@ -611,6 +672,7 @@ Vue.component("pregledPorudzbina", {
               this.porudzbine.sort((a, b) => a[key] < b[key] ? 1: -1)
             }
           },
+
         
     
     }
