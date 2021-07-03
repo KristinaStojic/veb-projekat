@@ -25,7 +25,8 @@ Vue.component("pregledPorudzbina", {
         cekaDostavu: "",
         transport: "",
         otkazana: "",
-        uloga: ""
+        uloga: "",
+        search: ""
 
 
 	}
@@ -82,6 +83,9 @@ Vue.component("pregledPorudzbina", {
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
                                 
+                                <label style="font-size:15px">Pretraga: </label>
+				                <input type="text" v-model="search" style="height:36px; width:180px" placeholder="Pretražite porudžbine"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
 
@@ -141,9 +145,13 @@ Vue.component("pregledPorudzbina", {
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
                                 
+                               
+
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
 
+
+                                
                                 </div></th>
                                 </tr>
                                 
@@ -368,11 +376,14 @@ Vue.component("pregledPorudzbina", {
             let filter4 = new RegExp(this.transport, 'i');
             let filter5 = new RegExp(this.obrada, 'i');
 
-            return ( this.pomocne.filter(el => el.status.match(filter1) 
+            let filter6 = new RegExp(this.search, 'i');
+
+            return ( this.pomocne.filter(el => (el.status.match(filter1) 
             || el.status.match(filter2)
 			|| el.status.match(filter3)
 			|| el.status.match(filter4)
-			|| el.status.match(filter5)
+			|| el.status.match(filter5))
+            && el.restoran.match(filter6)
 			
 			));
           }

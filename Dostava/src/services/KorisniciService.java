@@ -435,15 +435,13 @@ public class KorisniciService {
 	@Path("/nadjiPorudzbine/{id}/{uloga}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id,@PathParam("uloga") String uloga) {
-		System.out.println(uloga);
 		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
 		porudzbineKupca.clear();
 		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
 		RestoranDAO restoranDAO = dobaviRestoranDAO();
 		PorudzbinePrikazDTO porDTO = null;
-		System.out.println(porudzbineKupca.size());
 		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
-	
+		System.out.println("Ukupno postoji porudzbina: " + porudzbineDAO.dobaviPorudzbine().size());
 		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
 			String nazivRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getNaziv();
 			if(uloga.equals("KUPAC")) {
@@ -516,6 +514,8 @@ public class KorisniciService {
 							porDTO.setArtikli(artikli);
 							porudzbineKupca.add(porDTO);
 						}}}}}
+		
+		System.out.println("Ovoliko porudzbina se salje za prikaz: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
 }
