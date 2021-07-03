@@ -483,7 +483,7 @@ public class KorisniciService {
 							if(dostavljac.getPorudzbineZaDostavu() != null) {
 								for (Porudzbina p : dostavljac.getPorudzbineZaDostavu()) {
 									if(!porudzbina.getId().equals(p.getId())) {
-										porDTO = new PorudzbinePrikazDTO(p.getId(),porudzbina.getKupac(),p.getRestoran().getNaziv(),p.getCena(),
+										porDTO = new PorudzbinePrikazDTO(p.getId(),p.getKupac(),p.getRestoran().getNaziv(),p.getCena(),
 												p.getDatumVreme(),p.getStatus());
 										
 										
@@ -500,6 +500,27 @@ public class KorisniciService {
 								}
 							}
 							
+						}
+					}
+				}
+			}
+			
+			else if(uloga.equals("MENADZER")) {
+				for (Menadzer menadzer : korisniciDAO.dobaviSveMenadzere()) {
+					if(menadzer.getRestoran() != null) {
+						if(porudzbina.getRestoran().getNaziv().equals(menadzer.getRestoran().getNaziv())) {
+							porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
+									porudzbina.getDatumVreme(),porudzbina.getStatus());
+							
+							
+							List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+							for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+								artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+										a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+							}
+							
+							porDTO.setArtikli(artikli);
+							porudzbineKupca.add(porDTO);
 						}
 					}
 				}

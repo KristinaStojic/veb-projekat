@@ -171,6 +171,55 @@ Vue.component("pregledPorudzbina", {
                 </div> 
                 
 
+                <div class="bottom" v-if="uloga === 'MENADZER'">
+                <div class="slika-registracija">
+                    <div id="greska" class="snackbar">{{greska}}</div>
+                        <div style="padding-right:30px;" class="korpa ">
+                            
+                            <table  class="table table-hover align-middle">
+                                
+                                <colgroup span="11"></colgroup>
+                                <colgroup span="4"></colgroup>
+                            <thead>
+                                <tr >
+                                    <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
+                                <h3>Pregled porudžbina:</h3></br>
+                                
+                                
+
+                                </div></th>
+                                </tr>
+                                
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Datum i vreme</th>
+                                <th scope="col">Restoran</th>			      
+                                <th scope="col">Ukupna cena</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Detalji</th>
+                                <th colspan="4" scope="colgroup"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr v-for="(p, i) in pronadjene">
+                                    <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
+                                    <td style="vertical-align:middle;text-align: center">{{p.datumVreme}}</td>
+                                    <td style="vertical-align:middle;text-align: center">{{p.restoran}}</td>
+                                    <td style="vertical-align:middle;text-align: center">{{p.cena}}</td>
+                                    <td style="vertical-align:middle;text-align: center">{{p.status}}</td>
+                                    <td style="vertical-align:middle;text-align: center">
+                                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p.artikli)">
+                                    Detalji
+                                  </button>                 
+                                    </td>
+                                    </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+
+
                 <div class="modal" id="myModal">
                     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" style="max-width: 50%;">
                         <div class="modal-content">

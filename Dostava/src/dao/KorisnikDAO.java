@@ -704,4 +704,8 @@ public class KorisnikDAO {
 	public List<Dostavljac> dobaviSveDostavljace(){
 		return dostavljaci;
 	}
+	
+	public List<Menadzer> dobaviSveMenadzere(){
+		return menadzeri;
+	}
 }

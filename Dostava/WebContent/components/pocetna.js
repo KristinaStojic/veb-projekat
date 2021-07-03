@@ -125,6 +125,8 @@ Vue.component("pocetna", {
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
 								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 							</div>
 						</li>
