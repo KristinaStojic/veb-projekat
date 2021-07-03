@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
+import beans.ArtikalKorpa;
 import beans.Porudzbina;
 import beans.Restoran;
 import dao.KorisnikDAO;
@@ -80,11 +81,11 @@ public class PorudzbineService {
 		if (r.getLogickoBrisanje() == 1 || r == null) {
 			return Response.status(400).build();
 		}
-		List<Artikal> artikli = new ArrayList<>();
+		List<ArtikalKorpa> artikli = new ArrayList<>();
 		for (ArtikliKorpaDTO a : korpa.artikli) {
 			for (Artikal ar : r.getArtikliUPonudi()) {
 				if (a.naziv.equals(ar.getNaziv())) {
-					artikli.add(ar);
+					artikli.add(new ArtikalKorpa(ar, a.kolicinaKorpa));
 					break;
 				}
 			}

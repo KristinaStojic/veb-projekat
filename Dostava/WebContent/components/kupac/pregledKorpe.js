@@ -15,9 +15,13 @@ Vue.component("pregledKorpe", {
     template: ` 
   <div>
   <nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
-			<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
-				<img :src="logo" alt="" width="100" height="80">
-			</a>
+  <a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
+  <img :src="logo" alt="" width="100" height="80">
+</a>
+		  
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
 						
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -34,6 +38,8 @@ Vue.component("pregledKorpe", {
 									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
                                     <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+								<div class="dropdown-divider"></div>
+									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 								</div>

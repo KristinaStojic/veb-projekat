@@ -26,12 +26,15 @@ import beans.Korpa;
 import beans.Kupac;
 import beans.Lokacija;
 import beans.Menadzer;
+import beans.Porudzbina;
 import beans.Restoran;
 import beans.TipKupca.ImeTipa;
 import dao.KorisnikDAO;
+import dao.PorudzbinaDAO;
 import dao.RestoranDAO;
 import dto.ArtikliDTO;
 import dto.ArtikliKorpaDTO;
+import dto.ArtikliPorudzbineDTO;
 import dto.KorisnikBlokiranjeDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
@@ -40,6 +43,7 @@ import dto.KorisnikPrikazDTO;
 import dto.KorpaDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
+import dto.PorudzbinePrikazDTO;
 import dto.RestoranMenadzerDTO;
 
 @Path("/korisnici")
@@ -72,6 +76,18 @@ public class KorisniciService {
 		}
 
 		return restorani;
+	}
+	
+	private PorudzbinaDAO dobaviPorudzbinaDAO() {
+
+		PorudzbinaDAO porudzbine = (PorudzbinaDAO) sc.getAttribute("porudzbine");
+
+		if (porudzbine == null) {
+			porudzbine = new PorudzbinaDAO(sc.getRealPath("."));
+			sc.setAttribute("porudzbine", porudzbine);
+		}
+
+		return porudzbine;
 	}
 
 	@POST
@@ -377,5 +393,141 @@ public class KorisniciService {
 		}
 		return Response.status(200).build();
 
+	}
+	
+	
+	/*@GET
+	@Path("/nadjiPorudzbine/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id) {
+		System.out.println("ccaoooo");
+		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
+		porudzbineKupca.clear();
+		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
+		PorudzbinePrikazDTO porDTO = null;
+		System.out.println(porudzbineKupca.size());
+		
+		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
+			if(porudzbina.getKupac().equals(id)) {
+				System.out.println("uslo");
+				porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
+						porudzbina.getDatumVreme(),porudzbina.getStatus());
+				
+				List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+				for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+					artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+							a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+				}
+				
+				porDTO.setArtikli(artikli);
+				porudzbineKupca.add(porDTO);
+			}
+			
+			
+		}
+		
+		return porudzbineKupca;
+	}
+	*/
+	
+	
+	@GET
+	@Path("/nadjiPorudzbine/{id}/{uloga}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id,@PathParam("uloga") String uloga) {
+		System.out.println(uloga);
+		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
+		porudzbineKupca.clear();
+		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
+		PorudzbinePrikazDTO porDTO = null;
+		System.out.println(porudzbineKupca.size());
+		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
+
+		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
+			if(uloga.equals("KUPAC")) {
+				if(porudzbina.getKupac().equals(id)) {
+					System.out.println("uslo");
+					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
+							porudzbina.getDatumVreme(),porudzbina.getStatus());
+					
+					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+					}
+					
+					porDTO.setArtikli(artikli);
+					porudzbineKupca.add(porDTO);
+				}
+			}else if(uloga.equals("DOSTAVLJAC")) {
+				if(porudzbina.getStatus().toString().equals("CEKA_DOSTAVU")) {
+					
+					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
+							porudzbina.getDatumVreme(),porudzbina.getStatus());
+					
+					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+					}
+					
+					porDTO.setArtikli(artikli);
+					porudzbineKupca.add(porDTO);
+				}
+				
+				
+				/*PROVJERITI OVO!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+				for (Dostavljac dostavljac : korisniciDAO.dobaviSveDostavljace()) {
+					if(dostavljac.getUloga().toString().equals("DOSTAVLJAC")) {
+						if(dostavljac.getId().equals(id)) {
+							if(dostavljac.getPorudzbineZaDostavu() != null) {
+								for (Porudzbina p : dostavljac.getPorudzbineZaDostavu()) {
+									if(!porudzbina.getId().equals(p.getId())) {
+										porDTO = new PorudzbinePrikazDTO(p.getId(),p.getKupac(),p.getRestoran().getNaziv(),p.getCena(),
+												p.getDatumVreme(),p.getStatus());
+										
+										
+										List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+										for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+											artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+													a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+										}
+										
+										porDTO.setArtikli(artikli);
+										porudzbineKupca.add(porDTO);
+									}
+									
+								}
+							}
+							
+						}
+					}
+				}
+			}
+			
+			else if(uloga.equals("MENADZER")) {
+				for (Menadzer menadzer : korisniciDAO.dobaviSveMenadzere()) {
+					if(menadzer.getRestoran() != null) {
+						if(porudzbina.getRestoran().getNaziv().equals(menadzer.getRestoran().getNaziv())) {
+							porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
+									porudzbina.getDatumVreme(),porudzbina.getStatus());
+							
+							
+							List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+							for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+								artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+										a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+							}
+							
+							porDTO.setArtikli(artikli);
+							porudzbineKupca.add(porDTO);
+						}
+					}
+				}
+			}
+			
+		}
+		
+		return porudzbineKupca;
 	}
 }
