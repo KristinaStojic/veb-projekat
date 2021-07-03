@@ -87,15 +87,27 @@ public class PorudzbinaDAO {
 		return true;
 	}
 
-	public boolean otkaziPorudzbinu(String id) {
+	public boolean promeniStatusPorudzbine(String id, Status status) {
 
 		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
 		if (p == null) return false;
 		
-		p.setStatus(Status.OTKAZANA);
+		p.setStatus(status);
 		if(sacuvajPodatke()) return true;
 		
 		return false;
 	}
+
+	public boolean zahtevajPorudzbinu(String id, String idDostavljaca) {
+		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
+		if (p == null) return false;
+		
+		p.dodajDostavljaca(idDostavljaca);
+		if(sacuvajPodatke()) return true;
+		
+		return false;
+	}
+
+
 
 }

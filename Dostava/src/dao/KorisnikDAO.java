@@ -74,9 +74,9 @@ public class KorisnikDAO {
 				List<Kupac> postojeciKupci = Arrays
 						.asList(mapper.readValue(Paths.get(this.putanja + "\\kupci.json").toFile(), Kupac[].class));
 				for (Kupac k : postojeciKupci) {
-					//if (k.getLogickoBrisanje() == 0) {
-						korisnici.put(k.getId(), k);
-					//}
+					// if (k.getLogickoBrisanje() == 0) {
+					korisnici.put(k.getId(), k);
+					// }
 					kupci.add(k);
 					System.out.println(k.getBlokiran() + " kupac");
 				}
@@ -92,9 +92,9 @@ public class KorisnikDAO {
 				List<Dostavljac> postojeciDostavljaci = Arrays.asList(
 						mapper.readValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), Dostavljac[].class));
 				for (Dostavljac d : postojeciDostavljaci) {
-					//if (d.getLogickoBrisanje() == 0) {
-						korisnici.put(d.getId(), d);
-					//}
+					// if (d.getLogickoBrisanje() == 0) {
+					korisnici.put(d.getId(), d);
+					// }
 					dostavljaci.add(d);
 				}
 			}
@@ -109,9 +109,9 @@ public class KorisnikDAO {
 				List<Menadzer> postojeciMenadzeri = Arrays.asList(
 						mapper.readValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), Menadzer[].class));
 				for (Menadzer m : postojeciMenadzeri) {
-					//if (m.getLogickoBrisanje() == 0) {
-						korisnici.put(m.getId(), m);
-					//}
+					// if (m.getLogickoBrisanje() == 0) {
+					korisnici.put(m.getId(), m);
+					// }
 					menadzeri.add(m);
 				}
 			}
@@ -126,9 +126,9 @@ public class KorisnikDAO {
 				List<Administrator> postojeciAdministratori = Arrays.asList(mapper
 						.readValue(Paths.get(this.putanja + "\\administratori.json").toFile(), Administrator[].class));
 				for (Administrator a : postojeciAdministratori) {
-					//if (a.getLogickoBrisanje() == 0) {
-						korisnici.put(a.getId(), a);
-					//}
+					// if (a.getLogickoBrisanje() == 0) {
+					korisnici.put(a.getId(), a);
+					// }
 					administratori.add(a);
 				}
 			}
@@ -162,7 +162,8 @@ public class KorisnikDAO {
 	public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) {
 
 		for (Korisnik k : dobaviSve()) {
-			if (k.getKorisnickoIme().equals(korisnickoIme) && k.getLozinka().equals(lozinka) && k.getLogickoBrisanje() == 0 && k.getBlokiran()==0) {
+			if (k.getKorisnickoIme().equals(korisnickoIme) && k.getLozinka().equals(lozinka)
+					&& k.getLogickoBrisanje() == 0 && k.getBlokiran() == 0) {
 				return k;
 			}
 		}
@@ -175,8 +176,9 @@ public class KorisnikDAO {
 			return null;
 
 		TipKupca tipKupca = new TipKupca(TipKupca.ImeTipa.BRONZANI, 0, 0);
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, korisnik.korisnickoIme, korisnik.lozinka,
-				korisnik.ime, korisnik.prezime, korisnik.pol, korisnik.datumRodjenja, korisnik.uloga, 0);
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0,
+				korisnik.korisnickoIme, korisnik.lozinka, korisnik.ime, korisnik.prezime, korisnik.pol,
+				korisnik.datumRodjenja, korisnik.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		System.out.println("novi korisnika: " + noviKorisnik.getBlokiran());
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0);
@@ -322,8 +324,9 @@ public class KorisnikDAO {
 		if (daLiPostojiKorIme(menadzer.korisnickoIme))
 			return null;
 
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, menadzer.korisnickoIme, menadzer.lozinka,
-				menadzer.ime, menadzer.prezime, menadzer.pol, menadzer.datumRodjenja, menadzer.uloga, 0);
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0,
+				menadzer.korisnickoIme, menadzer.lozinka, menadzer.ime, menadzer.prezime, menadzer.pol,
+				menadzer.datumRodjenja, menadzer.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
 		noviMenadzer.setBlokiran(0);
@@ -355,8 +358,9 @@ public class KorisnikDAO {
 	public Dostavljac dodajDostavljaca(KorisnikDTO dostavljac) {
 		if (daLiPostojiKorIme(dostavljac.korisnickoIme))
 			return null;
-		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, dostavljac.korisnickoIme, dostavljac.lozinka,
-				dostavljac.ime, dostavljac.prezime, dostavljac.pol, dostavljac.datumRodjenja, dostavljac.uloga, 0);
+		Korisnik noviKorisnik = new Korisnik(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0,
+				dostavljac.korisnickoIme, dostavljac.lozinka, dostavljac.ime, dostavljac.prezime, dostavljac.pol,
+				dostavljac.datumRodjenja, dostavljac.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
 		noviDostavljac.setBlokiran(0);
@@ -533,13 +537,13 @@ public class KorisnikDAO {
 
 	public void obrisiRestoranMenadzeru(String idRestorana) {
 		for (Menadzer menadzer : menadzeri) {
-			if(menadzer.getRestoran() != null) {
-				if(menadzer.getRestoran().getId().equals(idRestorana)) {
+			if (menadzer.getRestoran() != null) {
+				if (menadzer.getRestoran().getId().equals(idRestorana)) {
 					menadzer.setRestoran(null);
-					//menadzer.getRestoran().setLogickoBrisanje(1);
+					// menadzer.getRestoran().setLogickoBrisanje(1);
 				}
 			}
-			
+
 		}
 		sacuvajPodatke();
 	}
@@ -575,23 +579,22 @@ public class KorisnikDAO {
 
 		sacuvajPodatke();
 	}
-	
-	public void obrisiArtikleuMenadzeru(String nazivArtikla,String idRestorana) {
+
+	public void obrisiArtikleuMenadzeru(String nazivArtikla, String idRestorana) {
 		System.out.println("Artikli u menadzeru");
 		for (Menadzer menadzer : menadzeri) {
-			if(menadzer.getRestoran() != null) {
-				if(menadzer.getRestoran().getId().equals(idRestorana)) {
-					if(menadzer.getRestoran().getArtikliUPonudi() != null) {
-					
-						for( int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++ )
-						{
-						    Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
-						    System.out.println(zaBrisanje.getNaziv());
-						    if(zaBrisanje.getNaziv().equals(nazivArtikla)) {
-						    {
-						    	menadzer.getRestoran().obrisiArtikal(zaBrisanje);
-						    }
-						    }  
+			if (menadzer.getRestoran() != null) {
+				if (menadzer.getRestoran().getId().equals(idRestorana)) {
+					if (menadzer.getRestoran().getArtikliUPonudi() != null) {
+
+						for (int i = 0; i < menadzer.getRestoran().getArtikliUPonudi().size(); i++) {
+							Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
+							System.out.println(zaBrisanje.getNaziv());
+							if (zaBrisanje.getNaziv().equals(nazivArtikla)) {
+								{
+									menadzer.getRestoran().obrisiArtikal(zaBrisanje);
+								}
+							}
 						}
 					}
 				}
@@ -681,7 +684,7 @@ public class KorisnikDAO {
 		for (Kupac k : kupci) {
 			if (k.getId().equals(id)) {
 				Korpa korpa = k.getKorpa();
-				
+
 				for (ArtikalKorpa ak : korpa.getArtikli()) {
 					Artikal a = ak.getArtikal();
 					if (a.getNaziv().equals(promena.naziv)) {
@@ -700,29 +703,46 @@ public class KorisnikDAO {
 
 		return false;
 	}
-	
-	
-	public List<Dostavljac> dobaviSveDostavljace(){
+
+	public List<Dostavljac> dobaviSveDostavljace() {
 		return dostavljaci;
 	}
-	
-	public List<Menadzer> dobaviSveMenadzere(){
+
+	public List<Menadzer> dobaviSveMenadzere() {
 		return menadzeri;
 	}
 
-	public boolean otkaziPorudzbinu(String id, String idKorisnika) {
-
-		for(Kupac k:kupci) {
-			if(k.getId().equals(idKorisnika)) {
+	public boolean promeniStatusPorudzbineKupcu(String id, String idKorisnika, Status status) {
+		System.out.println("id kupca " + idKorisnika);
+		for (Kupac k : kupci) {
+			if (k.getId().equals(idKorisnika)) {
+				System.out.println("ovaj kupac " + k.getKorisnickoIme());
 				for (Porudzbina p : k.getSvePorudzbine()) {
-					if(p.getId().equals(id)) {
-						p.setStatus(Status.OTKAZANA);
-						Double trenutniBodovi = k.getSakupljeniBodovi();
-						k.setSakupljeniBodovi(trenutniBodovi - (p.getCena() / 1000 * 133 * 4));
-						k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
-						return true;
+					if (p.getId().equals(id)) {
+						System.out.println("nasao sam je ");
+						if (status == Status.OTKAZANA) {
+							p.setStatus(status);
+							Double trenutniBodovi = k.getSakupljeniBodovi();
+							k.setSakupljeniBodovi(trenutniBodovi - (p.getCena() / 1000 * 133 * 4));
+							k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
+							return true;
+						} else {
+							System.out.println("tusam");
+							p.setStatus(status);
+							return true;
+						}
 					}
 				}
+			}
+		}
+		return false;
+	}
+
+	public boolean dostavljacDostavio(String id, String idDostavljaca, Status status) {
+
+		for (Dostavljac d : dostavljaci) {
+			if (d.getId().equals(idDostavljaca)) {
+				return d.ukloniPorudzbinu(id);
 			}
 		}
 		return false;
