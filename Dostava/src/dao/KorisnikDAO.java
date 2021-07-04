@@ -455,7 +455,21 @@ public class KorisnikDAO {
 
 		return null;
 	}
+	public String nadjiTipKupca(Kupac k) {
+		for (Kupac kupac : kupci) {
+			if (kupac.getId().equals(k.getId())) {
+				if (kupac.getTipKupca().getImeTipa().toString().equals("ZLATNI")) {
+					return "Zlatni";
+				} else if (kupac.getTipKupca().getImeTipa().toString().equals("SREBRNI")) {
+					return "Srebrni";
+				} else if (kupac.getTipKupca().getImeTipa().toString().equals("BRONZANI")) {
+					return "Bronzani";
+				}
+			}
+		}
 
+		return null;
+	}
 	public Double nadjiBrojBodovaKupca(Korisnik k) {
 		for (Kupac kupac : kupci) {
 			if (kupac.getId().equals(k.getId())) {
@@ -806,6 +820,26 @@ public class KorisnikDAO {
 				return true;
 			}
 		}
+		return false;
+	}
+	
+	public Kupac nadjiKupca(String id) {
+		for (Kupac kupac : kupci) {
+			if(kupac.getId().equals(id)) {
+				return kupac;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Boolean postojiKupac(List<KorisnikPrikazDTO> postojeci, String idKupca) {
+		for (KorisnikPrikazDTO korisnikPrikazDTO : postojeci) {
+			if(korisnikPrikazDTO.getId().equals(idKupca)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 }

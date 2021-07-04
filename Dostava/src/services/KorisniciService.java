@@ -44,6 +44,7 @@ import dto.KorpaDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
 import dto.PorudzbinePrikazDTO;
+import dto.PorudzbinePrikazKupacaDTO;
 import dto.RestoranMenadzerDTO;
 
 @Path("/korisnici")
@@ -502,24 +503,77 @@ public class KorisniciService {
 			
 			else if(uloga.equals("MENADZER")) {
 				for (Menadzer menadzer : korisniciDAO.dobaviSveMenadzere()) {
-					if(menadzer.getRestoran() != null) {
-						if(porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
-							System.out.println("restoran menadzera " + menadzer.getRestoran().getId()  + " restoran porudzbina " + porudzbina.getRestoran());
-							porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
-									porudzbina.getDatumVreme(),porudzbina.getStatus());
-							
-							
-							List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
-							for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-								artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-										a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
-							}
-							
-							porDTO.setArtikli(artikli);
-							porudzbineKupca.add(porDTO);
-						}}}}}
-		
+					if(menadzer.getId().equals(id)) {
+						if(menadzer.getRestoran() != null) {
+							if(porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
+								System.out.println("restoran menadzera " + menadzer.getRestoran().getId()  + " restoran porudzbina " + porudzbina.getRestoran());
+								porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
+										porudzbina.getDatumVreme(),porudzbina.getStatus());
+								
+								
+								List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+								for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+									artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+											a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+								}
+								
+								porDTO.setArtikli(artikli);
+								porudzbineKupca.add(porDTO);
+							}}}}}
+			
+					}
+					
 		System.out.println("Ovoliko porudzbina se salje za prikaz: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
+	
+	
+	@GET
+	@Path("/nadjiKupce/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikPrikazDTO> nadjiKupce(@PathParam("id") String idMenadzera) {
+		
+		PorudzbinaDAO porDAO  = dobaviPorudzbinaDAO();
+		KorisnikDAO korDAO = dobaviKorisnikDAO();
+		KorisnikPrikazDTO korDTO = null;
+		
+		List<KorisnikPrikazDTO> sviKupci = new ArrayList<KorisnikPrikazDTO>();
+		
+		
+		for (Porudzbina p : porDAO.dobaviPorudzbine()) {
+			for (Menadzer m : korDAO.dobaviSveMenadzere()) {
+				if(m.getId().equals(idMenadzera)) {
+					if(p.getRestoran().equals(m.getRestoran().getId())) {
+						if(sviKupci.size() != 0) {					
+							if(!korDAO.postojiKupac(sviKupci, p.getKupac())) {
+								Kupac kupac  = korDAO.nadjiKupca(p.getKupac());
+								korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
+										kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
+										korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
+								List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
+								porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
+								korDTO.setPorudzbine(porDTO);
+								sviKupci.add(korDTO);
+							}
+						}
+						else {
+							Kupac kupac  = korDAO.nadjiKupca(p.getKupac());
+							korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
+									kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
+									korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
+							
+							List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
+							porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
+							korDTO.setPorudzbine(porDTO);
+							sviKupci.add(korDTO);
+						}
+				}
+				}
+			}
+		}
+		System.out.println("Ovoliko kupaca ima iz menadzerovog restorana: " + sviKupci.size());
+		return sviKupci;
+	}
+	
+	
 }
