@@ -449,7 +449,7 @@ Vue.component("pregledPorudzbina", {
 									<button v-if="p.status === 'PRIPREMA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#odobravanje" @click="posaljiPorudzbinu(p)">
                                     	Pripremljena
                                  	 </button> 
-									 <button v-if="p.status === 'CEKA_DOSTAVU'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#prikaziZahteve" @click="dobaviZahteve(p.id); posaljiPorudzbinu(p)">
+									 <button v-if="p.status === 'CEKA_DOSTAVU'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#prikaziZahteve" @click="dobaviZahteve(p.id); posaljiPorudzbinu(p.id)">
                                      Vidi zahteve
                                   	</button>                              
                                     </td>
@@ -488,7 +488,7 @@ Vue.component("pregledPorudzbina", {
                                 </tr>
                             </thead>
                             <tbody>
-                                    <tr v-for="(d, i) in this.zahtevi">
+                                    <tr v-for="(d, i) in zahtevi">
                                     <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
                                     <td style="vertical-align:middle;text-align: center">{{d.korisnickoIme}}</td>
                                     <td style="vertical-align:middle;text-align: center">{{d.imePrezime}}</td>
@@ -658,7 +658,6 @@ Vue.component("pregledPorudzbina", {
                     }
                     else{
                         this.porudzbine = response.data
-                        console.log(this.porudzbine)
                         this.pomocne = response.data
                     }
                    
@@ -724,7 +723,6 @@ Vue.component("pregledPorudzbina", {
                 }
                 else if(this.pocDatum !== "" && this.krajDatum !==""){
                     this.pomocne.filter(el => (console.log(el.datumVreme.slice(0, 10))));
-                    console.log(this.pocetniDatum)
                     return ( this.pomocne.filter(el => (el.status.match(filter1) 
                     || el.status.match(filter2)
                     || el.status.match(filter3)
@@ -766,7 +764,7 @@ Vue.component("pregledPorudzbina", {
                 
             }
             else if(this.uloga === "DOSTAVLJAC"){
-                console.log("cene: " + this.pocCena.length + " " + this.krajnjaCena.length)
+
                 if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
                     && el.tipRestorana.match(filter7)
@@ -880,6 +878,7 @@ Vue.component("pregledPorudzbina", {
         },
 
 		dobaviZahteve : function(id){
+			
 			axios 
                 .get('/DostavaREST/rest/porudzbine/dobaviZahteve/' + id)
     			.then(response => {
@@ -891,10 +890,9 @@ Vue.component("pregledPorudzbina", {
     			})
 		},
 		dodeli : function(event){
-			console.log(this.dostavljac)
 			event.preventDefault();
 			axios 
-    			.post('/DostavaREST/rest/porudzbine/dodeliPorudzbinu/' + this.pomocnaPorudzbina.id + "/" + this.dostavljac)
+    			.post('/DostavaREST/rest/porudzbine/dodeliPorudzbinu/' + this.pomocnaPorudzbina + "/" + this.dostavljac)
     			.then(response => {
 					this.greska = response.data;
 					var x = document.getElementById("greska");

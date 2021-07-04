@@ -444,6 +444,7 @@ public class KorisniciService {
 		System.out.println("Ukupno postoji porudzbina: " + porudzbineDAO.dobaviPorudzbine().size());
 		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
 			String nazivRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getNaziv();
+			String tipRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getTipRestorana().toString();
 			if(uloga.equals("KUPAC")) {
 				if(porudzbina.getKupac().equals(id)) {
 					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
@@ -493,31 +494,10 @@ public class KorisniciService {
 								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
 					}
 					
+					porDTO.setTipRestorana(tipRestorana);
 					porDTO.setArtikli(artikli);
 					porudzbineKupca.add(porDTO);
 				}
-//				/*PROVJERITI OVO!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-//				for (Dostavljac dostavljac : korisniciDAO.dobaviSveDostavljace()) {
-//					if(dostavljac.getUloga().toString().equals("DOSTAVLJAC")) {
-//						if(dostavljac.getId().equals(id)) {
-//							if(dostavljac.getPorudzbineZaDostavu() != null) {
-//								for (Porudzbina p : dostavljac.getPorudzbineZaDostavu()) {
-//									if(!porudzbina.getId().equals(p.getId())) {
-//										String naziv2 = restoranDAO.dobaviRestoran(p.getRestoran()).getNaziv();
-//										porDTO = new PorudzbinePrikazDTO(p.getId(),p.getKupac(),naziv2,p.getCena(),
-//												p.getDatumVreme(),p.getStatus());
-//										
-//										
-//										List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
-//										for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-//											artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-//													a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
-//										}
-//										
-//										porDTO.setArtikli(artikli);
-//										porudzbineKupca.add(porDTO);
-//									}
-//								}}}}}
 			}
 			
 			else if(uloga.equals("MENADZER")) {
