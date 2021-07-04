@@ -18,6 +18,7 @@ public class PorudzbinePrikazDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
 	public Date datumVreme;
 	public Status status;
+	public String tipRestorana;
 	
 	public PorudzbinePrikazDTO(String id, String kupac, String restoran, Double cena,
 			Date datumVreme, Status status) {
@@ -85,6 +86,28 @@ public class PorudzbinePrikazDTO {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
+	public String getTipRestorana() {
+		return tipRestorana;
+	}
+
+	public void setTipRestorana(String tipRestorana) {
+		this.tipRestorana = tipRestorana;
+	}
+
+	public PorudzbinePrikazDTO(String id, List<ArtikliPorudzbineDTO> artikli, String kupac, String restoran,
+			Double cena, Date datumVreme, Status status, String tipRestorana) {
+		super();
+		this.id = id;
+		this.artikli = artikli;
+		this.kupac = kupac;
+		this.restoran = restoran;
+		this.cena = cena;
+		this.datumVreme = datumVreme;
+		this.status = status;
+		this.tipRestorana = tipRestorana;
+	}
+	
 	
 	
 }
