@@ -110,6 +110,7 @@ Vue.component("pregledPorudzbina", {
                                 <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
                                 </vuejs-datepicker>
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
                                 <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
@@ -226,8 +227,26 @@ Vue.component("pregledPorudzbina", {
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
                                 
-                               
+                                <label style="font-size:15px">Pretraga: </label>
+				                <input type="text" v-model="search" style="height:36px; width:180px" placeholder="Pretražite naziv restorana"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                
+                                <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
 
@@ -597,13 +616,35 @@ Vue.component("pregledPorudzbina", {
                 
             }
             else if(this.uloga === "MENADZER"){
-                return ( this.pomocne.filter(el => (el.status.match(filter8))
+                
+                return ( this.pomocne.filter(el => (el.status.match(filter8)
+                && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                )
                 ));
             }
             else if(this.uloga === "DOSTAVLJAC"){
-                return ( this.pomocne.filter(el => (el.status.match(filter8)
-                && el.tipRestorana.match(filter7))
-                ));
+                console.log("cene: " + this.pocCena.length + " " + this.krajnjaCena.length)
+                if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && el.tipRestorana.match(filter7)
+                    && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    )));
+                }
+                else if(this.pocDatum !== "" && this.krajDatum !==""){
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && el.tipRestorana.match(filter7)
+                    && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                    && el.restoran.match(filter6)
+                    )
+                    ));
+                }else{
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && el.tipRestorana.match(filter7)
+                    && el.restoran.match(filter6)
+                )));
+                }
+                
+                
             }
             
           }
