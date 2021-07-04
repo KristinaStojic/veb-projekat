@@ -441,13 +441,18 @@ public class KorisniciService {
 		RestoranDAO restoranDAO = dobaviRestoranDAO();
 		PorudzbinePrikazDTO porDTO = null;
 		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
-	
+		System.out.println("Ukupno postoji porudzbina: " + porudzbineDAO.dobaviPorudzbine().size());
 		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
 			String nazivRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getNaziv();
 			if(uloga.equals("KUPAC")) {
 				if(porudzbina.getKupac().equals(id)) {
 					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
 							porudzbina.getDatumVreme(),porudzbina.getStatus());
+					for (Restoran restoran : restoranDAO.dobaviRestorane()) {
+						if(restoran.getId().equals(porudzbina.getRestoran())) {
+							porDTO.setTipRestorana(restoran.getTipRestorana().toString());
+						}
+					}
 					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
 						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
@@ -462,7 +467,11 @@ public class KorisniciService {
 					
 					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
 							porudzbina.getDatumVreme(),porudzbina.getStatus());
-					
+					for (Restoran restoran : restoranDAO.dobaviRestorane()) {
+						if(restoran.getId().equals(porudzbina.getRestoran())) {
+							porDTO.setTipRestorana(restoran.getTipRestorana().toString());
+						}
+					}
 					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
 						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
@@ -529,6 +538,8 @@ public class KorisniciService {
 							porDTO.setArtikli(artikli);
 							porudzbineKupca.add(porDTO);
 						}}}}}
+		
+		System.out.println("Ovoliko porudzbina se salje za prikaz: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
 }

@@ -233,9 +233,6 @@ Vue.component("pocetna", {
 						<li v-if="r.ocena !== '0.0'" class="list-group-item">Prosečna ocena: {{r.ocena}}</li>
 						<li v-else class="list-group-item">Restoran nema nijednu ocenu</li>
 
-
-						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-						
 						<li v-if="uloga === 'KUPAC' && r.status === 'Otvoreno'" class="list-group-item">
 						<button class="dugme3" style="margin-left: 45px;" @click="informacije(r.id)">Informacije i naručivanje</button>
 						</li>

@@ -27,7 +27,18 @@ Vue.component("pregledPorudzbina", {
         otkazana: "",
         uloga: "",
 	    zahtevi : [],
-		dostavljac : ""
+		dostavljac : "",
+        search: "",
+        filterTip: "",
+        filterStatus: "",
+        pocCena: "",
+        krajnjaCena: "",
+        pocDatum: "",
+        krajDatum: "",
+        pocetak: false,
+        kraj: false,
+        pocetniDatum: "",
+        krajnjiDatum: ""
 
 	}
     },
@@ -83,9 +94,84 @@ Vue.component("pregledPorudzbina", {
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
                                 
+                                <label style="font-size:15px">Pretraga: </label>
+				                <input type="text" v-model="search" style="height:36px; width:180px" placeholder="Pretražite naziv restorana"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <label style="font-size:15px">Filtriranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tip restorana
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('BRZA_HRANA')">Brza hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('RAZNO')">Raznolika kuhinja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ITALIJANSKI')">Italijanska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('KINESKI')">Kineska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ROSTILJ')">Jela sa roštilja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('SRPSKI')">Srpska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('GRCKI')">Grčka hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('VEGETARIJANSKI')">Vegetarijanska hrana</button>
+
+                                </div>
+
+
+                                
+                                </div>
+
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Status porudžbine
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OBRADA')">Obrada</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('PRIPREMA')">Priprema</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('CEKA_DOSTAVU')">Čeka dostavu</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('TRANSPORT')">Transport</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
+
+                                </div>
+                                </div>
+
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+
+                                <label style="font-size:15px;">Sortiranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                    Izaberite kriterijum
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('restoran', 'asc')">Naziv restorana-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('restoran', 'desc')">Naziv restorana-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'asc')">Cena-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'desc')">Cena-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'asc')">Datum-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'desc')">Datum-silazno</button>
+                                 
+                                </div>
+                                </div>
                                 </div></th>
                                 </tr>
                                 
@@ -142,9 +228,83 @@ Vue.component("pregledPorudzbina", {
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
                                 
+                                <label style="font-size:15px">Pretraga: </label>
+				                <input type="text" v-model="search" style="height:36px; width:180px" placeholder="Pretražite naziv restorana"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
 
+                                <label style="font-size:15px">Filtriranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Status porudžbine
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OBRADA')">Obrada</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('PRIPREMA')">Priprema</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('CEKA_DOSTAVU')">Čeka dostavu</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('TRANSPORT')">Transport</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
+
+                                </div>
+                                </div>
+                                
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tip restorana
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('BRZA_HRANA')">Brza hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('RAZNO')">Raznolika kuhinja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ITALIJANSKI')">Italijanska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('KINESKI')">Kineska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('ROSTILJ')">Jela sa roštilja</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('SRPSKI')">Srpska hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('GRCKI')">Grčka hrana</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterTip('VEGETARIJANSKI')">Vegetarijanska hrana</button>
+
+                                </div>
+                                </div>
+
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+
+                                <label style="font-size:15px;">Sortiranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                    Izaberite kriterijum
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('restoran', 'asc')">Naziv restorana-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('restoran', 'desc')">Naziv restorana-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'asc')">Cena-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'desc')">Cena-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'asc')">Datum-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'desc')">Datum-silazno</button>
+                                 
+                                </div>
+                                </div>
                                 </div></th>
                                 </tr>
                                 
@@ -200,9 +360,62 @@ Vue.component("pregledPorudzbina", {
                                 <tr >
                                     <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
                                 <h3>Pregled porudžbina:</h3></br>
-                                
-                                
 
+                                <label style="font-size:15px">Pretraga: </label>
+                                <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
+                                </vuejs-datepicker>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                
+                                <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+
+                                <label style="font-size:15px">Filtriranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Status porudžbine
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('')">Svi</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OBRADA')">Obrada</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('PRIPREMA')">Priprema</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('CEKA_DOSTAVU')">Čeka dostavu</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('TRANSPORT')">Transport</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('DOSTAVLJENA')">Dostavljena</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilterStatus('OTKAZANA')">Otkazana</button>
+
+                                </div>
+                                </div>
+                                
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+
+                                <label style="font-size:15px;">Sortiranje: </label>
+                                <div class="btn-group">
+                                <button class="btn btn-secondary dropdown-toggle dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                    Izaberite kriterijum
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'asc')">Cena-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('cena', 'desc')">Cena-silazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'asc')">Datum-uzlazno</button>
+                                    <button class="btn-info btn-sm dropdown-item" @click="sortTable('datumVreme', 'desc')">Datum-silazno</button>
+                                 
+                                </div>
+                                </div>
                                 </div></th>
                                 </tr>
                                 
@@ -445,6 +658,7 @@ Vue.component("pregledPorudzbina", {
                     }
                     else{
                         this.porudzbine = response.data
+                        console.log(this.porudzbine)
                         this.pomocne = response.data
                     }
                    
@@ -480,14 +694,105 @@ Vue.component("pregledPorudzbina", {
             let filter4 = new RegExp(this.transport, 'i');
             let filter5 = new RegExp(this.obrada, 'i');
 
-            return ( this.pomocne.filter(el => el.status.match(filter1) 
-            || el.status.match(filter2)
-			|| el.status.match(filter3)
-			|| el.status.match(filter4)
-			|| el.status.match(filter5)
-			
-			));
+            let filter6 = new RegExp(this.search, 'i');
+            let filter7= new RegExp(this.filterTip, 'i');
+            let filter8= new RegExp(this.filterStatus, 'i');
+
+            let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(this.pocDatum);
+            let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(this.pocDatum);
+            let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(this.pocDatum);
+            this.pocetniDatum = `${ye}-${mo}-${da}`;
+
+            let ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(this.krajDatum);
+            let mo1 = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(this.krajDatum);
+            let da1 = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(this.krajDatum);
+            let sati = new Intl.DateTimeFormat('en', { hour: '2-digit' }).format(00);
+            this.krajnjiDatum = `${ye1}-${mo1}-${da1}`;
+
+            if(this.uloga === "KUPAC"){
+                if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
+                    return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
+                    && el.restoran.match(filter6)
+                    && el.tipRestorana.match(filter7)
+                    && el.status.match(filter8)
+                    && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    ));
+                }
+                else if(this.pocDatum !== "" && this.krajDatum !==""){
+                    this.pomocne.filter(el => (console.log(el.datumVreme.slice(0, 10))));
+                    console.log(this.pocetniDatum)
+                    return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
+                    && el.restoran.match(filter6)
+                    && el.tipRestorana.match(filter7)
+                    && el.status.match(filter8)
+                    && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                    ));
+                }
+                else{
+                    return ( this.pomocne.filter(el => (el.status.match(filter1) 
+                || el.status.match(filter2)
+                || el.status.match(filter3)
+                || el.status.match(filter4)
+                || el.status.match(filter5))
+                && el.restoran.match(filter6)
+                && el.tipRestorana.match(filter7)
+                && el.status.match(filter8)
+                ));
+                }
+                
+            }
+            else if(this.uloga === "MENADZER"){
+                if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    )));
+                }else if(this.pocDatum !== "" && this.krajDatum !==""){
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                    )
+                    ));
+                }else{
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                )));
+                }
+                
+            }
+            else if(this.uloga === "DOSTAVLJAC"){
+                console.log("cene: " + this.pocCena.length + " " + this.krajnjaCena.length)
+                if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && el.tipRestorana.match(filter7)
+                    && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    )));
+                }
+                else if(this.pocDatum !== "" && this.krajDatum !==""){
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && el.tipRestorana.match(filter7)
+                    && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                    && el.restoran.match(filter6)
+                    )
+                    ));
+                }else{
+                    return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && el.tipRestorana.match(filter7)
+                    && el.restoran.match(filter6)
+                )));
+                }
+                
+                
+            }
+            
           }
+        },components: {
+            vuejsDatepicker
         },
     methods: {
 		otkazi : function(){
@@ -625,8 +930,21 @@ Vue.component("pregledPorudzbina", {
 					console.log(err);
 				  })
 				
-		}
-        
-    
+		},
+        postaviFilterTip(value){
+            this.filterTip = value;
+         },
+         postaviFilterStatus(value){
+            this.filterStatus = value;
+         },
+
+         sortTable(key, direction){
+            this.sort = `${key} > ${direction}`
+            if (direction === 'asc') {
+              this.porudzbine.sort((a, b) => a[key] > b[key] ? 1: -1)
+            } else {
+              this.porudzbine.sort((a, b) => a[key] < b[key] ? 1: -1)
+            }
+          }
     }
   });
