@@ -148,6 +148,7 @@ public class PorudzbineService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response dostaviPorudzbinu(@PathParam("id") String id) {
+		System.out.println("id porudzbine za dostavljanje: " + id);
 		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
 		String idKupca = porudzbine.dobaviPorudzbinu(id).getKupac();
 		KorisnikDAO korisnici = dobaviKorisnikDAO();

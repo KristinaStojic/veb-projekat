@@ -95,9 +95,9 @@ public class PorudzbinaDAO {
 			return false;
 
 		p.setStatus(status);
-		if(status == Status.DOSTAVLJENA) {
+		/*if(status == Status.DOSTAVLJENA) {
 			p.setDostavljac("");
-		}
+		}*/
 		if (sacuvajPodatke())
 			return true;
 
