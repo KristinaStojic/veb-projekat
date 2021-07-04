@@ -25,7 +25,9 @@ Vue.component("pregledPorudzbina", {
         cekaDostavu: "",
         transport: "",
         otkazana: "",
-        uloga: ""
+        uloga: "",
+	    zahtevi : [],
+		dostavljac : ""
 
 	}
     },
@@ -173,7 +175,7 @@ Vue.component("pregledPorudzbina", {
                                     <button v-if="p.status === 'CEKA_DOSTAVU'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#zahtevanje" @click="posaljiPorudzbinu(p)">
                                      Zahtevaj
                                   	</button>
-									<button v-if="p.status === 'TRANSPORT'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="posaljiPorudzbinu(p)">
+									<button v-if="p.status === 'TRANSPORT'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#dostavljanje" @click="posaljiPorudzbinu(p)">
                                      Dostavljena
                                   	</button>                     
                                     </td>
@@ -233,7 +235,10 @@ Vue.component("pregledPorudzbina", {
                                   	</button>  
 									<button v-if="p.status === 'PRIPREMA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#odobravanje" @click="posaljiPorudzbinu(p)">
                                     	Pripremljena
-                                 	 </button>                                
+                                 	 </button> 
+									 <button v-if="p.status === 'CEKA_DOSTAVU'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#prikaziZahteve" @click="dobaviZahteve(p.id); posaljiPorudzbinu(p)">
+                                     Vidi zahteve
+                                  	</button>                              
                                     </td>
                                     </tr>
                             </tbody>
@@ -241,6 +246,55 @@ Vue.component("pregledPorudzbina", {
                         </div>
                     </div>
                 </div> 
+
+				<div class="modal" id="prikaziZahteve">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        <div class="modal-content">
+                        <!-- Modal body -->
+                        <div v-if="this.zahtevi.length == 0" class="modal-body" style="text-align: center">
+							<h5 class="modal-title">Trenutno nema nijednog zahteva!</h5>
+                        </div>
+
+						<div v-if="this.zahtevi.length != 0" class="modal-body" style="text-align: center">
+							 <table  class="table table-hover align-middle">
+                                
+                                <colgroup span="11"></colgroup>
+                                <colgroup span="4"></colgroup>
+                            <thead>
+                                <tr >
+                                    <th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
+                                <h3>Dostavljači koji su poslali zahtev:</h3></br>
+                                </div></th>
+                                </tr>
+                                
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Korisničko ime</th>
+                                <th scope="col">Ime i prezime</th>		
+                                <th colspan="2" scope="colgroup"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr v-for="(d, i) in this.zahtevi">
+                                    <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
+                                    <td style="vertical-align:middle;text-align: center">{{d.korisnickoIme}}</td>
+                                    <td style="vertical-align:middle;text-align: center">{{d.imePrezime}}</td>
+                                   	<td style="vertical-align:middle;text-align: center">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="dostavljac = d.id" v-on:click="dodeli">Dodeli</button></td>
+                                    </tr>
+                            </tbody>
+                            </table>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
 
 
 				<div class="modal" id="zahtevanje">
@@ -255,6 +309,24 @@ Vue.component("pregledPorudzbina", {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
 							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="zahtevaj()">Potvrdi</button>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+
+				 <div class="modal" id="dostavljanje">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        <div class="modal-content">
+                        <!-- Modal body -->
+                        <div class="modal-body" style="text-align: center">
+							<h5 class="modal-title">Da li ste sigurni da želite da promenite status u 'Dostavljeno'?</h5>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="dostavi()">Potvrdi</button>
                         </div>
 
                         </div>
@@ -364,7 +436,6 @@ Vue.component("pregledPorudzbina", {
         axios 
                 .get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + this.$route.params.id + "/" + window.localStorage.getItem("uloga"))
     			.then(response => {
-					console.log("dsdsd")
                     if(response.data.length == 0){
                         this.greska = "Nemate nijednu porudžbinu!";
 					    var x = document.getElementById("greska");
@@ -501,7 +572,60 @@ Vue.component("pregledPorudzbina", {
 
         posaljiPorudzbinu(por){
             this.pomocnaPorudzbina = por;
-        }
+        },
+
+		dobaviZahteve : function(id){
+			axios 
+                .get('/DostavaREST/rest/porudzbine/dobaviZahteve/' + id)
+    			.then(response => {
+                    if(response.data.length != 0){
+                        this.zahtevi = response.data;
+                    }
+                   
+					
+    			})
+		},
+		dodeli : function(event){
+			console.log(this.dostavljac)
+			event.preventDefault();
+			axios 
+    			.post('/DostavaREST/rest/porudzbine/dodeliPorudzbinu/' + this.pomocnaPorudzbina.id + "/" + this.dostavljac)
+    			.then(response => {
+					this.greska = response.data;
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.go();
+    			})
+				.catch(err => {
+					this.greska = "Došlo je do greške! Pokušajte ponovo!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+				
+		},
+		dostavi : function(){
+			event.preventDefault();
+			axios 
+    			.post('/DostavaREST/rest/porudzbine/dostaviPorudzbinu/' + this.pomocnaPorudzbina.id)
+    			.then(response => {
+					this.greska = "Uspešno promenjen status!"
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.go();
+    			})
+				.catch(err => {
+					this.greska = "Došlo je do greške! Pokušajte ponovo!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+				
+		}
         
     
     }

@@ -23,6 +23,7 @@ public class Porudzbina implements Serializable {
 	private Double cena;
 	private String kupac;
 	private Status status;
+	private String dostavljac;
 	private List<String> dostavljaciKojiZahtevaju;
 
 	public Porudzbina() {
@@ -40,6 +41,7 @@ public class Porudzbina implements Serializable {
 		this.kupac = kupac;
 		this.status = status;
 		this.dostavljaciKojiZahtevaju = new ArrayList<String>();
+		this.dostavljac = "";
 	}
 
 	public String getId() {
@@ -110,5 +112,14 @@ public class Porudzbina implements Serializable {
 	public void dodajDostavljaca(String idDostavljaca) {
 		dostavljaciKojiZahtevaju.add(idDostavljaca);
 	}
+
+	public String getDostavljac() {
+		return dostavljac;
+	}
+
+	public void setDostavljac(String dostavljac) {
+		this.dostavljac = dostavljac;
+	}
+	
 	
 }

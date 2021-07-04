@@ -34,6 +34,7 @@ import dto.ArtikliKorpaDTO;
 import dto.KorisnikBlokiranjeDTO;
 import dto.KorisnikDTO;
 import dto.KorisnikIzmenaPodatakaDTO;
+import dto.KorisnikPrikazDTO;
 import dto.MenadzerDTO;
 
 public class KorisnikDAO {
@@ -713,22 +714,26 @@ public class KorisnikDAO {
 	}
 
 	public boolean promeniStatusPorudzbineKupcu(String id, String idKorisnika, Status status) {
-		System.out.println("id kupca " + idKorisnika);
 		for (Kupac k : kupci) {
 			if (k.getId().equals(idKorisnika)) {
-				System.out.println("ovaj kupac " + k.getKorisnickoIme());
 				for (Porudzbina p : k.getSvePorudzbine()) {
 					if (p.getId().equals(id)) {
-						System.out.println("nasao sam je ");
 						if (status == Status.OTKAZANA) {
 							p.setStatus(status);
 							Double trenutniBodovi = k.getSakupljeniBodovi();
 							k.setSakupljeniBodovi(trenutniBodovi - (p.getCena() / 1000 * 133 * 4));
 							k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
+							sacuvajPodatke();
 							return true;
-						} else {
-							System.out.println("tusam");
+						} else if(status == Status.DOSTAVLJENA) {
+							System.out.println("evo ovde je jer je dostavljena");
+							p.setDostavljac("");
 							p.setStatus(status);
+							sacuvajPodatke();
+							return true;
+						}else {
+							p.setStatus(status);
+							sacuvajPodatke();
 							return true;
 						}
 					}
@@ -738,11 +743,67 @@ public class KorisnikDAO {
 		return false;
 	}
 
-	public boolean dostavljacDostavio(String id, String idDostavljaca, Status status) {
+	public boolean promeniStatusPorudzbineKupcuTransport(String id, String idKorisnika, String idDostavljaca) {
+		for (Kupac k : kupci) {
+			if (k.getId().equals(idKorisnika)) {
+				for (Porudzbina p : k.getSvePorudzbine()) {
+					if (p.getId().equals(id)) {
+						p.setStatus(Status.TRANSPORT);
+						p.setDostavljaciKojiZahtevaju(new ArrayList<String>());
+						p.setDostavljac(idDostavljaca);
+						sacuvajPodatke();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean dostavljacDostavio(String id, String idDostavljaca) {
 
 		for (Dostavljac d : dostavljaci) {
 			if (d.getId().equals(idDostavljaca)) {
-				return d.ukloniPorudzbinu(id);
+				d.ukloniPorudzbinu(id);
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<KorisnikPrikazDTO> dobaviDTODostavljace(List<String> idevi) {
+		List<KorisnikPrikazDTO> povratna = new ArrayList<>();
+
+		for (String s : idevi) {
+			KorisnikPrikazDTO d = dobaviDostavljacaDTO(s);
+			if (d != null) {
+				povratna.add(d);
+			}
+		}
+
+		return povratna;
+	}
+
+	public KorisnikPrikazDTO dobaviDostavljacaDTO(String id) {
+
+		for (Dostavljac d : dostavljaci) {
+			if (d.getId().equals(id) && d.getBlokiran() == 0 && d.getLogickoBrisanje() == 0) {
+				return new KorisnikPrikazDTO(d.getId(), d.getKorisnickoIme(), d.getIme() + " " + d.getPrezime());
+			}
+		}
+
+		return null;
+	}
+
+	public boolean dodeliPorudzbinuDostavljacu(Porudzbina porudzbina, String idDostavljaca) {
+		System.out.println(idDostavljaca + "treba da dodam dostavljacu");
+		for (Dostavljac d : dostavljaci) {
+			if (d.getId().equals(idDostavljaca)) {
+				System.out.println("dodajem");
+				d.dodajPorudzbinu(porudzbina);
+				sacuvajPodatke();
+				return true;
 			}
 		}
 		return false;

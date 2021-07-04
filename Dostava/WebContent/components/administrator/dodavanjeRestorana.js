@@ -158,12 +158,11 @@ Vue.component("dodavanjeRestorana", {
                 var x = document.getElementById("greska");
                 x.className = "snackbar show";
                 setTimeout(function(){x.className = x.className.replace("show","");},1800);
-			const fd = new FormData();
-			fd.append('slika',this.izabranFajl, this.izabranFajl.name)
-			
-			console.log(this.izabranFajl);
+				const fd = new FormData();
+				fd.append('slika',this.izabranFajl, this.izabranFajl.name)
+				console.log(fd.get('slika'));
 			axios
-				.post('rest/restorani/dodajSliku')
+				.post('rest/restorani/dodajSliku' ,fd)
 				.then(response => {
 					console.log(response);
 				})

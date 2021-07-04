@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,6 +27,7 @@ import dao.KorisnikDAO;
 import dao.PorudzbinaDAO;
 import dao.RestoranDAO;
 import dto.ArtikliKorpaDTO;
+import dto.KorisnikPrikazDTO;
 import dto.KorpaDTO;
 
 @Path("/porudzbine")
@@ -125,12 +127,12 @@ public class PorudzbineService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response odobriPorudzbinu(@PathParam("id") String id) {
-		
+
 		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Porudzbina porudzbina = porudzbine.dobaviPorudzbinu(id);
 		Status status = Status.PRIPREMA;
-		if(porudzbina.getStatus() == status) {
+		if (porudzbina.getStatus() == status) {
 			status = Status.CEKA_DOSTAVU;
 		}
 		if (!porudzbine.promeniStatusPorudzbine(id, status)
@@ -145,19 +147,20 @@ public class PorudzbineService {
 	@Path("/dostaviPorudzbinu/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response dostaviPorudzbinu(@PathParam("id") String id, String idKupca) {
+	public Response dostaviPorudzbinu(@PathParam("id") String id) {
 		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
+		String idKupca = porudzbine.dobaviPorudzbinu(id).getKupac();
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		String idDostavljaca = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
 		if (!porudzbine.promeniStatusPorudzbine(id, Status.DOSTAVLJENA)
-				|| !korisnici.dostavljacDostavio(id, idDostavljaca, Status.DOSTAVLJENA)
+				|| !korisnici.dostavljacDostavio(id, idDostavljaca)
 				|| !korisnici.promeniStatusPorudzbineKupcu(id, idKupca, Status.DOSTAVLJENA)) {
 			return Response.status(400).build();
 		}
 
 		return Response.status(200).build();
 	}
-	
+
 	@POST
 	@Path("/zahtevajPorudzbinu/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -165,13 +168,41 @@ public class PorudzbineService {
 	public Response zahtevajPorudzbinu(@PathParam("id") String id) {
 		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
 		String idDostavljaca = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
-		Integer zahtev = porudzbine.zahtevajPorudzbinu(id,idDostavljaca);
+		Integer zahtev = porudzbine.zahtevajPorudzbinu(id, idDostavljaca);
 		if (zahtev == 0) {
 			return Response.status(400).build();
-		}else if(zahtev == 1) {
+		} else if (zahtev == 1) {
 			return Response.status(200).entity("Već ste poslali zahtev!").build();
 		}
 
 		return Response.status(200).entity("Zahtev uspešno poslat!").build();
+	}
+
+	@GET
+	@Path("/dobaviZahteve/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikPrikazDTO> dobaviZahteve(@PathParam("id") String id) {
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
+		List<String> dostavljaci = porudzbine.dobaviPorudzbinu(id).getDostavljaciKojiZahtevaju();
+		return korisnici.dobaviDTODostavljace(dostavljaci);
+	}
+
+	@POST
+	@Path("/dodeliPorudzbinu/{id}/{idDostavljaca}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response dodeliPorudzbinu(@PathParam("id") String id,@PathParam("idDostavljaca") String idDostavljaca ) {
+		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Porudzbina porudzbina = porudzbine.dobaviPorudzbinu(id);
+		if (porudzbina == null || porudzbina.getStatus() != Status.CEKA_DOSTAVU) {
+			return Response.status(400).build();
+		}
+		if (!porudzbine.promeniStatusPorudzbineTransport(id, idDostavljaca) || !korisnici.promeniStatusPorudzbineKupcuTransport(id, porudzbina.getKupac(),idDostavljaca)
+				|| !korisnici.dodeliPorudzbinuDostavljacu(porudzbina, idDostavljaca)) {
+			return Response.status(400).build();
+		}
+		return Response.status(200).entity("Porudžbina uspešno dodeljena dostavljaču!").build();
 	}
 }
