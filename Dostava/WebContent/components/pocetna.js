@@ -127,6 +127,8 @@ Vue.component("pocetna", {
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
 								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" v-on:click="pregledKupaca()">Svi kupci</a>
+								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 							</div>
 						</li>
@@ -303,6 +305,37 @@ computed: {
                     }
                     else{
                         this.$router.push("/pregledPorudzbina/"+ this.kupac)
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
+    	},
+		
+		pregledKupaca(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiKupce/' + window.localStorage.getItem("korisnik"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Ne postoji nijedan kupac u Vašem restoranu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledKupaca/"+ this.kupac)
                     }
                    
 					

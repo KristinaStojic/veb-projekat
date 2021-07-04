@@ -525,4 +525,49 @@ public class KorisniciService {
 		System.out.println("Ovoliko porudzbina se salje za prikaz: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
+	
+	
+	@GET
+	@Path("/nadjiKupce/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikPrikazDTO> nadjiKupce(@PathParam("id") String idMenadzera) {
+		
+		PorudzbinaDAO porDAO  = dobaviPorudzbinaDAO();
+		KorisnikDAO korDAO = dobaviKorisnikDAO();
+		KorisnikPrikazDTO korDTO = null;
+		
+		List<KorisnikPrikazDTO> sviKupci = new ArrayList<KorisnikPrikazDTO>();
+		
+		
+		for (Porudzbina p : porDAO.dobaviPorudzbine()) {
+			for (Menadzer m : korDAO.dobaviSveMenadzere()) {
+				if(m.getId().equals(idMenadzera)) {
+					if(p.getRestoran().equals(m.getRestoran().getId())) {
+						if(sviKupci.size() != 0) {					
+							if(!korDAO.postojiKupac(sviKupci, p.getKupac())) {
+								Kupac kupac  = korDAO.nadjiKupca(p.getKupac());
+								korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
+										kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
+										korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
+								
+								sviKupci.add(korDTO);
+							}
+						}
+						else {
+							Kupac kupac  = korDAO.nadjiKupca(p.getKupac());
+							korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
+									kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
+									korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
+							
+							sviKupci.add(korDTO);
+						}
+				}
+				}
+			}
+		}
+		System.out.println("Ovoliko kupaca ima iz menadzerovog restorana: " + sviKupci.size());
+		return sviKupci;
+	}
+	
+	
 }
