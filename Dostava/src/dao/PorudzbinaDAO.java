@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,13 +19,13 @@ import beans.Porudzbina.Status;
 
 public class PorudzbinaDAO {
 
-	private Map<String, Porudzbina> porudzbine; //pazi na logicki obrisane
+	private Map<String, Porudzbina> porudzbine; // pazi na logicki obrisane
 	private String putanja;
 
 	public PorudzbinaDAO(String putanjaDoFajla) {
 		porudzbine = new HashMap<>();
 		this.putanja = putanjaDoFajla;
-		
+
 		ucitajPodatke();
 	}
 
@@ -41,10 +42,10 @@ public class PorudzbinaDAO {
 				writer.write("[]");
 				writer.close();
 			} else {
-				TypeReference<HashMap<String, Porudzbina>> typeRef 
-				  = new TypeReference<HashMap<String, Porudzbina>>() {};
-				Map<String, Porudzbina> postojece = 
-						mapper.readValue(Paths.get(this.putanja + "\\porudzbine.json").toFile(), typeRef);
+				TypeReference<HashMap<String, Porudzbina>> typeRef = new TypeReference<HashMap<String, Porudzbina>>() {
+				};
+				Map<String, Porudzbina> postojece = mapper
+						.readValue(Paths.get(this.putanja + "\\porudzbine.json").toFile(), typeRef);
 				for (Porudzbina p : postojece.values()) {
 					porudzbine.put(p.getId(), p);
 				}
@@ -64,7 +65,7 @@ public class PorudzbinaDAO {
 	public Collection<Porudzbina> dobaviPorudzbine() {
 		return porudzbine.values();
 	}
-	
+
 	public Porudzbina dodajPorudzbinu(Porudzbina novaPorudzbina) {
 		porudzbine.put(novaPorudzbina.getId(), novaPorudzbina);
 		sacuvajPodatke();
@@ -74,9 +75,9 @@ public class PorudzbinaDAO {
 	public Porudzbina dobaviPorudzbinu(String id) {
 		return porudzbine.containsKey(id) ? porudzbine.get(id) : null;
 	}
-	
+
 	public boolean sacuvajPodatke() {
-		
+
 		ObjectMapper maper = new ObjectMapper();
 		try {
 			maper.writeValue(Paths.get(this.putanja + "\\porudzbine.json").toFile(), porudzbine);
@@ -87,15 +88,52 @@ public class PorudzbinaDAO {
 		return true;
 	}
 
-	public boolean otkaziPorudzbinu(String id) {
+	public boolean promeniStatusPorudzbine(String id, Status status) {
 
 		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
-		if (p == null) return false;
-		
-		p.setStatus(Status.OTKAZANA);
-		if(sacuvajPodatke()) return true;
-		
+		if (p == null)
+			return false;
+
+		p.setStatus(status);
+		if(status == Status.DOSTAVLJENA) {
+			p.setDostavljac("");
+		}
+		if (sacuvajPodatke())
+			return true;
+
 		return false;
+	}
+
+	public boolean promeniStatusPorudzbineTransport(String id, String idDostavljaca) {
+
+		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
+		if (p == null)
+			return false;
+
+		p.setStatus(Status.TRANSPORT);
+		p.setDostavljaciKojiZahtevaju(new ArrayList<String>());
+		p.setDostavljac(idDostavljaca);
+
+		if (sacuvajPodatke())
+			return true;
+
+		return false;
+	}
+
+	public Integer zahtevajPorudzbinu(String id, String idDostavljaca) {
+		Porudzbina p = porudzbine.containsKey(id) ? porudzbine.get(id) : null;
+		if (p == null)
+			return 0;
+		for (String idd : p.getDostavljaciKojiZahtevaju()) {
+			if (idd.equals(idDostavljaca)) {
+				return 1;
+			}
+		}
+		p.dodajDostavljaca(idDostavljaca);
+		if (sacuvajPodatke())
+			return 2;
+
+		return 0;
 	}
 
 }

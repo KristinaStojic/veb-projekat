@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class Porudzbina implements Serializable {
 	private Double cena;
 	private String kupac;
 	private Status status;
+	private String dostavljac;
+	private List<String> dostavljaciKojiZahtevaju;
 
 	public Porudzbina() {
 		super();
@@ -37,6 +40,8 @@ public class Porudzbina implements Serializable {
 		this.cena = cena;
 		this.kupac = kupac;
 		this.status = status;
+		this.dostavljaciKojiZahtevaju = new ArrayList<String>();
+		this.dostavljac = "";
 	}
 
 	public String getId() {
@@ -96,4 +101,25 @@ public class Porudzbina implements Serializable {
 		this.status = status;
 	}
 
+	public List<String> getDostavljaciKojiZahtevaju() {
+		return dostavljaciKojiZahtevaju;
+	}
+
+	public void setDostavljaciKojiZahtevaju(List<String> dostavljaciKojiZahtevaju) {
+		this.dostavljaciKojiZahtevaju = dostavljaciKojiZahtevaju;
+	}
+	
+	public void dodajDostavljaca(String idDostavljaca) {
+		dostavljaciKojiZahtevaju.add(idDostavljaca);
+	}
+
+	public String getDostavljac() {
+		return dostavljac;
+	}
+
+	public void setDostavljac(String dostavljac) {
+		this.dostavljac = dostavljac;
+	}
+	
+	
 }

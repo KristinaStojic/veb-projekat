@@ -482,38 +482,49 @@ public class KorisniciService {
 					porudzbineKupca.add(porDTO);
 				}
 				
-				
-				/*PROVJERITI OVO!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-				for (Dostavljac dostavljac : korisniciDAO.dobaviSveDostavljace()) {
-					if(dostavljac.getUloga().toString().equals("DOSTAVLJAC")) {
-						if(dostavljac.getId().equals(id)) {
-							if(dostavljac.getPorudzbineZaDostavu() != null) {
-								for (Porudzbina p : dostavljac.getPorudzbineZaDostavu()) {
-									if(!porudzbina.getId().equals(p.getId())) {
-										String naziv2 = restoranDAO.dobaviRestoran(p.getRestoran()).getNaziv();
-										porDTO = new PorudzbinePrikazDTO(p.getId(),p.getKupac(),naziv2,p.getCena(),
-												p.getDatumVreme(),p.getStatus());
-										
-										for (Restoran restoran : restoranDAO.dobaviRestorane()) {
-											if(restoran.getId().equals(porudzbina.getRestoran())) {
-												porDTO.setTipRestorana(restoran.getTipRestorana().toString());
-											}
-										}
-										List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
-										for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-											artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-													a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
-										}
-										
-										porDTO.setArtikli(artikli);
-										porudzbineKupca.add(porDTO);
-									}
-								}}}}}}
+				if(porudzbina.getDostavljac().equals(id)) {
+					
+					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
+							porudzbina.getDatumVreme(),porudzbina.getStatus());
+					
+					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+					}
+					
+					porDTO.setArtikli(artikli);
+					porudzbineKupca.add(porDTO);
+				}
+//				/*PROVJERITI OVO!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+//				for (Dostavljac dostavljac : korisniciDAO.dobaviSveDostavljace()) {
+//					if(dostavljac.getUloga().toString().equals("DOSTAVLJAC")) {
+//						if(dostavljac.getId().equals(id)) {
+//							if(dostavljac.getPorudzbineZaDostavu() != null) {
+//								for (Porudzbina p : dostavljac.getPorudzbineZaDostavu()) {
+//									if(!porudzbina.getId().equals(p.getId())) {
+//										String naziv2 = restoranDAO.dobaviRestoran(p.getRestoran()).getNaziv();
+//										porDTO = new PorudzbinePrikazDTO(p.getId(),p.getKupac(),naziv2,p.getCena(),
+//												p.getDatumVreme(),p.getStatus());
+//										
+//										
+//										List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+//										for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+//											artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+//													a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+//										}
+//										
+//										porDTO.setArtikli(artikli);
+//										porudzbineKupca.add(porDTO);
+//									}
+//								}}}}}
+			}
 			
 			else if(uloga.equals("MENADZER")) {
 				for (Menadzer menadzer : korisniciDAO.dobaviSveMenadzere()) {
 					if(menadzer.getRestoran() != null) {
 						if(porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
+							System.out.println("restoran menadzera " + menadzer.getRestoran().getId()  + " restoran porudzbina " + porudzbina.getRestoran());
 							porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
 									porudzbina.getDatumVreme(),porudzbina.getStatus());
 							
