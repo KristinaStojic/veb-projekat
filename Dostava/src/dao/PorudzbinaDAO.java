@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Porudzbina;
 import beans.Porudzbina.Status;
+import dto.PorudzbinePrikazKupacaDTO;
 
 public class PorudzbinaDAO {
 
@@ -134,6 +136,19 @@ public class PorudzbinaDAO {
 			return 2;
 
 		return 0;
+	}
+	
+	
+	public List<PorudzbinePrikazKupacaDTO> nadjiPorudzbineKupca(String idKupca){
+	
+		List<PorudzbinePrikazKupacaDTO> porudzbineKupca = new ArrayList<PorudzbinePrikazKupacaDTO>();
+		for (Porudzbina por : dobaviPorudzbine()) {
+			if(por.getKupac().equals(idKupca)) {
+				porudzbineKupca.add(new PorudzbinePrikazKupacaDTO(por.getId(), por.getCena()));
+			}
+		}
+		
+		return porudzbineKupca;
 	}
 
 }

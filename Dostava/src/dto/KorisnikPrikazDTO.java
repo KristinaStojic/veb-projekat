@@ -1,11 +1,9 @@
 package dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import beans.Korisnik.Pol;
-import beans.Korisnik.Uloga;
 
 public class KorisnikPrikazDTO {
 
@@ -23,6 +21,7 @@ public class KorisnikPrikazDTO {
 	Double brojBodova;
 	Integer blokiran;
 
+	public List<PorudzbinePrikazKupacaDTO> porudzbine;
 	public KorisnikPrikazDTO() {
 		super();
 	}
@@ -135,6 +134,24 @@ public class KorisnikPrikazDTO {
 		this.prezime = prezime;
 		this.tipKupca = tipKupca;
 		this.brojBodova = brojBodova;
+
+	}
+	
+	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
+			String uloga, String ime, String prezime, String tipKupca, Double brojBodova,List<PorudzbinePrikazKupacaDTO> porudzbine) {
+		super();
+		this.id = id;
+		this.korisnickoIme = korisnickoIme;
+		this.imePrezime = imePrezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.tipKupca = tipKupca;
+		this.brojBodova = brojBodova;
+		this.porudzbine = porudzbine;
+
 	}
 
 	public Integer getBlokiran() {
@@ -166,6 +183,34 @@ public class KorisnikPrikazDTO {
 		this.korisnickoIme = korisnickoIme;
 		this.imePrezime = imePrezime;
 	}
+
+	public KorisnikPrikazDTO(String id, String korisnickoIme, String imePrezime, String pol, Date datumRodjenja,
+			String uloga, String ime, String prezime, String tipKupca, Double brojBodova, Integer blokiran,
+			List<PorudzbinePrikazKupacaDTO> porudzbine) {
+		super();
+		this.id = id;
+		this.korisnickoIme = korisnickoIme;
+		this.imePrezime = imePrezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.tipKupca = tipKupca;
+		this.brojBodova = brojBodova;
+		this.blokiran = blokiran;
+		this.porudzbine = porudzbine;
+	}
+
+	public List<PorudzbinePrikazKupacaDTO> getPorudzbine() {
+		return porudzbine;
+	}
+
+	public void setPorudzbine(List<PorudzbinePrikazKupacaDTO> porudzbine) {
+		this.porudzbine = porudzbine;
+	}
+	
+	
 
 	
 

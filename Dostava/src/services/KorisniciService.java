@@ -44,6 +44,7 @@ import dto.KorpaDTO;
 import dto.MenadzerDTO;
 import dto.MenadzerPrikazDTO;
 import dto.PorudzbinePrikazDTO;
+import dto.PorudzbinePrikazKupacaDTO;
 import dto.RestoranMenadzerDTO;
 
 @Path("/korisnici")
@@ -549,7 +550,9 @@ public class KorisniciService {
 								korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
 										kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
 										korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
-								
+								List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
+								porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
+								korDTO.setPorudzbine(porDTO);
 								sviKupci.add(korDTO);
 							}
 						}
@@ -559,6 +562,9 @@ public class KorisniciService {
 									kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
 									korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
 							
+							List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
+							porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
+							korDTO.setPorudzbine(porDTO);
 							sviKupci.add(korDTO);
 						}
 				}
