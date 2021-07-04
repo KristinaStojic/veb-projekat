@@ -144,7 +144,7 @@ public class PorudzbinaDAO {
 		List<PorudzbinePrikazKupacaDTO> porudzbineKupca = new ArrayList<PorudzbinePrikazKupacaDTO>();
 		for (Porudzbina por : dobaviPorudzbine()) {
 			if(por.getKupac().equals(idKupca)) {
-				porudzbineKupca.add(new PorudzbinePrikazKupacaDTO(por.getId(), por.getCena()));
+				porudzbineKupca.add(new PorudzbinePrikazKupacaDTO(por.getId(), por.getCena(), por.getDatumVreme()));
 			}
 		}
 		

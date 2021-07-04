@@ -113,15 +113,17 @@ Vue.component("pregledKupaca", {
                             <tr>
                             <th scope="col">#</th>
                             <th scope="col">Id porudžbine</th>
+                            <th scope="col">Datum</th>
                             <th scope="col">Ukupna cena</th>
-                            <th colspan="4" scope="colgroup"></th>
+                            <th colspan="2" scope="colgroup"></th>
                             </tr>
                         </thead>
                         <tbody>
                                 <tr v-for="(p, i) in this.porudzbine">
                                 <th style="vertical-align:middle;text-align: center" scope="row">{{i+1}}</th>
-                                <td style="vertical-align:middle;text-align: center">{{p.idPorudzbine}}</td>                           
-                                <td style="vertical-align:middle;text-align: center">{{p.ukupnaCena}}</td>
+                                <td style="vertical-align:middle;text-align: center">{{p.idPorudzbine}}</td>
+                                <td style="vertical-align:middle;text-align: center">{{p.datum}}</td>                           
+                                <td style="vertical-align:middle;text-align: center">{{p.ukupnaCena}} RSD</td>
                                 </tr>
                         </tbody>
                         </table>

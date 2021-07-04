@@ -15,7 +15,7 @@ public class PorudzbinePrikazDTO {
 	public String kupac;
 	public String restoran;
 	public Double cena;
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="dd-MM-yyyy HH:mm:ss")
 	public Date datumVreme;
 	public Status status;
 	public String tipRestorana;
