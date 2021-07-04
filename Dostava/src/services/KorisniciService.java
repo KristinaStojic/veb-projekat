@@ -502,23 +502,26 @@ public class KorisniciService {
 			
 			else if(uloga.equals("MENADZER")) {
 				for (Menadzer menadzer : korisniciDAO.dobaviSveMenadzere()) {
-					if(menadzer.getRestoran() != null) {
-						if(porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
-							System.out.println("restoran menadzera " + menadzer.getRestoran().getId()  + " restoran porudzbina " + porudzbina.getRestoran());
-							porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
-									porudzbina.getDatumVreme(),porudzbina.getStatus());
-							
-							
-							List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
-							for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-								artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-										a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
-							}
-							
-							porDTO.setArtikli(artikli);
-							porudzbineKupca.add(porDTO);
-						}}}}}
-		
+					if(menadzer.getId().equals(id)) {
+						if(menadzer.getRestoran() != null) {
+							if(porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
+								System.out.println("restoran menadzera " + menadzer.getRestoran().getId()  + " restoran porudzbina " + porudzbina.getRestoran());
+								porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
+										porudzbina.getDatumVreme(),porudzbina.getStatus());
+								
+								
+								List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
+								for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
+									artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+											a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+								}
+								
+								porDTO.setArtikli(artikli);
+								porudzbineKupca.add(porDTO);
+							}}}}}
+			
+					}
+					
 		System.out.println("Ovoliko porudzbina se salje za prikaz: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
