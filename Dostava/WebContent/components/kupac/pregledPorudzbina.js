@@ -752,13 +752,13 @@ Vue.component("pregledPorudzbina", {
             let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(this.pocDatum);
             let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(this.pocDatum);
             let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(this.pocDatum);
-            this.pocetniDatum = `${ye}-${mo}-${da}`;
+            this.pocetniDatum = `${da}-${mo}-${ye}`;
 
             let ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(this.krajDatum);
             let mo1 = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(this.krajDatum);
             let da1 = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(this.krajDatum);
             let sati = new Intl.DateTimeFormat('en', { hour: '2-digit' }).format(00);
-            this.krajnjiDatum = `${ye1}-${mo1}-${da1}`;
+            this.krajnjiDatum = `${da1}-${mo1}-${ye1}`;
 
             if(this.uloga === "KUPAC"){
                 if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
@@ -774,7 +774,7 @@ Vue.component("pregledPorudzbina", {
                     ));
                 }
                 else if(this.pocDatum !== "" && this.krajDatum !==""){
-                    this.pomocne.filter(el => (console.log(el.datumVreme.slice(0, 10))));
+                    
                     return ( this.pomocne.filter(el => (el.status.match(filter1) 
                     || el.status.match(filter2)
                     || el.status.match(filter3)
@@ -805,6 +805,8 @@ Vue.component("pregledPorudzbina", {
                     && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
                     )));
                 }else if(this.pocDatum !== "" && this.krajDatum !==""){
+                    console.log(this.pocetniDatum);
+                    this.pomocne.filter(el => (console.log(el.datumVreme.slice(0, 10))));
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
                     && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
                     )

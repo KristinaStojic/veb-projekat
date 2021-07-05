@@ -50,6 +50,10 @@ Vue.component("pocetna", {
 							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
 							</li>
 
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sumnjiviKorisnici">Prikaži sve sumnjive korisnike</a>
+							</li>
+
 							<li class="nav-item dropdown">
 							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
