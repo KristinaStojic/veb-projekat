@@ -95,7 +95,7 @@ Vue.component("dodavanjeRestorana", {
 		
 	</div>
  	<div class="form-wrapper">
-      <input type="number" placeholder="Adresa" v-model="adresa" v-on:click="duzinaPromena" 
+      <input type="text" placeholder="Adresa" v-model="adresa" v-on:click="duzinaPromena" 
       v-bind:class="[{ invalid1: adresaP && !adresa}, { 'form-control1': !adresaP || adresa}]" >
     </div>
 	<div align="center" vertical-align="center" style="border-style:solid; width:100%; height:200px;">
@@ -302,9 +302,14 @@ Vue.component("dodavanjeRestorana", {
                         else if (flag && address.city) {
                             this.restoran.mesto = address.city;
                         }
+						if (flag && address.postCode) {
+                            this.restoran.postanskiBroj = address.postCode;
+                        }
+                        else if (flag && address.postcode) {
+                            this.restoran.postanskiBroj = address.postcode;
+                        }
                         if (flag) {
-                            this.adresa = this.restoran.ulica + " " + this.restoran.broj;
-							alert(this.adresa)
+                            this.adresa = this.restoran.ulica + " " + this.restoran.broj + ", " + this.restoran.mesto + " " + this.restoran.postanskiBroj
                         }
                     }
 				})

@@ -45,7 +45,7 @@ Vue.component("map-container", {
                     ],
     
                     view: new ol.View({
-                        zoom: 6,
+                        zoom: 10,
                         center: ol.proj.transform(
                             this.coordinates,
                             "EPSG:4326",
