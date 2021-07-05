@@ -43,7 +43,8 @@ Vue.component("pregledPorudzbina", {
         pocetak: false,
         kraj: false,
         pocetniDatum: "",
-        krajnjiDatum: ""
+        krajnjiDatum: "",
+		upozorenjeKom: ""
 
 	}
     },
@@ -584,32 +585,33 @@ Vue.component("pregledPorudzbina", {
 							<div class="form-group" id="rating-ability-wrapper">
 			                    <label style="margin:15px;" class="grey-text">Ocena: </label>
 			                    <br/>
-			                    <button type="button" class="btnrating btn btn-warning btn-lg" data-attr="1" id="rating-star-1" @click="postaviOcenu(1)" >1
+			                    <button type="button" class="btnrating btn btn-warning btn-lg" data-attr="1" id="zvezdica-1" @click="postaviOcenu(1)" >1
 			                        <i class="fa fa-star" aria-hidden="true"></i>
 			                    </button>
-			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="rating-star-2" @click="postaviOcenu(2)" >2
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="zvezdica-2" @click="postaviOcenu(2)" >2
 			                        <i class="fa fa-star" aria-hidden="true"></i>
 			                    </button>
-			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="rating-star-3" @click="postaviOcenu(3)">3
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="zvezdica-3" @click="postaviOcenu(3)">3
 			                        <i class="fa fa-star" aria-hidden="true"></i>
 			                    </button>
-			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="rating-star-4" @click="postaviOcenu(4)" >4
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="zvezdica-4" @click="postaviOcenu(4)" >4
 			                        <i class="fa fa-star" aria-hidden="true"></i>
 			                    </button>
-			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="rating-star-5" @click="postaviOcenu(5)">5
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="zvezdica-5" @click="postaviOcenu(5)">5
 			                        <i class="fa fa-star" aria-hidden="true"></i>
 			                    </button>
 						     </div>
 			
 			                    <label align="left" for="comment" class="grey-text">Komentar:</label>
-			                    <textarea class="form-control2" style="height:150px;" rows="3" id="comment" v-modal="komentar.tekst"></textarea>
-			                    <br/>
+			                    <textarea class="form-control2" style="height:150px;" rows="3" id="comment" v-model="komentar.tekst"></textarea>
+			                    <label align="center" style="color:red">{{upozorenjeKom}}</label>
+								<br/>
                         </div>
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
-							<button type="button" class="btn btn-primary" data-dismiss="modal" >Potvrdi</button>
+							<button type="button" class="btn btn-primary" @click="dodajKomentar">Potvrdi</button>
                         </div>
 
                         </div>
@@ -927,6 +929,7 @@ Vue.component("pregledPorudzbina", {
             this.pomocnaPorudzbina = por;
 			this.komentar.kupac = this.pomocnaPorudzbina.kupac;
 			this.komentar.restoran = this.pomocnaPorudzbina.restoran;
+			this.komentar.ocena = 1;
         },
 		dobaviZahteve : function(id){
 			
@@ -961,7 +964,6 @@ Vue.component("pregledPorudzbina", {
 				
 		},
 		dostavi : function(){
-			event.preventDefault();
 			axios 
     			.post('/DostavaREST/rest/porudzbine/dostaviPorudzbinu/' + this.pomocnaPorudzbina.id)
     			.then(response => {
@@ -999,14 +1001,39 @@ Vue.component("pregledPorudzbina", {
             var prethodnaOcena = this.komentar.ocena;
             this.komentar.ocena = ocena;
             for (i = 1; i <= ocena; ++i) {
-                $("#rating-star-"+i).toggleClass('btn-warning');
-                $("#rating-star-"+i).toggleClass('btn-default');
+                $("#zvezdica-"+i).toggleClass('btn-warning');
+                $("#zvezdica-"+i).toggleClass('btn-default');
             }
                 
             for (ix = 1; ix <= prethodnaOcena; ++ix) {
-                $("#rating-star-"+ix).toggleClass('btn-warning');
-                $("#rating-star-"+ix).toggleClass('btn-default');
+                $("#zvezdica-"+ix).toggleClass('btn-warning');
+                $("#zvezdica-"+ix).toggleClass('btn-default');
             }
         },
+		dodajKomentar : function(){
+			if(!this.komentar.tekst){
+				this.upozorenjeKom = "Morate uneti komentar!"
+			}else{
+				this.upozorenjeKom = ""
+				axios 
+    			.post('/DostavaREST/rest/komentari/',  this.komentar)
+    			.then(response => {
+					this.greska = "Uspešno poslat komentar!"
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					$('#komentar').modal('toggle'); 
+    			})
+				.catch(err => {
+					this.greska = "Došlo je do greške! Pokušajte ponovo!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+				
+			}
+	
+		}
     }
   });
