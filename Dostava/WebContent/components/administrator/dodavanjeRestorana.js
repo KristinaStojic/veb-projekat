@@ -154,7 +154,7 @@ Vue.component("dodavanjeRestorana", {
 				fd.append('slika',this.izabranFajl, this.izabranFajl.name)
 				console.log(fd.get('slika'));
 			axios
-				.post('rest/restorani/dodajSliku' ,fd)
+				.post('rest/restorani/dodajSliku' )
 				.then(response => {
 					console.log(response);
 				})
