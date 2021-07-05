@@ -14,7 +14,12 @@ Vue.component("pregledPorudzbina", {
 			status: ""
 			
         },
-
+		komentar:{
+			kupac:"",
+			restoran:"",
+			tekst:"",
+			ocena:""
+		},
         pomocnaPorudzbina : [],
 
         pomocne: [],
@@ -201,6 +206,9 @@ Vue.component("pregledPorudzbina", {
                                     <td style="vertical-align:middle;text-align: center">
                                     <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#otkazivanje" @click="posaljiPorudzbinu(p)">
                                     Otkaži
+                                  </button>  
+									<button v-if="p.status === 'DOSTAVLJENA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#komentar" @click="posaljiPorudzbinu(p)">
+                                    Dodaj komentar
                                   </button>                 
                                     </td>
                                     </tr>
@@ -566,6 +574,48 @@ Vue.component("pregledPorudzbina", {
                     </div>
                 </div>
 
+				<div class="modal" id="komentar">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        <div class="modal-content">
+                        <!-- Modal body -->
+                        <div class="modal-body" style="text-align: center">
+							<h5 class="modal-title">Dodavanje komentara za porudžbinu iz restorana: </br> '<b>{{this.pomocnaPorudzbina.restoran}}</b>'</h5>
+							<hr class="mt-2 mb-3"/>
+							<div class="form-group" id="rating-ability-wrapper">
+			                    <label style="margin:15px;" class="grey-text">Ocena: </label>
+			                    <br/>
+			                    <button type="button" class="btnrating btn btn-warning btn-lg" data-attr="1" id="rating-star-1" @click="postaviOcenu(1)" >1
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="rating-star-2" @click="postaviOcenu(2)" >2
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="rating-star-3" @click="postaviOcenu(3)">3
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="rating-star-4" @click="postaviOcenu(4)" >4
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="rating-star-5" @click="postaviOcenu(5)">5
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+						     </div>
+			
+			                    <label align="left" for="comment" class="grey-text">Komentar:</label>
+			                    <textarea class="form-control2" style="height:150px;" rows="3" id="comment" v-modal="komentar.tekst"></textarea>
+			                    <br/>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" >Potvrdi</button>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+
 				<div class="modal" id="odobravanje">
                     <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
                         <div class="modal-content">
@@ -875,8 +925,9 @@ Vue.component("pregledPorudzbina", {
 
         posaljiPorudzbinu(por){
             this.pomocnaPorudzbina = por;
+			this.komentar.kupac = this.pomocnaPorudzbina.kupac;
+			this.komentar.restoran = this.pomocnaPorudzbina.restoran;
         },
-
 		dobaviZahteve : function(id){
 			
 			axios 
@@ -943,6 +994,19 @@ Vue.component("pregledPorudzbina", {
             } else {
               this.porudzbine.sort((a, b) => a[key] < b[key] ? 1: -1)
             }
-          }
+          },
+		  postaviOcenu : function(ocena) {
+            var prethodnaOcena = this.komentar.ocena;
+            this.komentar.ocena = ocena;
+            for (i = 1; i <= ocena; ++i) {
+                $("#rating-star-"+i).toggleClass('btn-warning');
+                $("#rating-star-"+i).toggleClass('btn-default');
+            }
+                
+            for (ix = 1; ix <= prethodnaOcena; ++ix) {
+                $("#rating-star-"+ix).toggleClass('btn-warning');
+                $("#rating-star-"+ix).toggleClass('btn-default');
+            }
+        },
     }
   });
