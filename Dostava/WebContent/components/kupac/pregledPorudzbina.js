@@ -14,7 +14,12 @@ Vue.component("pregledPorudzbina", {
 			status: ""
 			
         },
-
+		komentar:{
+			kupac:"",
+			restoran:"",
+			tekst:"",
+			ocena:""
+		},
         pomocnaPorudzbina : [],
 
         pomocne: [],
@@ -38,7 +43,8 @@ Vue.component("pregledPorudzbina", {
         pocetak: false,
         kraj: false,
         pocetniDatum: "",
-        krajnjiDatum: ""
+        krajnjiDatum: "",
+		upozorenjeKom: ""
 
 	}
     },
@@ -201,6 +207,9 @@ Vue.component("pregledPorudzbina", {
                                     <td style="vertical-align:middle;text-align: center">
                                     <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#otkazivanje" @click="posaljiPorudzbinu(p)">
                                     Otkaži
+                                  </button>  
+									<button v-if="p.status === 'DOSTAVLJENA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#komentar" @click="posaljiPorudzbinu(p)">
+                                    Dodaj komentar
                                   </button>                 
                                     </td>
                                     </tr>
@@ -566,6 +575,49 @@ Vue.component("pregledPorudzbina", {
                     </div>
                 </div>
 
+				<div class="modal" id="komentar">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        <div class="modal-content">
+                        <!-- Modal body -->
+                        <div class="modal-body" style="text-align: center">
+							<h5 class="modal-title">Dodavanje komentara za porudžbinu iz restorana: </br> '<b>{{this.pomocnaPorudzbina.restoran}}</b>'</h5>
+							<hr class="mt-2 mb-3"/>
+							<div class="form-group" id="rating-ability-wrapper">
+			                    <label style="margin:15px;" class="grey-text">Ocena: </label>
+			                    <br/>
+			                    <button type="button" class="btnrating btn btn-warning btn-lg" data-attr="1" id="zvezdica-1" @click="postaviOcenu(1)" >1
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="zvezdica-2" @click="postaviOcenu(2)" >2
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="zvezdica-3" @click="postaviOcenu(3)">3
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="zvezdica-4" @click="postaviOcenu(4)" >4
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+			                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="zvezdica-5" @click="postaviOcenu(5)">5
+			                        <i class="fa fa-star" aria-hidden="true"></i>
+			                    </button>
+						     </div>
+			
+			                    <label align="left" for="comment" class="grey-text">Komentar:</label>
+			                    <textarea class="form-control2" style="height:150px;" rows="3" id="comment" v-model="komentar.tekst"></textarea>
+			                    <label align="center" style="color:red">{{upozorenjeKom}}</label>
+								<br/>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+							<button type="button" class="btn btn-primary" @click="dodajKomentar">Potvrdi</button>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+
 				<div class="modal" id="odobravanje">
                     <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
                         <div class="modal-content">
@@ -875,8 +927,10 @@ Vue.component("pregledPorudzbina", {
 
         posaljiPorudzbinu(por){
             this.pomocnaPorudzbina = por;
+			this.komentar.kupac = this.pomocnaPorudzbina.kupac;
+			this.komentar.restoran = this.pomocnaPorudzbina.restoran;
+			this.komentar.ocena = 1;
         },
-
 		dobaviZahteve : function(id){
 			
 			axios 
@@ -910,7 +964,6 @@ Vue.component("pregledPorudzbina", {
 				
 		},
 		dostavi : function(){
-			event.preventDefault();
 			axios 
     			.post('/DostavaREST/rest/porudzbine/dostaviPorudzbinu/' + this.pomocnaPorudzbina.id)
     			.then(response => {
@@ -943,6 +996,44 @@ Vue.component("pregledPorudzbina", {
             } else {
               this.porudzbine.sort((a, b) => a[key] < b[key] ? 1: -1)
             }
-          }
+          },
+		  postaviOcenu : function(ocena) {
+            var prethodnaOcena = this.komentar.ocena;
+            this.komentar.ocena = ocena;
+            for (i = 1; i <= ocena; ++i) {
+                $("#zvezdica-"+i).toggleClass('btn-warning');
+                $("#zvezdica-"+i).toggleClass('btn-default');
+            }
+                
+            for (ix = 1; ix <= prethodnaOcena; ++ix) {
+                $("#zvezdica-"+ix).toggleClass('btn-warning');
+                $("#zvezdica-"+ix).toggleClass('btn-default');
+            }
+        },
+		dodajKomentar : function(){
+			if(!this.komentar.tekst){
+				this.upozorenjeKom = "Morate uneti komentar!"
+			}else{
+				this.upozorenjeKom = ""
+				axios 
+    			.post('/DostavaREST/rest/komentari/',  this.komentar)
+    			.then(response => {
+					this.greska = "Uspešno poslat komentar!"
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					$('#komentar').modal('toggle'); 
+    			})
+				.catch(err => {
+					this.greska = "Došlo je do greške! Pokušajte ponovo!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+				
+			}
+	
+		}
     }
   });
