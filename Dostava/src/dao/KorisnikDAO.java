@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,6 +186,7 @@ public class KorisnikDAO {
 		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0);
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
 		noviKupac.setBlokiran(0);
+		noviKupac.setDatumiOtkazivanjaPorudzbina(new ArrayList<Date>());
 		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		kupci.add(noviKupac);
 
@@ -737,6 +739,8 @@ public class KorisnikDAO {
 							Double trenutniBodovi = k.getSakupljeniBodovi();
 							k.setSakupljeniBodovi(trenutniBodovi - (p.getCena() / 1000 * 133 * 4));
 							k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
+							k.getDatumiOtkazivanjaPorudzbina().add(new Date(System.currentTimeMillis()));
+							System.out.println("Broj otkazivanja: " + k.getDatumiOtkazivanjaPorudzbina().size());
 							sacuvajPodatke();
 							return true;
 						} else if(status == Status.DOSTAVLJENA) {
@@ -841,5 +845,9 @@ public class KorisnikDAO {
 		}
 		
 		return false;
+	}
+	
+	public List<Kupac> dobaviSveKupce(){
+		return kupci;
 	}
 }

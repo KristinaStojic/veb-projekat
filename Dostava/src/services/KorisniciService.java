@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -442,7 +443,6 @@ public class KorisniciService {
 		RestoranDAO restoranDAO = dobaviRestoranDAO();
 		PorudzbinePrikazDTO porDTO = null;
 		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
-		System.out.println("Ukupno postoji porudzbina: " + porudzbineDAO.dobaviPorudzbine().size());
 		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
 			String nazivRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getNaziv();
 			String tipRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getTipRestorana().toString();
@@ -523,7 +523,6 @@ public class KorisniciService {
 			
 					}
 					
-		System.out.println("Ovoliko porudzbina se salje za prikaz: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
 	
@@ -571,9 +570,54 @@ public class KorisniciService {
 				}
 			}
 		}
-		System.out.println("Ovoliko kupaca ima iz menadzerovog restorana: " + sviKupci.size());
 		return sviKupci;
 	}
 	
 	
+	
+	@GET
+	@Path("/nadjiSumnjiveKorisnike/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikPrikazDTO> nadjiSumnjiveKorisnike() {
+		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
+		System.out.println("usao sam :D");
+		String tipKupca = null;
+		Double brojBodovaKupca = 0.0;
+		List<KorisnikPrikazDTO> korisniciDTO = new ArrayList<KorisnikPrikazDTO>();
+		
+		for (Kupac k : korisniciDAO.dobaviSveKupce()) {
+			Integer brojacOtkaza = 0;
+			if(k.getDatumiOtkazivanjaPorudzbina().size() > 0) {
+				for (Date otkaz : k.getDatumiOtkazivanjaPorudzbina()) {
+					Date pocetakMeseca =  new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24));
+					if(otkaz.compareTo(pocetakMeseca) > 0) {
+						brojacOtkaza++;
+					}
+				}
+			}
+			
+			
+			if(brojacOtkaza > 5) {
+				String imePrz = k.getIme() + " " + k.getPrezime();
+
+				KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(), k.getKorisnickoIme(), imePrz,
+						korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(), korisniciDAO.nadjiUlogu(k.getUloga()),
+						k.getIme(), k.getPrezime(), k.getBlokiran());
+
+				if (k.getUloga().toString().equals("KUPAC")) {
+					tipKupca = korisniciDAO.nadjiTipKupca(k);
+					brojBodovaKupca = korisniciDAO.nadjiBrojBodovaKupca(k);
+
+					korDTO.setBrojBodova(brojBodovaKupca);
+					korDTO.setTipKupca(tipKupca);
+
+				}
+				
+				korisniciDTO.add(korDTO);
+			}
+		}
+		
+
+		return korisniciDTO;
+	}
 }

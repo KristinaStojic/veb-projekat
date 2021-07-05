@@ -15,6 +15,7 @@ public class Kupac extends Korisnik implements Serializable {
 	private Korpa korpa;
 	private Double sakupljeniBodovi;
 	private TipKupca tipKupca;
+	private List<Date> datumiOtkazivanjaPorudzbina;
 
 	public Kupac() {
 		super();
@@ -63,4 +64,24 @@ public class Kupac extends Korisnik implements Serializable {
 	public void dodajPorudzbinu(Porudzbina p) {
 		this.svePorudzbine.add(p);
 	}
+
+	public List<Date> getDatumiOtkazivanjaPorudzbina() {
+		return datumiOtkazivanjaPorudzbina;
+	}
+
+	public void setDatumiOtkazivanjaPorudzbina(List<Date> datumiOtkazivanjaPorudzbina) {
+		this.datumiOtkazivanjaPorudzbina = datumiOtkazivanjaPorudzbina;
+	}
+
+	public Kupac(List<Porudzbina> svePorudzbine, Korpa korpa, Double sakupljeniBodovi, TipKupca tipKupca,
+			List<Date> datumiOtkazivanjaPorudzbina) {
+		super();
+		this.svePorudzbine = svePorudzbine;
+		this.korpa = korpa;
+		this.sakupljeniBodovi = sakupljeniBodovi;
+		this.tipKupca = tipKupca;
+		this.datumiOtkazivanjaPorudzbina = datumiOtkazivanjaPorudzbina;
+	}
+	
+	
 }

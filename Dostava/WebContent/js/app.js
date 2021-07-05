@@ -14,6 +14,7 @@ const IzmenaArtikla = { template: '<izmenaArtikla></izmenaArtikla>' }
 const PregledKorpe = { template: '<pregledKorpe></pregledKorpe>' }
 const PregledPorudzbina = { template: '<pregledPorudzbina></pregledPorudzbina>' }
 const PregledKupaca = { template: '<pregledKupaca></pregledKupaca>' }
+const SumnjiviKorisnici = { template: '<sumnjiviKorisnici></sumnjiviKorisnici>' }
 
 
 const router = new VueRouter({
@@ -34,7 +35,9 @@ const router = new VueRouter({
 		{ path: '/izmenaArtikla/:id/:naziv', component: IzmenaArtikla},
 		{ path: '/pregledKorpe/:id', component: PregledKorpe},
 		{ path: '/pregledPorudzbina/:id', component: PregledPorudzbina},
-		{ path: '/pregledKupaca/:id', component: PregledKupaca}
+		{ path: '/pregledKupaca/:id', component: PregledKupaca},
+		{ path: '/sumnjiviKorisnici', component: SumnjiviKorisnici}
+
 
 
 	  ]
