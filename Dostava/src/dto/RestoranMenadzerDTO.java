@@ -13,7 +13,7 @@ public class RestoranMenadzerDTO {
 	public Double geografskaDuzina;
 	public Double geografskaSirina;
 	public String ulica;
-	public Integer broj;
+	public String broj;
 	public String mesto;
 	public Integer postanskiBroj;
 	public String idMenadzera;
@@ -22,7 +22,7 @@ public class RestoranMenadzerDTO {
 	public List<ArtikliDTO> artikli;
 	
 	public RestoranMenadzerDTO(String id, String naziv, String tipRestorana, String logo, Double geografskaDuzina,
-			Double geografskaSirina, String ulica, Integer broj, String mesto, Integer postanskiBroj, String ocenaS,Boolean status, List<ArtikliDTO> artikli) {
+			Double geografskaSirina, String ulica, String broj, String mesto, Integer postanskiBroj, String ocenaS,Boolean status, List<ArtikliDTO> artikli) {
 		super();
 		this.id = id;
 		this.naziv = naziv;

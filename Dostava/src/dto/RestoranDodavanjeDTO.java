@@ -13,7 +13,7 @@ public class RestoranDodavanjeDTO {
 	public Double geografskaDuzina;
 	public Double geografskaSirina;
 	public String ulica;
-	public Integer broj;
+	public String broj;
 	public String mesto;
 	public Integer postanskiBroj;
 	public String idMenadzera;
