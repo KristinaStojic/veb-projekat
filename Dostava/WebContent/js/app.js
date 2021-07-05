@@ -15,7 +15,8 @@ const PregledKorpe = { template: '<pregledKorpe></pregledKorpe>' }
 const PregledPorudzbina = { template: '<pregledPorudzbina></pregledPorudzbina>' }
 const PregledKupaca = { template: '<pregledKupaca></pregledKupaca>' }
 const SumnjiviKorisnici = { template: '<sumnjiviKorisnici></sumnjiviKorisnici>' }
-
+const MapViewOnlyContainer = {template: "<map-view-container></map-view-container>"};
+const MapContainer = {template: "<map-container></map-container>"};
 
 const router = new VueRouter({
 	mode: 'hash',

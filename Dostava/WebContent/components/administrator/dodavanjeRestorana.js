@@ -5,8 +5,8 @@ Vue.component("dodavanjeRestorana", {
 				naziv: "",
 				tipRestorana: 7,
 				logo: "",
-				geografskaDuzina: "",
-				geografskaSirina: "",
+				geografskaDuzina: 19.833549,
+				geografskaSirina: 45.267136,
 				ulica: "",
 				broj: "",
 				mesto: "",
@@ -15,9 +15,10 @@ Vue.component("dodavanjeRestorana", {
 
 			}, izabranFajl : null, kj : "slike/logo_final2.png",
 			menadzeri: null, selektovano: false, promena: false
-			, naziv: false, sirina: false, duzina: false, ulica: false, broj: false, mesto: false, posta: false,
+			, naziv: false, adresaP : false,
 			msg: "",
-			greska: ""
+			greska: "",
+			adresa : ""
 		}
 	},
 	template: ` 
@@ -93,24 +94,15 @@ Vue.component("dodavanjeRestorana", {
 	<div class="form-wrapper">
 		
 	</div>
- 	<div class="form-group">
-      <input type="number" placeholder="Geografska duzina" v-model="restoran.geografskaDuzina" v-on:click="duzinaPromena" 
-      v-bind:class="[{ invalid1: duzina && !restoran.geografskaDuzina}, { 'form-control1': !duzina || restoran.geografskaDuzina}]" >
-      <input type="number" placeholder="Geografska sirina" v-model="restoran.geografskaSirina" v-on:click="sirinaPromena" 
-      v-bind:class="[{ invalid1: sirina && !restoran.geografskaSirina}, { 'form-control1': !sirina || restoran.geografskaSirina}]">
+ 	<div class="form-wrapper">
+      <input type="number" placeholder="Adresa" v-model="adresa" v-on:click="duzinaPromena" 
+      v-bind:class="[{ invalid1: adresaP && !adresa}, { 'form-control1': !adresaP || adresa}]" >
     </div>
-	<div class="form-group">
-      <input type="text" placeholder="Ulica" v-model="restoran.ulica" v-on:click="ulicaPromena" 
-      v-bind:class="[{ invalid1: ulica && !restoran.ulica}, { 'form-control1': !ulica || restoran.ulica}]" >
-      <input type="number" placeholder="Broj kuće/stana" v-model="restoran.broj" v-on:click="brojPromena" 
-      v-bind:class="[{ invalid1: broj && !restoran.broj}, { 'form-control1': !broj || restoran.broj}]" min="0">
-    </div>
-	<div class="form-group">
-      <input type="text" placeholder="Mesto" v-model="restoran.mesto" v-on:click="mestoPromena" 
-      v-bind:class="[{ invalid1: mesto && !restoran.mesto}, { 'form-control1': !mesto || restoran.mesto}]" >
-      <input type="number" placeholder="Poštanski broj" v-model="restoran.postanskiBroj" v-on:click="postaPromena" 
-      v-bind:class="[{ invalid1: posta && !restoran.posta}, { 'form-control1': !posta || restoran.posta}]">
-    </div>
+	<div align="center" vertical-align="center" style="border-style:solid; width:100%; height:200px;">
+                <map-container
+                :coordinates="[this.restoran.geografskaDuzina,this.restoran.geografskaSirina]"
+                ></map-container>
+     </div>
 	<div class="form-wrapper">
       <select class="form-control" style="font-size: 12px" v-model="restoran.idMenadzera">
         <option value="" disabled select3ed>Menadzeri</option>
@@ -232,18 +224,8 @@ Vue.component("dodavanjeRestorana", {
 				this.msg = "Obavezno uneti naziv restorana!";
 			} else if (!this.restoran.logo) {
 				this.msg = "Obavezno izabrati logo restorana!";
-			} else if (!this.restoran.geografskaDuzina) {
-				this.msg = "Obavezno uneti geografsku dužinu!";
-			} else if (!this.restoran.geografskaSirina) {
-				this.msg = "Obavezno izabrati geografsku širinu!";
-			} else if (!this.restoran.ulica) {
-				this.msg = "Obavezno uneti ulicu!";
-			} else if (!this.restoran.broj) {
-				this.msg = "Obavezno uneti broj!";
-			}else if (!this.restoran.mesto) {
-				this.msg = "Obavezno uneti mesto!";
-			}else if (!this.restoran.postanskiBroj) {
-				this.msg = "Obavezno uneti poštanski broj!";
+			} else if (!this.adresa) {
+				this.msg = "Obavezno izabrati lokaciju!";
 			}
 			else if (this.selektovano === false && !this.restoran.idMenadzera) {
 				this.msg = "Odabrati menadžera ili selektovati kreiranje novog!";
@@ -285,6 +267,50 @@ Vue.component("dodavanjeRestorana", {
 					})
 				return true;
 			}
-		}
+		},
+		azuriranjeAdrese : function() {
+			
+            axios.get("https://nominatim.openstreetmap.org/reverse", {
+					params: {
+						lat: this.restoran.geografskaSirina,
+						lon: this.restoran.geografskaDuzina,
+						format: "json",
+					},
+				})
+				.then((response) => {
+					const { address } = response.data;
+                    var flag = false;
+                    if (address) {
+						
+                        if (address.road) {
+                            this.restoran.ulica = address.road;
+							
+                            flag = true;
+                        } else if (address.street) {
+                            this.restoran.ulica = address.street;
+                            flag = true;
+                        }
+                        if (flag && address["house-number"]) {
+                            this.restoran.broj = address["house-number"];
+                        }
+                        else if (flag && address["house_number"]) {
+                            this.restoran.broj = address["house_number"];
+                        }
+                        if (flag && address.town) {
+                            this.restoran.mesto = address.town;
+                        }
+                        else if (flag && address.city) {
+                            this.restoran.mesto = address.city;
+                        }
+                        if (flag) {
+                            this.adresa = this.restoran.ulica + " " + this.restoran.broj;
+							alert(this.adresa)
+                        }
+                    }
+				})
+				.catch(function(error) {
+					alert('Nije moguće pronaći adresu sa zadatim koordinatama.');
+				});
+        }
 	}
 });
