@@ -77,8 +77,9 @@ public class RestoraniService {
 		for (Restoran r : dao.dobaviRestorane()) {
 			String lokacija = r.getLokacija().getUlica() + " " + r.getLokacija().getBroj().toString() + ", "
 					+ r.getLokacija().getMesto();
+			Lokacija l = r.getLokacija();
 			restoraniDTO.add(new RestoranPrikazDTO(r.getId(), r.getNaziv(), r.tipString(), r.statusString(), lokacija,
-					r.getLogo(), r.getOcena().toString()));
+					r.getLogo(), r.getOcena().toString(),l.getGeografskaDuzina(),l.getGeografskaSirina(),l.getUlica(),l.getBroj(),l.getMesto(),l.getPostanskiBroj() ));
 		}
 
 		return restoraniDTO;

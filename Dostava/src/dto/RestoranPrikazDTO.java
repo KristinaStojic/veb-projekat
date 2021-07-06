@@ -11,9 +11,16 @@ public class RestoranPrikazDTO {
 	public String lokacija;
 	public String logo;
 	public String ocena;
+	public Double geografskaDuzina;
+	public Double geografskaSirina;
+	public String ulica;
+	public String broj;
+	public String mesto;
+	public Integer postanskiBroj;
 	
-	public RestoranPrikazDTO(String id, String naziv, String tipRestorana, String status, String lokacija,
-			String logo, String ocena) {
+	public RestoranPrikazDTO(String id, String naziv, String tipRestorana, String status, String lokacija, String logo,
+			String ocena, Double geografskaDuzina, Double geografskaSirina, String ulica, String broj, String mesto,
+			Integer postanskiBroj) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -22,6 +29,13 @@ public class RestoranPrikazDTO {
 		this.lokacija = lokacija;
 		this.logo = logo;
 		this.ocena = ocena;
+		this.geografskaDuzina = geografskaDuzina;
+		this.geografskaSirina = geografskaSirina;
+		this.ulica = ulica;
+		this.broj = broj;
+		this.mesto = mesto;
+		this.postanskiBroj = postanskiBroj;
 	}
+	
 	
 }
