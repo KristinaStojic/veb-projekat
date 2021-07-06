@@ -116,5 +116,20 @@ public class KomentarDAO {
 		
 		return 0;
 	}
+	
+	
+	public boolean odbijKomentar(String idKomentara) {
+		for (Komentar kom : dobaviSve()) {
+			if(kom.getId().equals(idKomentara)) {
+				System.out.println("usao u odobravanje komentara");
+				kom.setOdobren(false);
+				kom.setObradjen(true);
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 }

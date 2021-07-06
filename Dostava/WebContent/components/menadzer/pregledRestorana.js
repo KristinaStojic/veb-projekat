@@ -185,7 +185,7 @@ Vue.component("pregledRestorana", {
 										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 										<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modelOdobri" @click="postaviKom(k)">Odobri</button>
 										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-										<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modelOdbij">Odbij</button>
+										<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modelOdbij" @click="postaviKom(k)" >Odbij</button>
 										</li>
 										</ul>
 									</div>
@@ -237,7 +237,7 @@ Vue.component("pregledRestorana", {
 									<!-- Modal footer -->
 									<div class="modal-footer">
 										<button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
-										<button type="button" class="btn btn-primary" data-dismiss="modal" >Potvrdi</button>
+										<button type="button" class="btn btn-primary" data-dismiss="modal" @click="odbijKomentar(trenutniKomentar.id)" >Potvrdi</button>
 									</div>
 
 								</div>
@@ -344,6 +344,27 @@ Vue.component("pregledRestorana", {
     			})
 				.catch(err => {
 					this.greska = "Neuspjesno odobravanje komentara!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+		},
+		odbijKomentar(idKom){
+			console.log(idKom);
+			axios 
+    			.post('/DostavaREST/rest/komentari/odbijKomentar/' + idKom)
+    			.then(response => {  
+					this.$router.push("/pregledRestorana")	
+					this.$router.go();
+					this.greska = "Uspesno odbijen komentar!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    				
+    			})
+				.catch(err => {
+					this.greska = "Neuspjesno odbijanje komentara!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);

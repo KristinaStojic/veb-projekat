@@ -135,5 +135,16 @@ public class KomentariService {
 	}
 	
 	
-	
+	@POST
+	@Path("/odbijKomentar/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response odbijKomentar(@PathParam("id") String idKomentara) {
+		System.out.println("usao sam u odobravanje komentara: " + idKomentara);
+		KomentarDAO komentari = dobaviKomentarDAO();
+		if (!komentari.odbijKomentar(idKomentara)) {
+			return Response.status(400).build();
+		}
+		return Response.status(200).build();
+	}
 }
