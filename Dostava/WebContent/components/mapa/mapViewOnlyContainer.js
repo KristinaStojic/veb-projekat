@@ -22,7 +22,7 @@ Vue.component("map-view-container", {
                 this.markerFeature.setStyle(new ol.style.Style({
                 image: new ol.style.Icon({
                   scale: 0.2,
-                  src: 'static/images/mapPointer.png',
+                  src: 'slike/pokazivac.png',
                 })}));
     
                 vectorLayer = new ol.layer.Vector({
@@ -45,7 +45,7 @@ Vue.component("map-view-container", {
                     ],
     
                     view: new ol.View({
-                        zoom: 6,
+                        zoom: 15,
                         center: ol.proj.transform(
                             this.coordinates,
                             "EPSG:4326",
