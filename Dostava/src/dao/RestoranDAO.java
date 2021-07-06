@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
-import beans.Menadzer;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -244,6 +242,23 @@ public class RestoranDAO {
 				}
 			}
 		
+	}
+	
+	public boolean azurirajOcenuRestorana(String idRestorana, Integer ocena) {
+		for (Restoran rest : dobaviRestorane()) {
+			if(rest.getId().equals(idRestorana)) {
+				System.out.println("azuriram ocjenu restorana");
+				if(rest.getOcena() == 0) {
+					rest.setOcena(rest.getOcena() + ocena);
+				}else {
+					rest.setOcena((rest.getOcena() + ocena)/2);
+				}
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 

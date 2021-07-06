@@ -850,4 +850,31 @@ public class KorisnikDAO {
 	public List<Kupac> dobaviSveKupce(){
 		return kupci;
 	}
+	
+	public String restoranMenadzera(String id) {
+		for (Menadzer m : menadzeri) {
+			if(m.getId().equals(id)) {
+				return m.getRestoran().getId();
+			}
+		}
+		
+		return null;
+	}
+	
+	public boolean azurirajOcenuRestorana(String idRestorana, Integer ocena) {
+		for (Menadzer men : menadzeri) {
+			if(men.getRestoran().getId().equals(idRestorana)) {
+				System.out.println("azuriram ocjenu menadzera");
+				if(men.getRestoran().getOcena() == 0) {
+					men.getRestoran().setOcena(men.getRestoran().getOcena() + ocena);
+				}else {
+					men.getRestoran().setOcena((men.getRestoran().getOcena() + ocena)/2);
+				}
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
