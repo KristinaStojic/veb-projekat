@@ -68,7 +68,7 @@ public class KomentarDAO {
 
 	public Komentar dodajKomentar(KomentarDTO noviDTO) {
 		Komentar novi = new Komentar(UUID.randomUUID().toString().replace("-", "").substring(0, 10), noviDTO.kupac,
-				noviDTO.restoran, noviDTO.tekst, noviDTO.ocena);
+				noviDTO.restoran, noviDTO.tekst, noviDTO.ocena, noviDTO.idPorudzbine);
 		komentari.put(novi.getId(), novi);
 		if (!sacuvajPodatke())
 			return null;
@@ -90,6 +90,46 @@ public class KomentarDAO {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean odobriKomentar(String idKomentara) {
+		for (Komentar kom : dobaviSve()) {
+			if(kom.getId().equals(idKomentara)) {
+				System.out.println("usao u odobravanje komentara");
+				kom.setOdobren(true);
+				kom.setObradjen(true);
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	public Integer nadjiOcenu(String idKomentara) {
+		for (Komentar kom : dobaviSve()) {
+			if(kom.getId().equals(idKomentara)) {
+				return kom.getOcena();
+			}
+		}
+		
+		return 0;
+	}
+	
+	
+	public boolean odbijKomentar(String idKomentara) {
+		for (Komentar kom : dobaviSve()) {
+			if(kom.getId().equals(idKomentara)) {
+				System.out.println("usao u odobravanje komentara");
+				kom.setOdobren(false);
+				kom.setObradjen(true);
+				sacuvajPodatke();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

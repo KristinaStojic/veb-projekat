@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Porudzbina;
 import beans.Porudzbina.Status;
+import beans.Restoran;
 import dto.PorudzbinePrikazKupacaDTO;
 
 public class PorudzbinaDAO {
@@ -149,6 +150,16 @@ public class PorudzbinaDAO {
 		}
 		
 		return porudzbineKupca;
+	}
+	
+	public String nadjiRestoranPorudzbine(String idPorudzbine) {
+		for (Porudzbina por : dobaviPorudzbine()) {
+			if(por.getId().equals(idPorudzbine)) {
+				return por.getRestoran();
+			}
+		}
+		
+		return null;
 	}
 
 }

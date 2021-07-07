@@ -19,8 +19,22 @@ Vue.component("pregledRestorana", {
 
 		},
 		artikli : null,
+		trenutniKomentar: {
+			id: "",
+			kupac: "",
+			tekst: "",
+			ocena: "",
+			obradjen: false,
+		},
 		uloga: "",
         greska: "",
+		komentari : {
+			id: "",
+			kupac: "",
+			tekst: "",
+			ocena: "",
+			obradjen: false,
+		},
         kj : "slike/logo_final2.png",
 		 artikalTab : true,
 		 komentarTab : false,
@@ -154,18 +168,87 @@ Vue.component("pregledRestorana", {
 							</div>
 						</div>
 						</div>
-
-						<div class="content" v-if="this.komentarTab === true">
-						 <p>komentar</p>
 						</div>
+						<div class="scroll" v-if="this.komentarTab === true">
+						 	
+							<div class="row" v-for="k in this.komentari">
+								<div style="margin: 20px;">
+									<div class="card">
+										<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+										<b>Kupac: {{k.kupac}} </b>    			
+										</li>
+										
+										<li class="ime list-group-item">Ocena: {{k.ocena}}</li>
+										<li class="list-group-item">Komentar: {{k.tekst}}</li>
+										<li>
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modelOdobri" @click="postaviKom(k)">Odobri</button>
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modelOdbij" @click="postaviKom(k)" >Odbij</button>
+										</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+						</div>	
+
+
+						
+               
+            </div>
 						<div class="content" v-if="this.lokacijaTab === true">
 						 <p>lokacija</p>
 						</div>
 						<div id="greska" class="snackbar">{{greska}}</div>
 		</div>
-	</div>	
-</div>
-</div>
+
+		
+		</div>
+		
+						<div class="modal" id="modelOdobri">
+                    		<div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        		<div class="modal-content">
+									<!-- Modal body -->
+									<div class="modal-body" style="text-align: center">
+										<h5 class="modal-title">Da li ste sigurni da želite da odobrite izabrani komentar</h5>
+									</div>
+
+									<!-- Modal footer -->
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+										<button type="button" class="btn btn-primary" data-dismiss="modal" @click="odobriKomentar(trenutniKomentar.id)">Potvrdi</button>
+									</div>
+
+                        		</div>
+                    		</div>
+                		</div>
+
+
+						<div class="modal" id="modelOdbij">
+							<div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+								<div class="modal-content">
+									<!-- Modal body -->
+									<div class="modal-body" style="text-align: center">
+										<h5 class="modal-title">Da li ste sigurni da želite da odbijete izabrani komentar</h5>
+									</div>
+
+									<!-- Modal footer -->
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" data-dismiss="modal">Odustani</button>
+										<button type="button" class="btn btn-primary" data-dismiss="modal" @click="odbijKomentar(trenutniKomentar.id)" >Potvrdi</button>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						
+
+	</div>
+
+
+	
 </div>
   `
     ,
@@ -180,15 +263,23 @@ Vue.component("pregledRestorana", {
             {     
                 this.restoran = response.data;
                 this.artikli = response.data.artikli;
-				console.log("caos")
-                console.log(this.restoran.artikli);
+				console.log(this.restoran.id)
                 window.localStorage.setItem("trenutniRestoran", this.restoran.id);
 				window.localStorage.setItem("imeRestorana", this.restoran.naziv);
             }
         })
         
+		axios 
+        .get('rest/komentari/nadjiKomentare/' + window.localStorage.getItem("korisnik"))
+        .then(response => {
+            if(response.data != null)
+            {     
+                this.komentari = response.data;              
+            }
+        })
         
     },
+	
     methods: {
     	izmena(value){
     		this.$router.push("/izmenaArtikla/"+ this.restoran.id + "/" + value)
@@ -238,6 +329,53 @@ Vue.component("pregledRestorana", {
 				  })
     		
     	},
+		odobriKomentar(idKom){
+			console.log(idKom + " " + window.localStorage.getItem("trenutniRestoran"));
+			axios 
+    			.post('/DostavaREST/rest/komentari/odobriKomentar/' + idKom + "/" + this.restoran.id)
+    			.then(response => {  
+					this.$router.push("/pregledRestorana")	
+					this.$router.go();
+					this.greska = "Uspesno odobren komentar!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    				
+    			})
+				.catch(err => {
+					this.greska = "Neuspjesno odobravanje komentara!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+		},
+		odbijKomentar(idKom){
+			console.log(idKom);
+			axios 
+    			.post('/DostavaREST/rest/komentari/odbijKomentar/' + idKom)
+    			.then(response => {  
+					this.$router.push("/pregledRestorana")	
+					this.$router.go();
+					this.greska = "Uspesno odbijen komentar!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+    				
+    			})
+				.catch(err => {
+					this.greska = "Neuspjesno odbijanje komentara!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
+		},
+
+		postaviKom(kom){
+			this.trenutniKomentar = kom;
+			console.log(this.trenutniKomentar.id)
+		},
 		obrisiArtikal : function(nazivArtikla){
 				  axios 
 				 .delete('rest/restorani/obrisiArtikal/' + nazivArtikla + "/" + this.restoran.id)
@@ -251,6 +389,8 @@ Vue.component("pregledRestorana", {
 				 
 				 })
 			  }
+
+			
         
     
     }

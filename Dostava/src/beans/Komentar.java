@@ -15,12 +15,14 @@ public class Komentar implements Serializable {
 	private String tekst;
 	private Integer ocena; // od 1 do 5
 	private Boolean odobren;
+	private Boolean obradjen;
+	private String idPorudzbine;
 
 	public Komentar() {
 		super();
 	}
 
-	public Komentar(String id, String kupac, String restoran, String tekst, Integer ocena) {
+	public Komentar(String id, String kupac, String restoran, String tekst, Integer ocena, String idPorudzbine) {
 		super();
 		this.id = id;
 		this.kupac = kupac;
@@ -28,6 +30,8 @@ public class Komentar implements Serializable {
 		this.tekst = tekst;
 		this.ocena = ocena;
 		this.odobren = false;
+		this.obradjen = false;
+		this.idPorudzbine = idPorudzbine;
 	}
 
 	public String getId() {
@@ -78,4 +82,34 @@ public class Komentar implements Serializable {
 		this.odobren = odobren;
 	}
 
+	public Boolean getObradjen() {
+		return obradjen;
+	}
+
+	public void setObradjen(Boolean obradjen) {
+		this.obradjen = obradjen;
+	}
+
+	public String getIdPorudzbine() {
+		return idPorudzbine;
+	}
+
+	public void setIdPorudzbine(String idPorudzbine) {
+		this.idPorudzbine = idPorudzbine;
+	}
+
+	/*public Komentar(String id, String kupac, String restoran, String tekst, Integer ocena, Boolean odobren,
+			Boolean obradjen, String idPorudzbine) {
+		super();
+		this.id = id;
+		this.kupac = kupac;
+		this.restoran = restoran;
+		this.tekst = tekst;
+		this.ocena = ocena;
+		this.odobren = odobren;
+		this.obradjen = obradjen;
+		this.idPorudzbine = idPorudzbine;
+	}*/
+
+	
 }

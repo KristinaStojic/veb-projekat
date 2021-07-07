@@ -18,7 +18,8 @@ Vue.component("pregledPorudzbina", {
 			kupac:"",
 			restoran:"",
 			tekst:"",
-			ocena:""
+			ocena:"",
+            idPorudzbine: ""
 		},
         pomocnaPorudzbina : [],
 
@@ -932,6 +933,7 @@ Vue.component("pregledPorudzbina", {
 			this.komentar.kupac = this.pomocnaPorudzbina.kupac;
 			this.komentar.restoran = this.pomocnaPorudzbina.restoran;
 			this.komentar.ocena = 1;
+            this.komentar.idPorudzbine = this.pomocnaPorudzbina.id
         },
 		dobaviZahteve : function(id){
 			
