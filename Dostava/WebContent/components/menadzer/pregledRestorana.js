@@ -35,10 +35,19 @@ Vue.component("pregledRestorana", {
 			ocena: "",
 			obradjen: false,
 		},
+		sviKomentari : {
+			id: "",
+			kupac: "",
+			tekst: "",
+			ocena: "",
+			odobren: "",
+			restoran: ""
+		},
         kj : "slike/logo_final2.png",
 		 artikalTab : true,
 		 komentarTab : false,
-		 lokacijaTab : false
+		 lokacijaTab : false,
+		 zahteviKomTab : false
 	}
     },
     template: ` 
@@ -138,6 +147,12 @@ Vue.component("pregledRestorana", {
 						<span class="tab-rounding left"></span>
 						<span class="tab-rounding right"></span>
 						</span> </a></li>
+						<li><a href="#"  class="tab dugmeTab nav-link" v-on:click="promeniZahtevKom" :class="{'active': zahteviKomTab === true}" >
+						<span class="tab-copy">Zahtevi za komentare</span>
+						<span class="tab-background">
+						<span class="tab-rounding left"></span>
+						<span class="tab-rounding right"></span>
+						</span> </a></li>
 					</ul>
 			</nav>
 						<div class="scroll" v-if="this.artikalTab === true">
@@ -169,9 +184,10 @@ Vue.component("pregledRestorana", {
 						</div>
 						</div>
 						</div>
-						<div class="scroll" v-if="this.komentarTab === true">
-						 	
-							<div class="row" v-for="k in this.komentari">
+
+
+						<div class="scroll" v-if="this.zahteviKomTab === true">
+								<div class="row" v-for="k in this.komentari">
 								<div style="margin: 20px;">
 									<div class="card">
 										<ul class="list-group list-group-flush">
@@ -190,6 +206,27 @@ Vue.component("pregledRestorana", {
 										</ul>
 									</div>
 								</div>
+								</div>
+						</div>
+
+
+						<div class="scroll" v-if="this.komentarTab === true">
+						 	
+							<div class="row" v-for="k in this.sviKomentari">
+							<div v-if="k.restoran === restoran.id" style="margin: 20px;">
+								<div class="card">
+									<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+									<b>Kupac: {{k.kupac}} </b>    			
+									</li>
+									
+									<li class="ime list-group-item">Ocena: {{k.ocena}}</li>
+									<li class="list-group-item">Komentar: {{k.tekst}}</li>
+									<li class="list-group-item">Status: {{k.odobren}}</li>
+									
+									</ul>
+								</div>
+							</div>
 							</div>
 
 						</div>	
@@ -286,6 +323,17 @@ Vue.component("pregledRestorana", {
                 this.komentari = response.data;              
             }
         })
+
+
+		axios 
+		.get('rest/komentari/nadjiSveKomentare')
+		.then(response => {
+			if(response.data != null)
+			{     
+				this.sviKomentari = response.data; 
+				console.log(this.idRest)  
+			}
+		})
         
     },
 	
@@ -298,18 +346,31 @@ Vue.component("pregledRestorana", {
 			this.komentarTab = true;
 			this.artikalTab = false; 
 			this.lokacijaTab = false;
+			this.zahteviKomTab = false;
+
 		  },
 		  promeniTabArtikal : function(event) {
 			event.preventDefault();
 			this.komentarTab = false;
 			this.artikalTab = true; 
 			this.lokacijaTab = false;
+			this.zahteviKomTab = false;
+
 		  },
 		  promeniTabLokacija : function(event) {
 			event.preventDefault();
 			this.komentarTab = false;
 			this.artikalTab = false; 
 			this.lokacijaTab = true;
+			this.zahteviKomTab = false;
+
+		  },
+		  promeniZahtevKom : function(event){
+			event.preventDefault();
+			this.komentarTab = false;
+			this.artikalTab = false; 
+			this.lokacijaTab = false;
+			this.zahteviKomTab = true;
 		  },
 		dodajArtikal : function(event){
 			event.preventDefault();

@@ -132,4 +132,11 @@ public class KomentarDAO {
 		return false;
 	}
 
+	public String Odobren(boolean odobren) {
+		if(odobren) {
+			return "Odobren";
+		}else {
+			return "Odbijen";
+		}
+	}
 }

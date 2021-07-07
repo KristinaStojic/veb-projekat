@@ -23,6 +23,7 @@ import dao.PorudzbinaDAO;
 import dao.RestoranDAO;
 import dto.KomentarDTO;
 import dto.KomentarPrikazDTO;
+import dto.KomentariPrikazSviDTO;
 
 @Path("/komentari")
 public class KomentariService {
@@ -114,7 +115,7 @@ public class KomentariService {
 			}
 			
 		}
-		System.out.println("ovoliko ima komentara za odobravanje: " + komentariDTO.size());
+		//System.out.println("ovoliko ima komentara za odobravanje: " + komentariDTO.size());
 		return komentariDTO;
 	}
 	
@@ -146,5 +147,33 @@ public class KomentariService {
 			return Response.status(400).build();
 		}
 		return Response.status(200).build();
+	}
+	
+	
+	
+	@GET
+	@Path("/nadjiSveKomentare")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KomentariPrikazSviDTO> nadjiSveKomentare() {
+		System.out.println("CAOOOOOOOOOOOOOOOOOOOO");
+		KomentarDAO komentarDAO = dobaviKomentarDAO();
+		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
+		KorisnikDAO korisnikDAO =  dobaviKorisnikDAO();
+		List<KomentariPrikazSviDTO> komentariDTO = new ArrayList<>();
+		for (Komentar komentar : komentarDAO.dobaviSve()) {
+			if(komentar.getObradjen()) {
+				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
+				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
+				
+				KomentariPrikazSviDTO komDTO = new KomentariPrikazSviDTO(komentar.getId(), k.getIme() + " " + k.getPrezime(), komentar.getTekst(), komentar.getOcena(),
+						komentarDAO.Odobren(komentar.getOdobren()), idRestorana);
+				komentariDTO.add(komDTO);
+				System.out.println(komentarDAO.Odobren(komentar.getOdobren()));
+				
+			}
+			
+		}
+		System.out.println("ovoliko ima komentara koji su obradjeni: " + komentariDTO.size());
+		return komentariDTO;
 	}
 }

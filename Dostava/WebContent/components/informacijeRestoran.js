@@ -1,8 +1,8 @@
 Vue.component("informacijeRestoran", {
 	data: function() {
-		return {
-			restoran: {
-				id: "",
+ return {
+		restoran: {
+				id : "",
 				naziv: "",
 				tipRestorana: 7,
 				logo: "",
@@ -16,17 +16,27 @@ Vue.component("informacijeRestoran", {
 				postanskiBroj: "",
 				ocena: ""
 
-			},
-			artikli: null,
-			greska: "",
-			kj: "slike/logo_final2.png",
-			artikalTab: true,
-			komentarTab: false,
-			lokacijaTab: false,
-			uloga: ""
-		}
-	},
-	template: ` 
+		},
+		komentari : {
+			id: "",
+			kupac: "",
+			tekst: "",
+			ocena: "",
+			odobren: "",
+			restoran: ""
+		},
+		artikli : null,
+        greska: "",
+		idRest: "",
+        kj : "slike/logo_final2.png",
+		 artikalTab : true,
+		 komentarTab : false,
+		 lokacijaTab : false,
+		uloga: ""
+	}
+    },
+    template: ` 
+
 <div>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
 				<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
@@ -246,7 +256,39 @@ Vue.component("informacijeRestoran", {
 				</div>	
 
 				<div class="content" v-if="this.komentarTab === true">
-					<p>komentar</p>
+					<div class="row" v-for="k in this.komentari">
+								<div v-if="k.restoran === idRest && (uloga === 'ADMINISTRATOR' || uloga === 'MENADZER') " style="margin: 20px;">
+									<div class="card">
+										<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+										<b>Kupac: {{k.kupac}} </b>    			
+										</li>
+										
+										<li class="ime list-group-item">Ocena: {{k.ocena}}</li>
+										<li class="list-group-item">Komentar: {{k.tekst}}</li>
+										<li class="list-group-item">Status: {{k.odobren}}</li>
+										
+										</ul>
+									</div>
+								</div>
+
+
+
+								<div v-if="k.restoran === idRest && k.odobren === 'Odobren' && (uloga === 'KUPAC' || uloga === 'DOSTAVLJAC')" style="margin: 20px;">
+									<div class="card">
+										<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+										<b>Kupac: {{k.kupac}} </b>    			
+										</li>
+										
+										<li class="ime list-group-item">Ocena: {{k.ocena}}</li>
+										<li class="list-group-item">Komentar: {{k.tekst}}</li>
+										
+										</ul>
+									</div>
+								</div>
+					</div>
+
 				</div>
 				<div  v-if="this.lokacijaTab === true">
 					<div style="width:500px;height:200px; align:center;vertical-align:center;margin-top:200px;float:left; margin-left:270px;margin-right:0px;font-size:20px">
@@ -269,27 +311,63 @@ Vue.component("informacijeRestoran", {
 	,
 	mounted() {
 		this.uloga = window.localStorage.getItem("uloga");
-		this.restoran.id = this.$route.path.slice(21, this.$route.path.length);
-		axios
-			.get('rest/restorani/' + this.restoran.id)
-			.then(response => {
-				if (response.data != null) {
-					this.restoran = response.data;
-					this.artikli = response.data.artikli;
-				}
-			})
-			.catch(err => {
-				this.greska = "Restoran je obrisan!";
-				var x = document.getElementById("greska");
-				x.className = "snackbar show";
-				setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-				console.log(err);
-			})
+		this.restoran.id = this.$route.path.slice(21,this.$route.path.length);
+		this.idRest = this.restoran.id;
+        axios 
+        .get('rest/restorani/' + this.restoran.id)
+        .then(response => {
+            if(response.data != null)
+            {     
+                this.restoran = response.data;
+                this.artikli = response.data.artikli;
+				
+            }
+        })
+        .catch(err => {
+					this.greska = "Restoran je obrisan!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					console.log(err);
+				  })
 
 
 
-	},
-	methods: {
+		axios 
+		.get('rest/komentari/nadjiSveKomentare')
+		.then(response => {
+			if(response.data != null)
+			{     
+				this.komentari = response.data; 
+				console.log(this.idRest)  
+			}
+		})
+        
+    },
+    methods: {
+		pregledKorpe : function(event){
+				console.log(this.artikli)
+				event.preventDefault();
+			    axios 
+			   .post('rest/korisnici/popunjavanjeKorpe', this.artikli)
+			   .then(response => {
+			        	
+					if(response.data.length == 1)
+		            {     
+		                   this.greska = "Morate dodati barem jedan artikal!";
+		                   var x = document.getElementById("greska");
+		                   x.className = "snackbar show";
+		                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
+		            }else{
+			           this.greska = "Uspešno!";
+			           var x = document.getElementById("greska");
+			           x.className = "snackbar show";
+			           setTimeout(function(){x.className = x.className.replace("show","");},1800);
+			           this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))}
+   				})
+    },
+
+
 		brisanje(ime) {
 
 			const artikal = { naziv: ime, kolicinaKorpa: 0, ukupnoCena: 0 }
@@ -311,25 +389,6 @@ Vue.component("informacijeRestoran", {
 					this.$router.push("/")
 				})
 
-		},
-		pregledKorpe: function(event) {
-			console.log(this.artikli)
-			event.preventDefault();
-			axios
-				.get('rest/korisnici/proveraKorpe')
-				.then(response => {
-					this.greska = "Uspešno!";
-					var x = document.getElementById("greska");
-					x.className = "snackbar show";
-					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-					this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))
-				})
-				.catch(err => {
-					this.greska = "Morate dodati barem jedan artikal!";
-					var x = document.getElementById("greska");
-					x.className = "snackbar show";
-					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-				})
 		},
 		menadzerRestoran: function(event) {
 			event.preventDefault();
