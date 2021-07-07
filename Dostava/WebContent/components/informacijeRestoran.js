@@ -17,8 +17,17 @@ Vue.component("informacijeRestoran", {
 				ocena: ""
 
 		},
+		komentari : {
+			id: "",
+			kupac: "",
+			tekst: "",
+			ocena: "",
+			odobren: "",
+			restoran: ""
+		},
 		artikli : null,
         greska: "",
+		idRest: "",
         kj : "slike/logo_final2.png",
 		 artikalTab : true,
 		 komentarTab : false,
@@ -246,7 +255,23 @@ Vue.component("informacijeRestoran", {
 				</div>	
 
 				<div class="content" v-if="this.komentarTab === true">
-					<p>komentar</p>
+					<div class="row" v-for="k in this.komentari">
+								<div v-if="k.restoran === idRest" style="margin: 20px;">
+									<div class="card">
+										<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+										<b>Kupac: {{k.kupac}} </b>    			
+										</li>
+										
+										<li class="ime list-group-item">Ocena: {{k.ocena}}</li>
+										<li class="list-group-item">Komentar: {{k.tekst}}</li>
+										<li class="list-group-item">Status: {{k.odobren}}</li>
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+
 				</div>
 				<div  v-if="this.lokacijaTab === true">
 					<div style="width:500px;height:200px; align:center;vertical-align:center;margin-top:200px;float:left; margin-left:270px;margin-right:0px;font-size:20px">
@@ -270,6 +295,7 @@ Vue.component("informacijeRestoran", {
     mounted () {
 		this.uloga = window.localStorage.getItem("uloga");
 		this.restoran.id = this.$route.path.slice(21,this.$route.path.length);
+		this.idRest = this.restoran.id;
         axios 
         .get('rest/restorani/' + this.restoran.id)
         .then(response => {
@@ -277,8 +303,7 @@ Vue.component("informacijeRestoran", {
             {     
                 this.restoran = response.data;
                 this.artikli = response.data.artikli;
-				console.log(this.restoran.geografskaDuzina)
-				console.log(this.restoran.geografskaSirina)
+				
             }
         })
         .catch(err => {
@@ -288,6 +313,18 @@ Vue.component("informacijeRestoran", {
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
 					console.log(err);
 				  })
+
+
+
+		axios 
+		.get('rest/komentari/nadjiSveKomentare')
+		.then(response => {
+			if(response.data != null)
+			{     
+				this.komentari = response.data; 
+				console.log(this.idRest)  
+			}
+		})
         
     },
     methods: {
