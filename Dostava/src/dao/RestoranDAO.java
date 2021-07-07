@@ -261,5 +261,17 @@ public class RestoranDAO {
 		return false;
 	}
 
+	public Artikal nadjiArtikal(String restoran, String naziv) {
+		Restoran r = dobaviRestoran(restoran);
+		if(r==null) return null;
+		
+		for(Artikal a : r.getArtikliUPonudi()) {
+			if(a.getNaziv().equals(naziv)) {
+				return a;
+			}
+		}
+		return null;
+	}
+
 
 }

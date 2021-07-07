@@ -183,7 +183,7 @@ public class KorisnikDAO {
 				korisnik.datumRodjenja, korisnik.uloga, 0);
 		noviKorisnik.setBlokiran(0);
 		System.out.println("novi korisnika: " + noviKorisnik.getBlokiran());
-		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0);
+		Korpa korpa = new Korpa(new ArrayList<ArtikalKorpa>(), noviKorisnik.getId(), 0.0, "");
 		Kupac noviKupac = new Kupac(noviKorisnik, new ArrayList<Porudzbina>(), korpa, 0.0, tipKupca);
 		noviKupac.setBlokiran(0);
 		noviKupac.setDatumiOtkazivanjaPorudzbina(new ArrayList<Date>());
@@ -457,6 +457,7 @@ public class KorisnikDAO {
 
 		return null;
 	}
+
 	public String nadjiTipKupca(Kupac k) {
 		for (Kupac kupac : kupci) {
 			if (kupac.getId().equals(k.getId())) {
@@ -472,6 +473,7 @@ public class KorisnikDAO {
 
 		return null;
 	}
+
 	public Double nadjiBrojBodovaKupca(Korisnik k) {
 		for (Kupac kupac : kupci) {
 			if (kupac.getId().equals(k.getId())) {
@@ -643,18 +645,18 @@ public class KorisnikDAO {
 		}
 	}
 
-	public boolean dodajKorpu(Korpa korpa) {
-
-		for (Kupac k : kupci) {
-			if (k.getId().equals(korpa.getKorisnik())) {
-				k.setKorpa(korpa);
-				sacuvajPodatke();
-				return true;
-			}
-
-		}
-		return false;
-	}
+//	public boolean dodajKorpu(Korpa korpa) {
+//
+//		for (Kupac k : kupci) {
+//			if (k.getId().equals(korpa.getKorisnik())) {
+//				k.setKorpa(korpa);
+//				sacuvajPodatke();
+//				return true;
+//			}
+//
+//		}
+//		return false;
+//	}
 
 	public Kupac dobaviKupca(String id) {
 
@@ -701,20 +703,26 @@ public class KorisnikDAO {
 		for (Kupac k : kupci) {
 			if (k.getId().equals(id)) {
 				Korpa korpa = k.getKorpa();
-
+				if(korpa.getArtikli().isEmpty()) {
+					korpa.setRestoran(promena.restoran);
+				}else {
+					if(!korpa.getRestoran().equals(promena.restoran)) {
+						korpa = new Korpa(new ArrayList<ArtikalKorpa>(),id, 0.0, promena.restoran);
+					}
+				}
+				
 				for (ArtikalKorpa ak : korpa.getArtikli()) {
 					Artikal a = ak.getArtikal();
 					if (a.getNaziv().equals(promena.naziv)) {
 
 						korpa.smanjiCenu(a.getCena() * ak.getKolicina());
-						korpa.povecajCenu(promena.ukupnoCena);
+						korpa.povecajCenu(promena.cena * promena.kolicinaKorpa);
 						ak.setKolicina(promena.kolicinaKorpa);
 						sacuvajPodatke();
 						return true;
 					}
 
 				}
-
 			}
 		}
 
@@ -743,13 +751,13 @@ public class KorisnikDAO {
 							System.out.println("Broj otkazivanja: " + k.getDatumiOtkazivanjaPorudzbina().size());
 							sacuvajPodatke();
 							return true;
-						} else if(status == Status.DOSTAVLJENA) {
+						} else if (status == Status.DOSTAVLJENA) {
 							System.out.println("evo ovde je jer je dostavljena");
 							p.setDostavljac("");
 							p.setStatus(status);
 							sacuvajPodatke();
 							return true;
-						}else {
+						} else {
 							p.setStatus(status);
 							sacuvajPodatke();
 							return true;
@@ -826,55 +834,95 @@ public class KorisnikDAO {
 		}
 		return false;
 	}
-	
+
 	public Kupac nadjiKupca(String id) {
 		for (Kupac kupac : kupci) {
-			if(kupac.getId().equals(id)) {
+			if (kupac.getId().equals(id)) {
 				return kupac;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public Boolean postojiKupac(List<KorisnikPrikazDTO> postojeci, String idKupca) {
 		for (KorisnikPrikazDTO korisnikPrikazDTO : postojeci) {
-			if(korisnikPrikazDTO.getId().equals(idKupca)) {
+			if (korisnikPrikazDTO.getId().equals(idKupca)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
-	public List<Kupac> dobaviSveKupce(){
+
+	public List<Kupac> dobaviSveKupce() {
 		return kupci;
 	}
-	
+
 	public String restoranMenadzera(String id) {
 		for (Menadzer m : menadzeri) {
-			if(m.getId().equals(id)) {
+			if (m.getId().equals(id)) {
 				return m.getRestoran().getId();
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public boolean azurirajOcenuRestorana(String idRestorana, Integer ocena) {
 		for (Menadzer men : menadzeri) {
-			if(men.getRestoran().getId().equals(idRestorana)) {
+			if (men.getRestoran().getId().equals(idRestorana)) {
 				System.out.println("azuriram ocjenu menadzera");
-				if(men.getRestoran().getOcena() == 0) {
+				if (men.getRestoran().getOcena() == 0) {
 					men.getRestoran().setOcena(men.getRestoran().getOcena() + ocena);
-				}else {
-					men.getRestoran().setOcena((men.getRestoran().getOcena() + ocena)/2);
+				} else {
+					men.getRestoran().setOcena((men.getRestoran().getOcena() + ocena) / 2);
 				}
 				sacuvajPodatke();
 				return true;
 			}
 		}
-		
+
 		return false;
+	}
+
+	public void dodajArtikalUKorpu(String id, Artikal a, Integer kolicinaKorpa) {
+
+		for (Kupac k : kupci) {
+			if (k.getId().equals(id)) {
+				Korpa korpa = k.getKorpa();
+
+				korpa.povecajCenu(a.getCena() * kolicinaKorpa);
+				korpa.dodajArtikal(a, kolicinaKorpa);
+				sacuvajPodatke();
+			}
+		}
+	}
+
+	public Integer dobaviKolicinuArtiklaIzKorpe(String idKorisnika, String idRestorana, String nazivArtikla) {
+
+		for (Kupac k : kupci) {
+			if (k.getId().equals(idKorisnika)) {
+				Korpa korpa = k.getKorpa();
+				if (korpa == null)
+					return 0;
+				for (ArtikalKorpa ak : korpa.getArtikli()) {
+					if (ak.getArtikal().getNaziv().equals(nazivArtikla)) {
+						return ak.getKolicina();
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	public void ukloniKorpu(String id) {
+		for (Kupac k : kupci) {
+			if (k.getId().equals(id)) {
+				k.setKorpa(new Korpa(new ArrayList<ArtikalKorpa>(), id, 0.0, ""));
+				sacuvajPodatke();
+				return;
+			}
+		}
 	}
 }

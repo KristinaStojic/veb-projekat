@@ -9,6 +9,7 @@ public class ArtikliKorpaDTO {
 	public Integer kolicinaKorpa;
 	public Double ukupnoCena;
 	public String restoran;
+	public String opis;
 	public String slika;
 
 	public ArtikliKorpaDTO() {

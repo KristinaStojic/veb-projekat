@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 import beans.Artikal;
 import beans.Artikal.TipArtikla;
+import beans.Korisnik.Uloga;
 import beans.ArtikalKorpa;
 import beans.Dostavljac;
 import beans.Korisnik;
@@ -79,7 +80,7 @@ public class KorisniciService {
 
 		return restorani;
 	}
-	
+
 	private PorudzbinaDAO dobaviPorudzbinaDAO() {
 
 		PorudzbinaDAO porudzbine = (PorudzbinaDAO) sc.getAttribute("porudzbine");
@@ -124,9 +125,12 @@ public class KorisniciService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void logout() {
-
 		HttpSession session = request.getSession();
 		if (session != null && session.getAttribute("prijavljeniKorisnik") != null) {
+			Korisnik k = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik"));
+			if(k.getUloga() == Uloga.KUPAC) {
+				dobaviKorisnikDAO().ukloniKorpu(k.getId());
+			}
 			session.invalidate();
 		}
 	}
@@ -268,11 +272,11 @@ public class KorisniciService {
 				Lokacija l = r.getLokacija();
 				List<ArtikliDTO> artikli = new ArrayList<>();
 				for (Artikal a : r.getArtikliUPonudi()) {
-					if(a.getLogickoBrisanje() == 0) {
+					if (a.getLogickoBrisanje() == 0) {
 						artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
 								a.getKolicina().toString(), a.getOpis(), a.getSlika()));
 					}
-					
+
 				}
 				return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(),
 						l.getGeografskaDuzina(), l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(),
@@ -308,41 +312,56 @@ public class KorisniciService {
 		return Response.status(200).build();
 	}
 
-	@POST
-	@Path("/popunjavanjeKorpe")
+//	@POST
+//	@Path("/popunjavanjeKorpe") //menja se
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public Response popunjavanjeKorpe(List<ArtikliDTO> artikli) {
+//		KorisnikDAO dao = dobaviKorisnikDAO();
+//		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
+//		if (idKorisnika == null)
+//			return Response.status(400).build();
+//
+//		List<ArtikalKorpa> proizvodi = new ArrayList<>();
+//		Double cena = 0.0;
+//
+//		for (ArtikliDTO a : artikli) {
+//			if (a.kolicinaKorpa > 0) {
+//				proizvodi.add(
+//						new ArtikalKorpa(new Artikal(a.naziv, Double.parseDouble(a.cena), tipArtiklaEnum(a.tipArtikla),
+//								a.restoran, Double.parseDouble(a.kolicina), a.opis, a.slika), a.kolicinaKorpa));
+//				cena += (a.kolicinaKorpa * Double.parseDouble(a.cena));
+//			}
+//		}
+//
+//		Korpa korpa = new Korpa(proizvodi, idKorisnika, cena, artikli.get(0).restoran);
+//		if (proizvodi.isEmpty()) {
+//			return Response.status(200).entity("a").build();
+//		}
+//
+//		if (dao.dodajKorpu(korpa)) {
+//
+//			return Response.status(200).entity("aa").build();
+//		}
+//		return Response.status(400).build();
+//
+//	}
+
+	@GET
+	@Path("/proveraKorpe") 
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response popunjavanjeKorpe(List<ArtikliDTO> artikli) {
+	public Response proveraKorpe() {
 		KorisnikDAO dao = dobaviKorisnikDAO();
-		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
-		if (idKorisnika == null)
-			return Response.status(400).build();
-
-		List<ArtikalKorpa> proizvodi = new ArrayList<>();
-		Double cena = 0.0;
-
-		for (ArtikliDTO a : artikli) {
-			if (a.kolicinaKorpa > 0) {
-				proizvodi.add(
-						new ArtikalKorpa(new Artikal(a.naziv, Double.parseDouble(a.cena), tipArtiklaEnum(a.tipArtikla),
-								a.restoran, Double.parseDouble(a.kolicina), a.opis, a.slika), a.kolicinaKorpa));
-				cena += (a.kolicinaKorpa * Double.parseDouble(a.cena));
-			}
-		}
-
-		Korpa korpa = new Korpa(proizvodi, idKorisnika, cena);
-		if (proizvodi.isEmpty()) {
-			return Response.status(200).entity("a").build();
-		}
-
-		if (dao.dodajKorpu(korpa)) {
-
-			return Response.status(200).entity("aa").build();
-		}
-		return Response.status(400).build();
-
+		String idKupca = ((Kupac) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
+		if (idKupca == null)
+			return Response.status(400).build(); 
+		
+		if(dao.dobaviKupca(idKupca).getKorpa().getArtikli().isEmpty())
+			return Response.status(400).build(); 
+			
+		return Response.status(200).build();
 	}
-
+	
 	public TipArtikla tipArtiklaEnum(String tekst) {
 		if (tekst.equals("Jelo")) {
 			return TipArtikla.JELO;
@@ -389,54 +408,22 @@ public class KorisniciService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response azurirajKorpu(@PathParam("id") String id, ArtikliKorpaDTO promena) {
 		KorisnikDAO dao = dobaviKorisnikDAO();
-		System.out.println("došao sam");
-		if (!dao.azurirajKorpu(promena, id)) {
+		RestoranDAO restoranDAO = dobaviRestoranDAO();
+		Artikal a = restoranDAO.nadjiArtikal(promena.restoran, promena.naziv);
+		if (a == null)
 			return Response.status(400).build();
+		
+		if (!dao.azurirajKorpu(promena, id)) {
+			dao.dodajArtikalUKorpu(id,a, promena.kolicinaKorpa);
 		}
 		return Response.status(200).build();
 
 	}
-	
-	
-	/*@GET
-	@Path("/nadjiPorudzbine/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id) {
-		System.out.println("ccaoooo");
-		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
-		porudzbineKupca.clear();
-		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
-		PorudzbinePrikazDTO porDTO = null;
-		System.out.println(porudzbineKupca.size());
-		
-		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
-			if(porudzbina.getKupac().equals(id)) {
-				System.out.println("uslo");
-				porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),porudzbina.getRestoran().getNaziv(),porudzbina.getCena(),
-						porudzbina.getDatumVreme(),porudzbina.getStatus());
-				
-				List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
-				for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-					artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-							a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
-				}
-				
-				porDTO.setArtikli(artikli);
-				porudzbineKupca.add(porDTO);
-			}
-			
-			
-		}
-		
-		return porudzbineKupca;
-	}
-	*/
-	
-	
+
 	@GET
 	@Path("/nadjiPorudzbine/{id}/{uloga}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id,@PathParam("uloga") String uloga) {
+	public List<PorudzbinePrikazDTO> nadjiPorudzbine(@PathParam("id") String id, @PathParam("uloga") String uloga) {
 		List<PorudzbinePrikazDTO> porudzbineKupca = new ArrayList<>();
 		porudzbineKupca.clear();
 		PorudzbinaDAO porudzbineDAO = dobaviPorudzbinaDAO();
@@ -446,158 +433,163 @@ public class KorisniciService {
 		for (Porudzbina porudzbina : porudzbineDAO.dobaviPorudzbine()) {
 			String nazivRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getNaziv();
 			String tipRestorana = restoranDAO.dobaviRestoran(porudzbina.getRestoran()).getTipRestorana().toString();
-			if(uloga.equals("KUPAC")) {
-				if(porudzbina.getKupac().equals(id)) {
-					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
-							porudzbina.getDatumVreme(),porudzbina.getStatus());
+			if (uloga.equals("KUPAC")) {
+				if (porudzbina.getKupac().equals(id)) {
+					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(), porudzbina.getKupac(), nazivRestorana,
+							porudzbina.getCena(), porudzbina.getDatumVreme(), porudzbina.getStatus());
 					for (Restoran restoran : restoranDAO.dobaviRestorane()) {
-						if(restoran.getId().equals(porudzbina.getRestoran())) {
+						if (restoran.getId().equals(porudzbina.getRestoran())) {
 							porDTO.setTipRestorana(restoran.getTipRestorana().toString());
 						}
 					}
 					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(),
+								a.getArtikal().getKolicina(), a.getArtikal().getSlika(), a.getKolicina(),
+								a.getArtikal().getTipArtikla()));
 					}
-					
+
 					porDTO.setArtikli(artikli);
 					porudzbineKupca.add(porDTO);
 				}
-			}else if(uloga.equals("DOSTAVLJAC")) {
-				if(porudzbina.getStatus().toString().equals("CEKA_DOSTAVU")) {
-					
-					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
-							porudzbina.getDatumVreme(),porudzbina.getStatus());
+			} else if (uloga.equals("DOSTAVLJAC")) {
+				if (porudzbina.getStatus().toString().equals("CEKA_DOSTAVU")) {
+
+					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(), porudzbina.getKupac(), nazivRestorana,
+							porudzbina.getCena(), porudzbina.getDatumVreme(), porudzbina.getStatus());
 					for (Restoran restoran : restoranDAO.dobaviRestorane()) {
-						if(restoran.getId().equals(porudzbina.getRestoran())) {
+						if (restoran.getId().equals(porudzbina.getRestoran())) {
 							porDTO.setTipRestorana(restoran.getTipRestorana().toString());
 						}
 					}
 					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(),
+								a.getArtikal().getKolicina(), a.getArtikal().getSlika(), a.getKolicina(),
+								a.getArtikal().getTipArtikla()));
 					}
-					
+
 					porDTO.setArtikli(artikli);
 					porudzbineKupca.add(porDTO);
 				}
-				
-				if(porudzbina.getDostavljac().equals(id)) {
-					
-					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
-							porudzbina.getDatumVreme(),porudzbina.getStatus());
-					
+
+				if (porudzbina.getDostavljac().equals(id)) {
+
+					porDTO = new PorudzbinePrikazDTO(porudzbina.getId(), porudzbina.getKupac(), nazivRestorana,
+							porudzbina.getCena(), porudzbina.getDatumVreme(), porudzbina.getStatus());
+
 					List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 					for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-								a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+						artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(),
+								a.getArtikal().getKolicina(), a.getArtikal().getSlika(), a.getKolicina(),
+								a.getArtikal().getTipArtikla()));
 					}
-					
+
 					porDTO.setTipRestorana(tipRestorana);
 					porDTO.setArtikli(artikli);
 					porudzbineKupca.add(porDTO);
 				}
 			}
-			
-			else if(uloga.equals("MENADZER")) {
+
+			else if (uloga.equals("MENADZER")) {
 				for (Menadzer menadzer : korisniciDAO.dobaviSveMenadzere()) {
-					if(menadzer.getId().equals(id)) {
-						if(menadzer.getRestoran() != null) {
-							if(porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
-								System.out.println("restoran menadzera " + menadzer.getRestoran().getId()  + " restoran porudzbina " + porudzbina.getRestoran());
-								porDTO = new PorudzbinePrikazDTO(porudzbina.getId(),porudzbina.getKupac(),nazivRestorana,porudzbina.getCena(),
-										porudzbina.getDatumVreme(),porudzbina.getStatus());
-								
-								
+					if (menadzer.getId().equals(id)) {
+						if (menadzer.getRestoran() != null) {
+							if (porudzbina.getRestoran().equals(menadzer.getRestoran().getId())) {
+								System.out.println("restoran menadzera " + menadzer.getRestoran().getId()
+										+ " restoran porudzbina " + porudzbina.getRestoran());
+								porDTO = new PorudzbinePrikazDTO(porudzbina.getId(), porudzbina.getKupac(),
+										nazivRestorana, porudzbina.getCena(), porudzbina.getDatumVreme(),
+										porudzbina.getStatus());
+
 								List<ArtikliPorudzbineDTO> artikli = new ArrayList<>();
 								for (ArtikalKorpa a : porudzbina.getPoruceniArtikli()) {
-									artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(), a.getArtikal().getCena(), a.getArtikal().getKolicina(),
-											a.getArtikal().getSlika(), a.getKolicina(), a.getArtikal().getTipArtikla()));
+									artikli.add(new ArtikliPorudzbineDTO(a.getArtikal().getNaziv(),
+											a.getArtikal().getCena(), a.getArtikal().getKolicina(),
+											a.getArtikal().getSlika(), a.getKolicina(),
+											a.getArtikal().getTipArtikla()));
 								}
-								
+
 								porDTO.setArtikli(artikli);
 								porudzbineKupca.add(porDTO);
-							}}}}}
-			
+							}
+						}
 					}
-					
+				}
+			}
+
+		}
+
 		return porudzbineKupca;
 	}
-	
-	
+
 	@GET
 	@Path("/nadjiKupce/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KorisnikPrikazDTO> nadjiKupce(@PathParam("id") String idMenadzera) {
-		
-		PorudzbinaDAO porDAO  = dobaviPorudzbinaDAO();
+
+		PorudzbinaDAO porDAO = dobaviPorudzbinaDAO();
 		KorisnikDAO korDAO = dobaviKorisnikDAO();
 		KorisnikPrikazDTO korDTO = null;
-		
+
 		List<KorisnikPrikazDTO> sviKupci = new ArrayList<KorisnikPrikazDTO>();
-		
-		
+
 		for (Porudzbina p : porDAO.dobaviPorudzbine()) {
 			for (Menadzer m : korDAO.dobaviSveMenadzere()) {
-				if(m.getId().equals(idMenadzera)) {
-					if(p.getRestoran().equals(m.getRestoran().getId())) {
-						if(sviKupci.size() != 0) {					
-							if(!korDAO.postojiKupac(sviKupci, p.getKupac())) {
-								Kupac kupac  = korDAO.nadjiKupca(p.getKupac());
-								korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
-										kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
-										korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
+				if (m.getId().equals(idMenadzera)) {
+					if (p.getRestoran().equals(m.getRestoran().getId())) {
+						if (sviKupci.size() != 0) {
+							if (!korDAO.postojiKupac(sviKupci, p.getKupac())) {
+								Kupac kupac = korDAO.nadjiKupca(p.getKupac());
+								korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(),
+										kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()),
+										kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(),
+										kupac.getPrezime(), korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
 								List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
 								porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
 								korDTO.setPorudzbine(porDTO);
 								sviKupci.add(korDTO);
 							}
-						}
-						else {
-							Kupac kupac  = korDAO.nadjiKupca(p.getKupac());
-							korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(), kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()), 
-									kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(), kupac.getPrezime(), 
-									korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
-							
+						} else {
+							Kupac kupac = korDAO.nadjiKupca(p.getKupac());
+							korDTO = new KorisnikPrikazDTO(kupac.getId(), kupac.getKorisnickoIme(),
+									kupac.getIme() + kupac.getPrezime(), korDAO.nadjiPol(kupac.getPol()),
+									kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(),
+									kupac.getPrezime(), korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
+
 							List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
 							porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
 							korDTO.setPorudzbine(porDTO);
 							sviKupci.add(korDTO);
 						}
-				}
+					}
 				}
 			}
 		}
 		return sviKupci;
 	}
-	
-	
-	
+
 	@GET
 	@Path("/nadjiSumnjiveKorisnike/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KorisnikPrikazDTO> nadjiSumnjiveKorisnike() {
 		KorisnikDAO korisniciDAO = dobaviKorisnikDAO();
-		System.out.println("usao sam :D");
 		String tipKupca = null;
 		Double brojBodovaKupca = 0.0;
 		List<KorisnikPrikazDTO> korisniciDTO = new ArrayList<KorisnikPrikazDTO>();
-		
+
 		for (Kupac k : korisniciDAO.dobaviSveKupce()) {
 			Integer brojacOtkaza = 0;
-			if(k.getDatumiOtkazivanjaPorudzbina().size() > 0) {
+			if (k.getDatumiOtkazivanjaPorudzbina().size() > 0) {
 				for (Date otkaz : k.getDatumiOtkazivanjaPorudzbina()) {
-					Date pocetakMeseca =  new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24));
-					if(otkaz.compareTo(pocetakMeseca) > 0) {
+					Date pocetakMeseca = new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24));
+					if (otkaz.compareTo(pocetakMeseca) > 0) {
 						brojacOtkaza++;
 					}
 				}
 			}
-			
-			
-			if(brojacOtkaza > 5) {
+
+			if (brojacOtkaza > 5) {
 				String imePrz = k.getIme() + " " + k.getPrezime();
 
 				KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(), k.getKorisnickoIme(), imePrz,
@@ -612,11 +604,10 @@ public class KorisniciService {
 					korDTO.setTipKupca(tipKupca);
 
 				}
-				
+
 				korisniciDTO.add(korDTO);
 			}
 		}
-		
 
 		return korisniciDTO;
 	}
