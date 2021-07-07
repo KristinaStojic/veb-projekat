@@ -19,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
+import beans.Korisnik;
+import beans.Korisnik.Uloga;
 import beans.Lokacija;
 import beans.Restoran;
 import dao.KorisnikDAO;
@@ -52,8 +54,6 @@ public class RestoraniService {
 
 		return restorani;
 	}
-	
-	
 
 	private KorisnikDAO dobaviKorisnikDAO() {
 
@@ -79,7 +79,8 @@ public class RestoraniService {
 					+ r.getLokacija().getMesto();
 			Lokacija l = r.getLokacija();
 			restoraniDTO.add(new RestoranPrikazDTO(r.getId(), r.getNaziv(), r.tipString(), r.statusString(), lokacija,
-					r.getLogo(), r.getOcena().toString(),l.getGeografskaDuzina(),l.getGeografskaSirina(),l.getUlica(),l.getBroj(),l.getMesto(),l.getPostanskiBroj() ));
+					r.getLogo(), r.getOcena().toString(), l.getGeografskaDuzina(), l.getGeografskaSirina(),
+					l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj()));
 		}
 
 		return restoraniDTO;
@@ -100,8 +101,8 @@ public class RestoraniService {
 	public RestoranDodavanjeDTO dodajRestoran(RestoranDodavanjeDTO r) {
 		Lokacija lokacija = new Lokacija(r.geografskaDuzina, r.geografskaSirina, r.ulica, r.broj, r.mesto,
 				r.postanskiBroj);
-		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, r.naziv, r.tipRestorana,
-				new ArrayList<Artikal>(), true, lokacija, r.logo, 0.0);
+		Restoran noviRestoran = new Restoran(UUID.randomUUID().toString().replace("-", "").substring(0, 10), 0, r.naziv,
+				r.tipRestorana, new ArrayList<Artikal>(), true, lokacija, r.logo, 0.0);
 
 		RestoranDAO restorani = dobaviRestoranDAO();
 		Restoran dodat = restorani.dodajRestoran(noviRestoran);
@@ -130,7 +131,7 @@ public class RestoraniService {
 		Double kolicina = 0.0;
 		if (!a.kolicina.equals(""))
 			kolicina = Double.parseDouble(a.kolicina);
-		Artikal artikal = new Artikal(0,a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
+		Artikal artikal = new Artikal(0, a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
 				a.slika);
 
 		if (!restorani.dodajArtikal(a.restoran, artikal) || !korisnici.dodarArtikal(artikal, a.restoran)) {
@@ -146,7 +147,7 @@ public class RestoraniService {
 	public RestoranMenadzerDTO nadjiRestoran(@PathParam("id") String id) {
 		RestoranDAO dao = dobaviRestoranDAO();
 		Restoran r = dao.dobaviRestoran(id);
-
+		KorisnikDAO kDao = dobaviKorisnikDAO();
 		if (r == null || r.getLogickoBrisanje() == 1) {
 			return null;
 		}
@@ -155,14 +156,25 @@ public class RestoraniService {
 		List<ArtikliDTO> artikli = new ArrayList<>();
 		for (Artikal a : r.getArtikliUPonudi()) {
 			System.out.println(a.getLogickoBrisanje());
-			if(a.getLogickoBrisanje() == 0) {
-			artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
-					a.getKolicina().toString(), a.getOpis(), a.getSlika()));
+			if (a.getLogickoBrisanje() == 0) {
+				artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
+						a.getKolicina().toString(), a.getOpis(), a.getSlika()));
 			}
 		}
+		Korisnik k = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik"));
+		if (k != null) {
+			if (k.getUloga() == Uloga.KUPAC) {
+				for (ArtikliDTO a : artikli) {
+
+					a.kolicinaKorpa = kDao.dobaviKolicinuArtiklaIzKorpe(k.getId(), id, a.naziv);
+				}
+			}
+		}
+
 		return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(), l.getGeografskaDuzina(),
 				l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj(),
 				r.getOcena().toString(), r.getStatus(), artikli);
+
 	}
 
 	@GET
@@ -209,8 +221,7 @@ public class RestoraniService {
 
 		return Response.status(200).build();
 	}
-	
-	
+
 	@DELETE
 	@Path("/obrisiRestoran/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -218,23 +229,22 @@ public class RestoraniService {
 	public Response obrisiRestoran(@PathParam("id") String idRestorana) {
 		RestoranDAO restorani = dobaviRestoranDAO();
 		restorani.obrisiRestoran(idRestorana);
-		
+
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		korisnici.obrisiRestoranMenadzeru(idRestorana);
-		
+
 		return Response.status(200).build();
 	}
-	
-	
+
 	@DELETE
 	@Path("/obrisiArtikal/{id}/{restoran}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response obrisiArtikal(@PathParam("id") String nazivArtikla,@PathParam("restoran") String idRestorana) {
+	public Response obrisiArtikal(@PathParam("id") String nazivArtikla, @PathParam("restoran") String idRestorana) {
 		RestoranDAO restorani = dobaviRestoranDAO();
 		restorani.obrisiArtikal(nazivArtikla, idRestorana);
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
-		korisnici.obrisiArtikleuMenadzeru(nazivArtikla,idRestorana);
+		korisnici.obrisiArtikleuMenadzeru(nazivArtikla, idRestorana);
 		return Response.status(200).build();
 	}
 }

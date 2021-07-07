@@ -1,8 +1,8 @@
 Vue.component("informacijeRestoran", {
-    data: function () {
-      return {
-		restoran: {
-				id : "",
+	data: function() {
+		return {
+			restoran: {
+				id: "",
 				naziv: "",
 				tipRestorana: 7,
 				logo: "",
@@ -16,17 +16,17 @@ Vue.component("informacijeRestoran", {
 				postanskiBroj: "",
 				ocena: ""
 
-		},
-		artikli : null,
-        greska: "",
-        kj : "slike/logo_final2.png",
-		 artikalTab : true,
-		 komentarTab : false,
-		 lokacijaTab : false,
-		uloga: ""
-	}
-    },
-    template: ` 
+			},
+			artikli: null,
+			greska: "",
+			kj: "slike/logo_final2.png",
+			artikalTab: true,
+			komentarTab: false,
+			lokacijaTab: false,
+			uloga: ""
+		}
+	},
+	template: ` 
 <div>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light navigacija top">
 				<a class="navbar-brand" href="http://localhost:8080/DostavaREST/#/">
@@ -233,11 +233,11 @@ Vue.component("informacijeRestoran", {
 								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li></ul>
 								<li  v-if="uloga === 'KUPAC'" class="list-group-item"> 
 									
-									<button  v-if="a.kolicinaKorpa > '1'" @click="a.kolicinaKorpa--"  style="margin-left:50px" class="okruglo">-</button>
+									<button  v-if="a.kolicinaKorpa > '1'"   @click="a.kolicinaKorpa--"  v-on:click="azurirajKorpu(a)"  style="margin-left:50px" class="okruglo">-</button>
 									<button style="margin-left:50px" v-else class="okruglo">-</button>
-									<input type="number" min="0" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa">
-									<button @click="a.kolicinaKorpa++" class="okruglo">+</button>
-									<a @click="a.kolicinaKorpa = 0" href="#"  style="margin-left:10px; text-decoration: underline; color:black;">Ukloni</a>
+									<input type="number" min="0"" style="width:50px; text-align:center;" v-model="a.kolicinaKorpa" v-on:keyup="azurirajKorpu(a)">
+									<button   @click="a.kolicinaKorpa++" v-on:click="azurirajKorpu(a)"  class="okruglo">+</button>
+									<a    @click="a.kolicinaKorpa = 0" v-on:click="brisanje(a.naziv)" href="#"  style="margin-left:10px; text-decoration: underline; color:black;">Ukloni</a>
 								
 								</li>
 							</div>
@@ -266,132 +266,144 @@ Vue.component("informacijeRestoran", {
 	</div>
 </div>
   `
-    ,
-    mounted () {
+	,
+	mounted() {
 		this.uloga = window.localStorage.getItem("uloga");
-		this.restoran.id = this.$route.path.slice(21,this.$route.path.length);
-        axios 
-        .get('rest/restorani/' + this.restoran.id)
-        .then(response => {
-            if(response.data != null)
-            {     
-                this.restoran = response.data;
-                this.artikli = response.data.artikli;
-				console.log(this.restoran.geografskaDuzina)
-				console.log(this.restoran.geografskaSirina)
-            }
-        })
-        .catch(err => {
-					this.greska = "Restoran je obrisan!";
-					var x = document.getElementById("greska");
-					x.className = "snackbar show";
-					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-					console.log(err);
-				  })
-        
-    },
-    methods: {
-		pregledKorpe : function(event){
-				console.log(this.artikli)
-				event.preventDefault();
-			    axios 
-			   .post('rest/korisnici/popunjavanjeKorpe', this.artikli)
-			   .then(response => {
-			        	
-					if(response.data.length == 1)
-		            {     
-		                   this.greska = "Morate dodati barem jedan artikal!";
-		                   var x = document.getElementById("greska");
-		                   x.className = "snackbar show";
-		                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
-		            }else{
-			           this.greska = "Uspešno!";
-			           var x = document.getElementById("greska");
-			           x.className = "snackbar show";
-			           setTimeout(function(){x.className = x.className.replace("show","");},1800);
-			           this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))}
-   				})
-				.catch(err => {
-					this.greska = "Neuspešno popunjavanje korpe!";
-					var x = document.getElementById("greska");
-					x.className = "snackbar show";
-					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-				  })
+		this.restoran.id = this.$route.path.slice(21, this.$route.path.length);
+		axios
+			.get('rest/restorani/' + this.restoran.id)
+			.then(response => {
+				if (response.data != null) {
+					this.restoran = response.data;
+					this.artikli = response.data.artikli;
+				}
+			})
+			.catch(err => {
+				this.greska = "Restoran je obrisan!";
+				var x = document.getElementById("greska");
+				x.className = "snackbar show";
+				setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+				console.log(err);
+			})
+
+
+
+	},
+	methods: {
+		brisanje(ime) {
+
+			const artikal = { naziv: ime, kolicinaKorpa: 0, ukupnoCena: 0 }
+			this.azurirajKorpu(artikal);
+
 		},
-    	menadzerRestoran : function(event){
-            event.preventDefault();
-            axios 
-           .get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
-           .then(response => {
-               if(response.data.length == 0)
-               {     
-                   this.greska = "Trenutno Vam nije dodeljen nijedan restoran!";
-                   var x = document.getElementById("greska");
-                   x.className = "snackbar show";
-                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
-               }else{
-                   this.$router.push("/pregledRestorana")
-               }
-           })
-        },
-		promeniTabKomentar : function(event) {
+		azurirajKorpu(artikal) {
+			if (!artikal.kolicinaKorpa) { console.log("izbacio sam"); return }
+			axios
+				.post('/DostavaREST/rest/korisnici/azurirajKorpu/' + window.localStorage.getItem("korisnik"), artikal)
+				.then(response => {
+					console.log("Uspešno")
+				})
+				.catch(err => {
+					this.greska = "Neuspešno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+					this.$router.push("/")
+				})
+
+		},
+		pregledKorpe: function(event) {
+			console.log(this.artikli)
+			event.preventDefault();
+			axios
+				.get('rest/korisnici/proveraKorpe')
+				.then(response => {
+					this.greska = "Uspešno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+					this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))
+				})
+				.catch(err => {
+					this.greska = "Morate dodati barem jedan artikal!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+				})
+		},
+		menadzerRestoran: function(event) {
+			event.preventDefault();
+			axios
+				.get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
+				.then(response => {
+					if (response.data.length == 0) {
+						this.greska = "Trenutno Vam nije dodeljen nijedan restoran!";
+						var x = document.getElementById("greska");
+						x.className = "snackbar show";
+						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+					} else {
+						this.$router.push("/pregledRestorana")
+					}
+				})
+		},
+		promeniTabKomentar: function(event) {
 			event.preventDefault();
 			this.komentarTab = true;
-			this.artikalTab = false; 
+			this.artikalTab = false;
 			this.lokacijaTab = false;
-		  },
-		  promeniTabArtikal : function(event) {
+		},
+		promeniTabArtikal: function(event) {
 			event.preventDefault();
 			this.komentarTab = false;
-			this.artikalTab = true; 
+			this.artikalTab = true;
 			this.lokacijaTab = false;
-		  },
-		  promeniTabLokacija : function(event) {
+		},
+		promeniTabLokacija: function(event) {
 			event.preventDefault();
 			this.komentarTab = false;
-			this.artikalTab = false; 
+			this.artikalTab = false;
 			this.lokacijaTab = true;
 			console.log(this.restoran.geografskaDuzina)
-				console.log(this.restoran.geografskaSirina)
-		  },
-        odjava : function() {
-    		axios 
-    			.post('/DostavaREST/rest/korisnici/odjava')
-    			.then(response => {
-    				window.localStorage.removeItem("trenutniRestoran");
+			console.log(this.restoran.geografskaSirina)
+		},
+		odjava: function() {
+			axios
+				.post('/DostavaREST/rest/korisnici/odjava')
+				.then(response => {
+					window.localStorage.removeItem("trenutniRestoran");
 					window.localStorage.removeItem("imeRestorana");
 					window.localStorage.removeItem("korisnik");
 					window.localStorage.removeItem("uloga");
 					this.greska = "Uspesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
-					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-    				this.$router.push("/")
-    			})
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+					this.$router.push("/")
+				})
 				.catch(err => {
 					this.greska = "Neuspjesna odjava!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
-					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 					console.log(err);
-				  })
-    		
-    	},
+				})
 
-		obrisiArtikal : function(nazivArtikla){
-			axios 
-		   .delete('rest/restorani/obrisiArtikal/' + nazivArtikla + "/" + this.restoran.id)
-		   .then(response => {
-			  this.$router.go();
+		},
 
-				   this.greska = "Uspesno ste obrisali artikal!";
-				   var x = document.getElementById("greska");
-				   x.className = "snackbar show";
-				   setTimeout(function(){x.className = x.className.replace("show","");},1800);
-		   
-		   })
+		obrisiArtikal: function(nazivArtikla) {
+			axios
+				.delete('rest/restorani/obrisiArtikal/' + nazivArtikla + "/" + this.restoran.id)
+				.then(response => {
+					this.$router.go();
+
+					this.greska = "Uspesno ste obrisali artikal!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+
+				})
 		}
-        
-    
-    }
-  });
+
+
+	}
+});

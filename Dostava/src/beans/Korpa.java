@@ -13,19 +13,18 @@ public class Korpa implements Serializable {
 	private List<ArtikalKorpa> artikli;
 	private String korisnik;
 	private Double cena;
+	private String restoran;
 
 	public Korpa() {
 		super();
 	}
 
-	
-	public Korpa(List<ArtikalKorpa> artikli, String korisnik, Double cena) {
+	public Korpa(List<ArtikalKorpa> artikli, String korisnik, Double cena, String restoran) {
 		super();
 		this.artikli = artikli;
 		this.korisnik = korisnik;
 		this.cena = cena;
 	}
-
 
 	public List<ArtikalKorpa> getArtikli() {
 		return artikli;
@@ -54,9 +53,21 @@ public class Korpa implements Serializable {
 	public void povecajCenu(Double cena) {
 		this.cena += cena;
 	}
-	
+
 	public void smanjiCenu(Double cena) {
 		this.cena -= cena;
 	}
-	
+
+	public void dodajArtikal(Artikal a, Integer kolicina) {
+		this.artikli.add(new ArtikalKorpa(a, kolicina));
+	}
+
+	public String getRestoran() {
+		return restoran;
+	}
+
+	public void setRestoran(String restoran) {
+		this.restoran = restoran;
+	}
+
 }
