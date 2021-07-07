@@ -44,6 +44,49 @@ const router = new VueRouter({
 	  ]
 });
 
+const dozvoljeneUloge = {
+	"": ["", "KUPAC", "MENADZER", "ADMINISTRATOR", "DOSTAVLJAC"],
+	"/prijava": [""],
+	"/registracija": [""],
+	"/licniPodaci": ["KUPAC", "MENADZER", "ADMINISTRATOR", "DOSTAVLJAC"],
+	"/izmenaPodataka": [ "KUPAC", "MENADZER", "ADMINISTRATOR", "DOSTAVLJAC"],
+	"/dodavanjeMenadzera": ["ADMINISTRATOR"],
+	"/dodavanjeRestorana": ["ADMINISTRATOR"],
+	"/dodavanjeDostavljaca": ["ADMINISTRATOR"],
+	"/sviKorisnici": ["ADMINISTRATOR"],
+	"/pregledRestorana": ["MENADZER"],
+	"/dodavanjeArtikla": ["MENADZER"],
+	"/informacijeRestoran/:id": ["", "KUPAC", "MENADZER", "ADMINISTRATOR", "DOSTAVLJAC"],
+	"/izmenaArtikla/:id/:naziv": ["MENADZER"],
+	"/pregledKorpe/:id": ["KUPAC"],
+	"/pregledPorudzbina/:id": ["KUPAC", "MENADZER", "DOSTAVLJAC"],
+	"/pregledKupaca/:id": ["MENADZER"],
+	"/pregledKupaca/:id": ["ADMINISTRATOR"],
+	"/sumnjiviKorisnici": ["ADMINISTRATOR"]
+}
+
+const proveriDozvoljenost = function(to, from, next){
+	if(to.matched.length > 0 && proveriPutanju(dozvoljeneUloge[to.matched[0].path])){
+		next();
+	}
+	else{
+		next(from);
+	}
+}
+
+function proveriPutanju(dozvoljeneUloge) {
+	if (window.localStorage.getItem("korisnik")) {
+		return dozvoljeneUloge.find(uloga => uloga === window.localStorage.getItem("uloga")) != undefined;
+	} else {
+		if (dozvoljeneUloge.find(uloga => uloga === "") === undefined) {
+			return false;
+		}
+		return true;
+	}
+}
+
+router.beforeEach(proveriDozvoljenost);
+
 var app = new Vue({
 	router,
 	el: '#app'

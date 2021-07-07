@@ -191,19 +191,19 @@ Vue.component("informacijeRestoran", {
 		<div >
 			<nav>
 					<ul class="nav nav-tabs">
-						<li><a href="#"  class="tab dugmeTab nav-link"  @click="promeniTabArtikal" :class="{'active': artikalTab === true}" >
+						<li><a href="#"  class="tab dugmeTab nav-link"  v-on:click="promeniTabArtikal" :class="{'active': artikalTab === true}" >
 						<span class="tab-copy">Artikli</span>
 						<span class="tab-background">
 						<span class="tab-rounding left"></span>
 						<span class="tab-rounding right"></span>
 						</span> </a></li>
-						<li><a href="#"  class="tab dugmeTab nav-link"  @click="promeniTabKomentar" :class="{'active': komentarTab === true}" >
+						<li><a href="#"  class="tab dugmeTab nav-link"  v-on:click="promeniTabKomentar" :class="{'active': komentarTab === true}" >
 						<span class="tab-copy">Komentari</span>
 						<span class="tab-background">
 						<span class="tab-rounding left"></span>
 						<span class="tab-rounding right"></span>
 						</span> </a></li>
-						<li><a href="#"  class="tab dugmeTab nav-link"  @click="promeniTabLokacija" :class="{'active': lokacijaTab === true}" >
+						<li><a href="#"  class="tab dugmeTab nav-link"   v-on:click="promeniTabLokacija" :class="{'active': lokacijaTab === true}" >
 						<span class="tab-copy">Lokacija</span>
 						<span class="tab-background">
 						<span class="tab-rounding left"></span>
@@ -334,17 +334,20 @@ Vue.component("informacijeRestoran", {
                }
            })
         },
-		promeniTabKomentar() {
+		promeniTabKomentar : function(event) {
+			event.preventDefault();
 			this.komentarTab = true;
 			this.artikalTab = false; 
 			this.lokacijaTab = false;
 		  },
-		  promeniTabArtikal() {
+		  promeniTabArtikal : function(event) {
+			event.preventDefault();
 			this.komentarTab = false;
 			this.artikalTab = true; 
 			this.lokacijaTab = false;
 		  },
-		  promeniTabLokacija() {
+		  promeniTabLokacija : function(event) {
+			event.preventDefault();
 			this.komentarTab = false;
 			this.artikalTab = false; 
 			this.lokacijaTab = true;

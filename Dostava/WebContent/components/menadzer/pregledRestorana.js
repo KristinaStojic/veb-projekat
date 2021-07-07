@@ -120,19 +120,19 @@ Vue.component("pregledRestorana", {
 		<div >
 			<nav>
 					<ul class="nav nav-tabs">
-						<li><a href="#"  class="tab dugmeTab nav-link"  @click="promeniTabArtikal" :class="{'active': artikalTab === true}" >
+						<li><a href="#"  class="tab dugmeTab nav-link"  v-on:click="promeniTabArtikal" :class="{'active': artikalTab === true}" >
 						<span class="tab-copy">Artikli</span>
 						<span class="tab-background">
 						<span class="tab-rounding left"></span>
 						<span class="tab-rounding right"></span>
 						</span> </a></li>
-						<li><a href="#"  class="tab dugmeTab nav-link"  @click="promeniTabKomentar" :class="{'active': komentarTab === true}" >
+						<li><a href="#"  class="tab dugmeTab nav-link"  v-on:click="promeniTabKomentar" :class="{'active': komentarTab === true}" >
 						<span class="tab-copy">Komentari</span>
 						<span class="tab-background">
 						<span class="tab-rounding left"></span>
 						<span class="tab-rounding right"></span>
 						</span> </a></li>
-						<li><a href="#"  class="tab dugmeTab nav-link"  @click="promeniTabLokacija" :class="{'active': lokacijaTab === true}" >
+						<li><a href="#"  class="tab dugmeTab nav-link" v-on:click="promeniTabLokacija" :class="{'active': lokacijaTab === true}" >
 						<span class="tab-copy">Lokacija</span>
 						<span class="tab-background">
 						<span class="tab-rounding left"></span>
@@ -198,9 +198,18 @@ Vue.component("pregledRestorana", {
 						
                
             </div>
-						<div class="content" v-if="this.lokacijaTab === true">
-						 <p>lokacija</p>
-						</div>
+						<div  v-if="this.lokacijaTab === true">
+					<div style="width:500px;height:200px; align:center;vertical-align:center;margin-top:200px;float:left; margin-left:270px;margin-right:0px;font-size:20px">
+						<label><b>{{this.restoran.ulica}} {{this.restoran.broj}}</b></label> </br>       
+						<label>{{this.restoran.mesto}} {{this.restoran.postanskiBroj}}</label> </br>
+						<label style="color:gray">{{this.restoran.geografskaDuzina}} , {{this.restoran.geografskaSirina}}</label></br>
+				     </div>
+					<div style="border-style:solid;width:400px;height:400px; align:center;vertical-align:center;margin:50px;float:right; margin-right:300px;margin-left:0px">
+				        <map-view-container
+				                :coordinates="[this.restoran.geografskaDuzina, this.restoran.geografskaSirina]">
+						</map-view-container>
+				     </div>
+				</div>
 						<div id="greska" class="snackbar">{{greska}}</div>
 		</div>
 
@@ -284,17 +293,20 @@ Vue.component("pregledRestorana", {
     	izmena(value){
     		this.$router.push("/izmenaArtikla/"+ this.restoran.id + "/" + value)
     	},
-		promeniTabKomentar() {
+		promeniTabKomentar : function(event) {
+			event.preventDefault();
 			this.komentarTab = true;
 			this.artikalTab = false; 
 			this.lokacijaTab = false;
 		  },
-		  promeniTabArtikal() {
+		  promeniTabArtikal : function(event) {
+			event.preventDefault();
 			this.komentarTab = false;
 			this.artikalTab = true; 
 			this.lokacijaTab = false;
 		  },
-		  promeniTabLokacija() {
+		  promeniTabLokacija : function(event) {
+			event.preventDefault();
 			this.komentarTab = false;
 			this.artikalTab = false; 
 			this.lokacijaTab = true;
@@ -334,7 +346,6 @@ Vue.component("pregledRestorana", {
 			axios 
     			.post('/DostavaREST/rest/komentari/odobriKomentar/' + idKom + "/" + this.restoran.id)
     			.then(response => {  
-					this.$router.push("/pregledRestorana")	
 					this.$router.go();
 					this.greska = "Uspesno odobren komentar!";
 					var x = document.getElementById("greska");
@@ -355,7 +366,6 @@ Vue.component("pregledRestorana", {
 			axios 
     			.post('/DostavaREST/rest/komentari/odbijKomentar/' + idKom)
     			.then(response => {  
-					this.$router.push("/pregledRestorana")	
 					this.$router.go();
 					this.greska = "Uspesno odbijen komentar!";
 					var x = document.getElementById("greska");
