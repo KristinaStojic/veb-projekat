@@ -12,4 +12,5 @@ public class KorpaDTO {
 	public Double cena;
 	public TipKupca.ImeTipa tipKupca;
 	public Double nedostaje;
+	public String restoran;
 }

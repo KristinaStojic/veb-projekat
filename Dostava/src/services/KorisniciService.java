@@ -114,6 +114,10 @@ public class KorisniciService {
 
 		if (prijavljeniKorisnik != null) {
 			request.getSession().setAttribute("prijavljeniKorisnik", prijavljeniKorisnik);
+			Korisnik k = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik"));
+			if(k.getUloga() == Uloga.KUPAC) {
+				dobaviKorisnikDAO().ukloniKorpu(k.getId());
+			}
 		}
 
 		return prijavljeniKorisnik;
@@ -312,41 +316,6 @@ public class KorisniciService {
 		return Response.status(200).build();
 	}
 
-//	@POST
-//	@Path("/popunjavanjeKorpe") //menja se
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public Response popunjavanjeKorpe(List<ArtikliDTO> artikli) {
-//		KorisnikDAO dao = dobaviKorisnikDAO();
-//		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
-//		if (idKorisnika == null)
-//			return Response.status(400).build();
-//
-//		List<ArtikalKorpa> proizvodi = new ArrayList<>();
-//		Double cena = 0.0;
-//
-//		for (ArtikliDTO a : artikli) {
-//			if (a.kolicinaKorpa > 0) {
-//				proizvodi.add(
-//						new ArtikalKorpa(new Artikal(a.naziv, Double.parseDouble(a.cena), tipArtiklaEnum(a.tipArtikla),
-//								a.restoran, Double.parseDouble(a.kolicina), a.opis, a.slika), a.kolicinaKorpa));
-//				cena += (a.kolicinaKorpa * Double.parseDouble(a.cena));
-//			}
-//		}
-//
-//		Korpa korpa = new Korpa(proizvodi, idKorisnika, cena, artikli.get(0).restoran);
-//		if (proizvodi.isEmpty()) {
-//			return Response.status(200).entity("a").build();
-//		}
-//
-//		if (dao.dodajKorpu(korpa)) {
-//
-//			return Response.status(200).entity("aa").build();
-//		}
-//		return Response.status(400).build();
-//
-//	}
-
 	@GET
 	@Path("/proveraKorpe") 
 	@Produces(MediaType.APPLICATION_JSON)
@@ -388,6 +357,7 @@ public class KorisniciService {
 		}
 		povratna.korisnik = id;
 		povratna.tipKupca = k.getTipKupca().getImeTipa();
+		povratna.restoran = korpa.getRestoran();
 		if (k.getTipKupca().getImeTipa() == ImeTipa.SREBRNI) {
 			povratna.cena = korpa.getCena() * 0.95;
 			povratna.nedostaje = 4000 - k.getSakupljeniBodovi();

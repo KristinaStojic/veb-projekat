@@ -6,7 +6,8 @@ Vue.component("pregledKorpe", {
 			korisnik : "",
 			cena : 0.0,
 			tipKupca : 0,
-			nedostaje : 0
+			nedostaje : 0,
+			restoran : ""
 		},
         greska: "",
         logo : "slike/logo_final2.png"
@@ -139,12 +140,12 @@ Vue.component("pregledKorpe", {
     methods: {
 		brisanje(ime){
 			
-			const artikal = {naziv: ime, kolicinaKorpa : 0, ukupnoCena: 0}
+			const artikal = {naziv: ime, kolicinaKorpa : 0, cena: 0, restoran: this.korpa.restoran}
 			this.azurirajKorpu(artikal);
 			
 		},
 		azurirajKorpu(artikal){
-			if(!artikal.kolicinaKorpa) return
+			if (!artikal.kolicinaKorpa) { if(artikal.kolicinaKorpa != 0){console.log("izbacio sam"); return }}
 			console.log(this.korpa.cena)
 			axios 
     			.post('/DostavaREST/rest/korisnici/azurirajKorpu/' + this.korpa.korisnik, artikal)
@@ -156,15 +157,21 @@ Vue.component("pregledKorpe", {
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-					this.$router.push("/")
 				  })
-		
+			if(this.korpa.artikli.length === 0){
+					
+					this.greska = "Korpa ne može biti prazna!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+			}
 		},
 		poruci : function(event) {
 			event.preventDefault();
 			
 			if(this.korpa.artikli.length === 0){
-					console.log("radi")
+					
 					this.greska = "Korpa ne može biti prazna!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";

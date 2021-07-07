@@ -70,4 +70,16 @@ public class Korpa implements Serializable {
 		this.restoran = restoran;
 	}
 
+	public void ukloniArtikal(String naziv) {
+
+		for (int i = 0; i < this.artikli.size(); i++) {
+
+			if (this.artikli.get(i).getArtikal().getNaziv().equals(naziv)) {
+				this.artikli.remove(i);
+				return;
+			}
+
+		}
+	}
+
 }

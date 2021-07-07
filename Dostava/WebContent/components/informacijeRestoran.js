@@ -345,37 +345,32 @@ Vue.component("informacijeRestoran", {
         
     },
     methods: {
-		pregledKorpe : function(event){
-				console.log(this.artikli)
-				event.preventDefault();
-			    axios 
-			   .post('rest/korisnici/popunjavanjeKorpe', this.artikli)
-			   .then(response => {
-			        	
-					if(response.data.length == 1)
-		            {     
-		                   this.greska = "Morate dodati barem jedan artikal!";
-		                   var x = document.getElementById("greska");
-		                   x.className = "snackbar show";
-		                   setTimeout(function(){x.className = x.className.replace("show","");},1800);
-		            }else{
-			           this.greska = "Uspešno!";
-			           var x = document.getElementById("greska");
-			           x.className = "snackbar show";
-			           setTimeout(function(){x.className = x.className.replace("show","");},1800);
-			           this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))}
-   				})
-    },
-
-
+		pregledKorpe: function(event) {
+			event.preventDefault();
+			axios
+				.get('rest/korisnici/proveraKorpe')
+				.then(response => {
+					this.greska = "Uspešno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+					this.$router.push('/pregledKorpe/' + window.localStorage.getItem("korisnik"))
+				})
+				.catch(err => {
+					this.greska = "Morate dodati barem jedan artikal!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+				})
+		},
 		brisanje(ime) {
 
-			const artikal = { naziv: ime, kolicinaKorpa: 0, ukupnoCena: 0 }
+			const artikal = { naziv: ime, kolicinaKorpa: 0, cena: 0 , restoran: this.restoran.id}
 			this.azurirajKorpu(artikal);
 
 		},
 		azurirajKorpu(artikal) {
-			if (!artikal.kolicinaKorpa) { console.log("izbacio sam"); return }
+			if (!artikal.kolicinaKorpa) { if(artikal.kolicinaKorpa != 0){console.log("izbacio sam"); return }}
 			axios
 				.post('/DostavaREST/rest/korisnici/azurirajKorpu/' + window.localStorage.getItem("korisnik"), artikal)
 				.then(response => {
@@ -386,7 +381,6 @@ Vue.component("informacijeRestoran", {
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-					this.$router.push("/")
 				})
 
 		},

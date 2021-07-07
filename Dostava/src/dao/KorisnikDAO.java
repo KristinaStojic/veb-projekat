@@ -645,18 +645,6 @@ public class KorisnikDAO {
 		}
 	}
 
-//	public boolean dodajKorpu(Korpa korpa) {
-//
-//		for (Kupac k : kupci) {
-//			if (k.getId().equals(korpa.getKorisnik())) {
-//				k.setKorpa(korpa);
-//				sacuvajPodatke();
-//				return true;
-//			}
-//
-//		}
-//		return false;
-//	}
 
 	public Kupac dobaviKupca(String id) {
 
@@ -673,7 +661,7 @@ public class KorisnikDAO {
 
 		for (Kupac k : kupci) {
 			if (k.getId().equals(p.getKupac())) {
-				k.setKorpa(null);
+				k.setKorpa(new Korpa(new ArrayList<ArtikalKorpa>(), p.getKupac(), 0.0, ""));
 				k.dodajPorudzbinu(p);
 				Double trenutniBodovi = k.getSakupljeniBodovi();
 				k.setSakupljeniBodovi(trenutniBodovi + (p.getCena() / 1000 * 133));
@@ -716,8 +704,11 @@ public class KorisnikDAO {
 					if (a.getNaziv().equals(promena.naziv)) {
 
 						korpa.smanjiCenu(a.getCena() * ak.getKolicina());
+						if(promena.kolicinaKorpa != 0) {
 						korpa.povecajCenu(promena.cena * promena.kolicinaKorpa);
-						ak.setKolicina(promena.kolicinaKorpa);
+						ak.setKolicina(promena.kolicinaKorpa);}else {
+							korpa.ukloniArtikal(promena.naziv);
+						}
 						sacuvajPodatke();
 						return true;
 					}
@@ -748,11 +739,9 @@ public class KorisnikDAO {
 							k.setSakupljeniBodovi(trenutniBodovi - (p.getCena() / 1000 * 133 * 4));
 							k.setTipKupca(proveriTip(k.getSakupljeniBodovi()));
 							k.getDatumiOtkazivanjaPorudzbina().add(new Date(System.currentTimeMillis()));
-							System.out.println("Broj otkazivanja: " + k.getDatumiOtkazivanjaPorudzbina().size());
 							sacuvajPodatke();
 							return true;
 						} else if (status == Status.DOSTAVLJENA) {
-							System.out.println("evo ovde je jer je dostavljena");
 							p.setDostavljac("");
 							p.setStatus(status);
 							sacuvajPodatke();
