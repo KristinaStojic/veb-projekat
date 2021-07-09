@@ -491,6 +491,7 @@ public class KorisniciService {
 
 		}
 
+		System.out.println("ovoliko ima pronadjenih porudzbina: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
 

@@ -124,19 +124,8 @@ Vue.component("pregledPorudzbina", {
 
                                
                                 <div class="btn-group">
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
-                                <select v-model="selected">
-                                    <option>Svi</option>
-                                    <option>Brza hrana</option>
-                                    <option>Raznolika kuhinja</option>
-                                    <option>Italijanska hrana</option>
-                                    <option>Kineska hrana</option>
-                                    <option>Jela sa roštilja</option>
-                                    <option>Srpska hrana</option>
-                                    <option>Grčka hrana</option>
-                                    <option>Vegetarijanska hrana</option>
-                                </select>
+                               
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Tip restorana
@@ -731,6 +720,7 @@ Vue.component("pregledPorudzbina", {
                     else{
                         this.porudzbine = response.data
                         this.pomocne = response.data
+                        console.log(this.porudzbine.length)
                     }
                    
 					
@@ -747,11 +737,7 @@ Vue.component("pregledPorudzbina", {
 
 
 		pronadjene() {
-            if(this.selected === "Svi"){
-                this.filterTip = "";
-            }else{
-                this.filterTip = "adssa";
-            }
+           
 			if(this.checked){
 				this.otkazana = "OTKAZANA";
                 this.priprema = "PRIPREMA";
