@@ -45,7 +45,8 @@ Vue.component("pregledPorudzbina", {
         kraj: false,
         pocetniDatum: "",
         krajnjiDatum: "",
-		upozorenjeKom: ""
+		upozorenjeKom: "",
+        selected: ""
 
 	}
     },
@@ -69,9 +70,9 @@ Vue.component("pregledPorudzbina", {
 									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
 								</div>
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
-                                    <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+                                <label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+                                <div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
                                 <div class="dropdown-divider"></div>
 									<a class="dropdown-item">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
@@ -107,23 +108,36 @@ Vue.component("pregledPorudzbina", {
                                 <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                <label style="font-size:15px">Nedostavljene: </label>
-                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                               
+                                <div >
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
                                 </vuejs-datepicker>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
                                 </vuejs-datepicker>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                </div>
+                                
+                                <label style="font-size:15px">Filtriranje: </label>
+
+                               
+                                <div class="btn-group">
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
-                                <label style="font-size:15px">Filtriranje: </label>
-                                <div class="btn-group">
+                                <select v-model="selected">
+                                    <option>Svi</option>
+                                    <option>Brza hrana</option>
+                                    <option>Raznolika kuhinja</option>
+                                    <option>Italijanska hrana</option>
+                                    <option>Kineska hrana</option>
+                                    <option>Jela sa roštilja</option>
+                                    <option>Srpska hrana</option>
+                                    <option>Grčka hrana</option>
+                                    <option>Vegetarijanska hrana</option>
+                                </select>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Tip restorana
                                 </button>
@@ -143,6 +157,7 @@ Vue.component("pregledPorudzbina", {
 
                                 
                                 </div>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <div class="btn-group">
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -160,7 +175,7 @@ Vue.component("pregledPorudzbina", {
                                 </div>
                                 </div>
 
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
 
                                 <label style="font-size:15px;">Sortiranje: </label>
@@ -179,6 +194,10 @@ Vue.component("pregledPorudzbina", {
                                  
                                 </div>
                                 </div>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
                                 </div></th>
                                 </tr>
                                 
@@ -725,8 +744,14 @@ Vue.component("pregledPorudzbina", {
 				  })
     },
     computed: {
+
+
 		pronadjene() {
-            
+            if(this.selected === "Svi"){
+                this.filterTip = "";
+            }else{
+                this.filterTip = "adssa";
+            }
 			if(this.checked){
 				this.otkazana = "OTKAZANA";
                 this.priprema = "PRIPREMA";
@@ -843,11 +868,20 @@ Vue.component("pregledPorudzbina", {
                 
             }
             
-          }
+          },
+
+          
         },components: {
             vuejsDatepicker
         },
     methods: {
+        izmenaPodataka(){
+			this.$router.push("/izmenaPodataka/"+ window.localStorage.getItem("korisnik"));
+		  },
+        mojiPodaci(){
+            this.$router.push("/licniPodaci/"+ window.localStorage.getItem("korisnik"));
+            console.log("moji podaci")
+          },
 		otkazi : function(){
 			axios 
     			.post('/DostavaREST/rest/porudzbine/otkaziPorudzbinu/' + this.pomocnaPorudzbina.id)
