@@ -301,7 +301,6 @@ Vue.component("pregledRestorana", {
 	
     mounted () {
 		this.uloga = window.localStorage.getItem("uloga")
-
         axios 
         .get('rest/korisnici/restoranMenadzera/' + window.localStorage.getItem("korisnik"))
         .then(response => {
