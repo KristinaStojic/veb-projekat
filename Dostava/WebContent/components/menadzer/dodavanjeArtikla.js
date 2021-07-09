@@ -32,12 +32,20 @@ Vue.component("dodavanjeArtikla", {
 			</button>
 
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav ml-auto">
+						<ul class="navbar-nav ml-auto">
 
 							<li class="nav-item nav-link active">
 							<a class="nav-link" href="" v-on:click="menadzerRestoran">Moj restoran</a>
 							</li>
-			
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+							</li>
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledKupaca()">Svi kupci</a>
+							</li>
+							
 							<li class="nav-item dropdown">
 							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
@@ -51,8 +59,7 @@ Vue.component("dodavanjeArtikla", {
 							</div>
 						</li>
 					</ul>
-			
-		</div>
+				</div>
 		
 	</nav>
 	<div class="bottom">
@@ -161,7 +168,37 @@ Vue.component("dodavanjeArtikla", {
                 x.className = "snackbar show";
                 setTimeout(function(){x.className = x.className.replace("show","");},1800);
 			}
-		}
+		},
+		pregledPorudzbina(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + window.localStorage.getItem("korisnik") + "/" + window.localStorage.getItem("uloga"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Nemate nijednu porudžbinu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledPorudzbina/"+ window.localStorage.getItem("korisnik"))
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
+    	}
 		,odjava : function() {
 		axios 
 			.post('/DostavaREST/rest/korisnici/odjava')
@@ -183,6 +220,36 @@ Vue.component("dodavanjeArtikla", {
 			  })
 		
 		},
+		pregledKupaca(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiKupce/' + window.localStorage.getItem("korisnik"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Ne postoji nijedan kupac u Vašem restoranu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledKupaca/"+ window.localStorage.getItem("korisnik"))
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
+    	},
 		nazivPromena: function(event) {
 			event.preventDefault();
 			this.naziv = true;

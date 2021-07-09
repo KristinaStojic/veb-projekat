@@ -61,7 +61,6 @@ const dozvoljeneUloge = {
 	"/pregledKorpe/:id": ["KUPAC"],
 	"/pregledPorudzbina/:id": ["KUPAC", "MENADZER", "DOSTAVLJAC"],
 	"/pregledKupaca/:id": ["MENADZER"],
-	"/pregledKupaca/:id": ["ADMINISTRATOR"],
 	"/sumnjiviKorisnici": ["ADMINISTRATOR"]
 }
 

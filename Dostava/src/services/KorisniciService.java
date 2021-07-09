@@ -492,6 +492,10 @@ public class KorisniciService {
 			}
 
 		}
+		
+		for (PorudzbinePrikazDTO porudzbinePrikazDTO : porudzbineKupca) {
+			System.out.println("evo je porudzbina " + porudzbinePrikazDTO.id);
+		}
 
 		return porudzbineKupca;
 	}
