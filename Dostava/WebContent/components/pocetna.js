@@ -73,6 +73,10 @@ Vue.component("pocetna", {
 
 				<div v-if="uloga === 'DOSTAVLJAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+							</li>
+							
 							<li class="nav-item dropdown">
 								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
@@ -81,8 +85,6 @@ Vue.component("pocetna", {
 								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
 								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 								</div>
@@ -94,6 +96,11 @@ Vue.component("pocetna", {
 		
 				<div v-if="uloga === 'KUPAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
 							<ul class="navbar-nav ml-auto">
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+							</li>
+							
 							<li class="nav-item dropdown">
 								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
@@ -102,8 +109,6 @@ Vue.component("pocetna", {
 								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
 								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 									
@@ -119,7 +124,15 @@ Vue.component("pocetna", {
 							<li class="nav-item nav-link active">
 							<a class="nav-link" href="" v-on:click="menadzerRestoran">Moj restoran</a>
 							</li>
-			
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Porudžbine</a>
+							</li>
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledKupaca()">Svi kupci</a>
+							</li>
+							
 							<li class="nav-item dropdown">
 							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
@@ -129,10 +142,6 @@ Vue.component("pocetna", {
 							<div class="dropdown-divider"></div>
 							<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
 							<div class="dropdown-divider"></div>
-								<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" v-on:click="pregledKupaca()">Svi kupci</a>
-								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 							</div>
 						</li>
@@ -315,7 +324,7 @@ computed: {
                         //this.$router.push("/")
                     }
                     else{
-                        this.$router.push("/pregledPorudzbina/"+ this.kupac)
+                        this.$router.push("/pregledPorudzbina/"+ window.localStorage.getItem("korisnik"))
                     }
                    
 					
@@ -346,7 +355,7 @@ computed: {
                         //this.$router.push("/")
                     }
                     else{
-                        this.$router.push("/pregledKupaca/"+ this.kupac)
+                        this.$router.push("/pregledKupaca/"+ window.localStorage.getItem("korisnik"))
                     }
                    
 					

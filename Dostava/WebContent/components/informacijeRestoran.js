@@ -48,24 +48,51 @@ Vue.component("informacijeRestoran", {
 				</button>
 
 					<div v-if="uloga === 'ADMINISTRATOR'"  class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="navbar-nav ml-auto">
-								<li class="nav-item nav-link active">
-									<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
-								</li>
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
+							</li>
 
-								<li class="nav-item nav-link active">
-									<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
-								</li>
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+							</li>
 
-								<li class="nav-item nav-link active">
-								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
-								</li>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+							</li>
 
-								<li class="nav-item nav-link active">
-								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
-								</li>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
+							</li>
 
-								<li class="nav-item dropdown">
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sumnjiviKorisnici">Prikaži sve sumnjive korisnike</a>
+							</li>
+
+							<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+							<div class="dropdown-divider"></div>
+							<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
+							<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+						</li>
+
+
+						</ul>
+				</div>
+
+					<div v-if="uloga === 'DOSTAVLJAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+							</li>
+							
+							<li class="nav-item dropdown">
 								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
 								</div>
@@ -78,68 +105,63 @@ Vue.component("informacijeRestoran", {
 								</div>
 							</li>
 
-
-							</ul>
-					</div>
-
-					<div v-if="uloga === 'DOSTAVLJAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="navbar-nav ml-auto">
-								<li class="nav-item dropdown">
-									<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-										<i class="zmdi zmdi-account zmdi-hc-2x"></i>
-									</div>
-									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-									<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
-									<div class="dropdown-divider"></div>
-									<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-									<div class="dropdown-divider"></div>
-										<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
-									</div>
-								</li>
-
-								
-							</ul>
-					</div>
+							
+						</ul>
+				</div>
 			
 					<div v-if="uloga === 'KUPAC'" class="collapse navbar-collapse" id="navbarSupportedContent">
-								<ul class="navbar-nav ml-auto">
-								<li class="nav-item dropdown">
-									<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-										<i class="zmdi zmdi-account zmdi-hc-2x"></i>
-									</div>
-									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-									<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+							<ul class="navbar-nav ml-auto">
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+							</li>
+							
+							<li class="nav-item dropdown">
+								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+								</div>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+								<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
 									<div class="dropdown-divider"></div>
-									<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-									<div class="dropdown-divider"></div>
-										<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
-									</div>
-								</li>
+									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+									
+								</div>
+							</li>
 
-								</ul>
-					</div>
+							</ul>
+				</div>
 
 					<div v-if="uloga === 'MENADZER'" class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="navbar-nav ml-auto">
+						<ul class="navbar-nav ml-auto">
 
 							<li class="nav-item nav-link active">
 							<a class="nav-link" href="" v-on:click="menadzerRestoran">Moj restoran</a>
 							</li>
-				
-								<li class="nav-item dropdown">
-								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
-								</div>
-								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
-								<div class="dropdown-divider"></div>
-								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-									<div class="dropdown-divider"></div>
-									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
-								</div>
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Porudžbine</a>
 							</li>
-						</ul>
-					</div>
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledKupaca()">Svi kupci</a>
+							</li>
+							
+							<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+							<div class="dropdown-divider"></div>
+							<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
+							<div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+							</div>
+						</li>
+					</ul>
+				</div>
 					
 					<div v-if="uloga === null" class="collapse navbar-collapse" id="navbarSupportedContent" >
 						<ul class="navbar-nav ml-auto">
@@ -223,7 +245,7 @@ Vue.component("informacijeRestoran", {
 					
 			</nav>
 				<div class="scroll" v-if="this.artikalTab === true">
-					<div v-if="uloga === 'KUPAC'"><button  class="dugme2" @click="pregledKorpe">Pregled korpe</button></br></br></br></br></div>
+					<div v-if="uloga === 'KUPAC' && restoran.status === true"><button  class="dugme2" @click="pregledKorpe">Pregled korpe</button></br></br></br></br></div>
 					<div class="red">
 						<div style="margin: 10px; margin-top:10" v-for="(a, i) in this.artikli">
 							<div class="kartica" >
@@ -241,7 +263,7 @@ Vue.component("informacijeRestoran", {
 								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
 								<li v-if="a.opis !== ''" class="list-group-item">{{a.opis}}</li>
 								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li></ul>
-								<li  v-if="uloga === 'KUPAC'" class="list-group-item"> 
+								<li  v-if="uloga === 'KUPAC' && restoran.status === true" class="list-group-item"> 
 									
 									<button  v-if="a.kolicinaKorpa > '1'"   @click="a.kolicinaKorpa--"  v-on:click="azurirajKorpu(a)"  style="margin-left:50px" class="okruglo">-</button>
 									<button style="margin-left:50px" v-else class="okruglo">-</button>
@@ -462,7 +484,67 @@ Vue.component("informacijeRestoran", {
 					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 
 				})
-		}
+		},
+		pregledPorudzbina(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + window.localStorage.getItem("korisnik") + "/" + window.localStorage.getItem("uloga"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Nemate nijednu porudžbinu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledPorudzbina/"+ window.localStorage.getItem("korisnik"))
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
+    	},
+		pregledKupaca(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiKupce/' + window.localStorage.getItem("korisnik"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Ne postoji nijedan kupac u Vašem restoranu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledKupaca/"+ window.localStorage.getItem("korisnik"))
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
+    	}
 
 
 	}

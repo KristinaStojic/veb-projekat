@@ -105,13 +105,14 @@ public class RestoranDAO {
 	}
 	
 	public Boolean dodajArtikal(String idRestorana, Artikal a) {
-		
+		System.out.println("pozvao sam dodavanje restorana");
 		for (Restoran r : dobaviRestorane()) {
 			if(r.getId().equals(idRestorana)) {
 				if(r == null || r.getLogickoBrisanje() == 1) return false;
 				for(Artikal ar : r.getArtikliUPonudi()){
 					if (ar.getNaziv().equals(a.getNaziv())) return false;
 				}
+				
 				r.dodajArtikal(a);
 				break;
 			}

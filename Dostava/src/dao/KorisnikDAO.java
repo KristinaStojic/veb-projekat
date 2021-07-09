@@ -276,8 +276,6 @@ public class KorisnikDAO {
 						kupac.setLozinka(izmenjeniKorisnik.lozinka);
 						kupac.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						kupac.setPol(izmenjeniKorisnik.pol);
-						// kupac.getKorpa().setKorisnik(null);
-						// kupac.getKorpa().setKorisnik(k);
 
 					}
 				}
@@ -290,8 +288,6 @@ public class KorisnikDAO {
 						men.setLozinka(izmenjeniKorisnik.lozinka);
 						men.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						men.setPol(izmenjeniKorisnik.pol);
-						// kupac.getKorpa().setKorisnik(null);
-						// kupac.getKorpa().setKorisnik(k);
 
 					}
 				}
@@ -304,8 +300,6 @@ public class KorisnikDAO {
 						admin.setLozinka(izmenjeniKorisnik.lozinka);
 						admin.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						admin.setPol(izmenjeniKorisnik.pol);
-						// kupac.getKorpa().setKorisnik(null);
-						// kupac.getKorpa().setKorisnik(k);
 
 					}
 				}
@@ -318,8 +312,6 @@ public class KorisnikDAO {
 						dost.setLozinka(izmenjeniKorisnik.lozinka);
 						dost.setDatumRodjenja(izmenjeniKorisnik.datumRodjenja);
 						dost.setPol(izmenjeniKorisnik.pol);
-						// kupac.getKorpa().setKorisnik(null);
-						// kupac.getKorpa().setKorisnik(k);
 
 					}
 				}
@@ -512,7 +504,7 @@ public class KorisnikDAO {
 	}
 
 	public Boolean dodarArtikal(Artikal a, String idRestorana) {
-
+		System.out.println("pozvao sam dodavanje menadzera");
 		for (Menadzer men : menadzeri) {
 			Restoran r = men.getRestoran();
 			if (r.getId().equals(idRestorana)) {
@@ -527,6 +519,16 @@ public class KorisnikDAO {
 
 	}
 
+	public boolean daLiSadrziArtikal(String naziv, List<Artikal> artikli) {
+		
+		for (Artikal artikal : artikli) {
+			if(artikal.getNaziv().equals(naziv)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Boolean izmeniArtikal(String idRestorana, String stariNaziv, Artikal a) {
 
 		for (Menadzer men : menadzeri) {

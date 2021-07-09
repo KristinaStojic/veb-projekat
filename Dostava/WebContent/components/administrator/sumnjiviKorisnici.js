@@ -38,43 +38,40 @@ Vue.component("sumnjiviKorisnici", {
               <span class="navbar-toggler-icon"></span>
           </button>
       
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto">
-                  <li class="nav-item nav-link active">
-                      <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
-                    </li>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeRestorana">Dodaj restoran</a>
+							</li>
 
-                  <li class="nav-item nav-link active">
-                      <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
-                    </li>
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeMenadzera">Dodaj menadžera</a>
+							</li>
 
-                  <li class="nav-item nav-link active">
-                    <a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
-                  </li>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/dodavanjeDostavljaca">Dodaj dostavljača</a>
+							</li>
 
-                  <li class="nav-item nav-link active">
-                    <a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
-                  </li>
-
-                  
-
-
-                  <li class="nav-item dropdown">
-                      <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                          <i class="zmdi zmdi-account zmdi-hc-2x"></i>
-                      </div>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                      <label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
-                                <div class="dropdown-divider"></div>
-                                <label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-                                <div class="dropdown-divider"></div>
+							<li class="nav-item nav-link active">
+							<a class="nav-link" href="http://localhost:8080/DostavaREST/#/sviKorisnici">Prikaži sve korisnike</a>
+							</li>
+							
+							<li class="nav-item dropdown">
+							<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								<i class="zmdi zmdi-account zmdi-hc-2x"></i>
+							</div>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+							<div class="dropdown-divider"></div>
+							<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
+							<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
 							</div>
-                  </li>
+						</li>
 
-                  
-              </ul>
-          </div>
+
+						</ul>
+				</div>
 
           <div id="greska" class="snackbar">{{greska}}</div>
 

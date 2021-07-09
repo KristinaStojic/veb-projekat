@@ -31,6 +31,11 @@ Vue.component("pregledKorpe", {
 		
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 							<ul class="navbar-nav ml-auto">
+							
+							<li class="nav-item nav-link active">
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+							</li>
+							
 							<li class="nav-item dropdown">
 								<div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
@@ -39,10 +44,9 @@ Vue.component("pregledKorpe", {
 								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
 								<div class="dropdown-divider"></div>
 								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
-								<div class="dropdown-divider"></div>
-									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
 									<label class="dropdown-item" v-on:click="odjava">Odjavi se</label>
+									
 								</div>
 							</li>
 
@@ -66,7 +70,7 @@ Vue.component("pregledKorpe", {
 					<th style="border-style:none" colspan="11" scope="colgroup"><div style="background:white: text-decoration: underline; color:gray;">
 				<h3>Trenutni status naloga: {{this.korpa.tipKupca}}</h3></br>
 				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' ">Popust koji je obračunat: 5%</h4>
-				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' && this.korpa.nedostaje < 0 ">Potrebno bodova za Zlatni status: {{(this.korpa.nedostaje).toFixed(2)}}</h4>
+				<h4 v-if="this.korpa.tipKupca === 'SREBRNI' && this.korpa.nedostaje > 0 ">Potrebno bodova za Zlatni status: {{(this.korpa.nedostaje).toFixed(2)}}</h4>
 				<h4 v-if="this.korpa.tipKupca === 'ZLATNI' ">Popust koji je obračunat: 10%</h4>
 				<h4 v-if="this.korpa.tipKupca === 'BRONZANI' && this.korpa.nedostaje > 0">Potrebno bodova za Srebrni status: {{(this.korpa.nedostaje).toFixed(2)}}</h4>
 				<h4 v-if="this.korpa.nedostaje < 0 ">Sakupljeno dovoljno bodova za sledeći nivo!</h4>
@@ -227,6 +231,36 @@ Vue.component("pregledKorpe", {
 					console.log(err);
 				  })
     		
+    	},
+		pregledPorudzbina(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiPorudzbine/' + window.localStorage.getItem("korisnik") + "/" + window.localStorage.getItem("uloga"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Nemate nijednu porudžbinu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledPorudzbina/"+ window.localStorage.getItem("korisnik"))
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
     	}
     }
   });
