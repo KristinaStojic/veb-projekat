@@ -107,23 +107,24 @@ Vue.component("pregledPorudzbina", {
                                 <input type="text" v-model="pocCena" style="height:36px; width:180px" placeholder="Početna cena"/>
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <input type="text" v-model="krajnjaCena" style="height:36px; width:180px" placeholder="Krajnja cena"/>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                <label style="font-size:15px">Nedostavljene: </label>
-                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                               
+                                <div >
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
                                 </vuejs-datepicker>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <vuejs-datepicker style="height:36px; width:180px" placeholder="Krajnji datum" v-model="krajDatum">
                                 </vuejs-datepicker>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
+                                </div>
+                                
+                                <label style="font-size:15px">Filtriranje: </label>
+
+                               
+                                <div class="btn-group">
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
-                                <label style="font-size:15px">Filtriranje: </label>
-                                <div class="btn-group">
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Tip restorana
                                 </button>
@@ -143,6 +144,7 @@ Vue.component("pregledPorudzbina", {
 
                                 
                                 </div>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
                                 <div class="btn-group">
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -160,7 +162,7 @@ Vue.component("pregledPorudzbina", {
                                 </div>
                                 </div>
 
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
 
                                 <label style="font-size:15px;">Sortiranje: </label>
@@ -179,6 +181,10 @@ Vue.component("pregledPorudzbina", {
                                  
                                 </div>
                                 </div>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <label style="font-size:15px">Nedostavljene: </label>
+                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
                                 </div></th>
                                 </tr>
                                 
