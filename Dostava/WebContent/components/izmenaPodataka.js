@@ -338,7 +338,7 @@ Vue.component("izmenaPodataka", {
             "datumRodjenja": this.datumRodjenja       
             }
         axios
-					.post('/DostavaREST/rest/korisnici/izmeniLicnePodatke', k)
+					.put('/DostavaREST/rest/korisnici/izmeniLicnePodatke/' + window.localStorage.getItem("korisnik") , k)
 					.then(response => {
 						if (response.data.length == 0) {
 							this.greska = "Korisnik sa ovim korisničkim imenom već postoji!";

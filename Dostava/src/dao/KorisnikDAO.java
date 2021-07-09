@@ -160,6 +160,18 @@ public class KorisnikDAO {
 
 		return null;
 	}
+	
+	
+	public Korisnik dobaviPoID(String id) {
+
+		for (Korisnik k : dobaviSve()) {
+			if (k.getId().equals(id)) {
+				return k;
+			}
+		}
+
+		return null;
+	}
 
 	public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) {
 
