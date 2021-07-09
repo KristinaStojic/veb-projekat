@@ -462,16 +462,10 @@ public class KorisnikDAO {
 		return null;
 	}
 
-	public String nadjiTipKupca(Kupac k) {
+	public TipKupca nadjiTipKupca(String idKupca) {
 		for (Kupac kupac : kupci) {
-			if (kupac.getId().equals(k.getId())) {
-				if (kupac.getTipKupca().getImeTipa().toString().equals("ZLATNI")) {
-					return "Zlatni";
-				} else if (kupac.getTipKupca().getImeTipa().toString().equals("SREBRNI")) {
-					return "Srebrni";
-				} else if (kupac.getTipKupca().getImeTipa().toString().equals("BRONZANI")) {
-					return "Bronzani";
-				}
+			if (kupac.getId().equals(idKupca)) {
+				return kupac.getTipKupca();
 			}
 		}
 
@@ -829,7 +823,7 @@ public class KorisnikDAO {
 		System.out.println(idDostavljaca + "treba da dodam dostavljacu");
 		for (Dostavljac d : dostavljaci) {
 			if (d.getId().equals(idDostavljaca)) {
-				System.out.println("dodajem");
+				
 				d.dodajPorudzbinu(porudzbina);
 				sacuvajPodatke();
 				return true;
@@ -928,4 +922,5 @@ public class KorisnikDAO {
 			}
 		}
 	}
+
 }

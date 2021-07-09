@@ -492,12 +492,6 @@ public class KorisniciService {
 			}
 
 		}
-		
-		for (PorudzbinePrikazDTO porudzbinePrikazDTO : porudzbineKupca) {
-			System.out.println("evo je porudzbina " + porudzbinePrikazDTO.id);
-		}
-
-		System.out.println("ovoliko ima pronadjenih porudzbina: " + porudzbineKupca.size());
 		return porudzbineKupca;
 	}
 

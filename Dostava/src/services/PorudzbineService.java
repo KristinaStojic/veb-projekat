@@ -22,6 +22,8 @@ import beans.ArtikalKorpa;
 import beans.Korisnik;
 import beans.Porudzbina;
 import beans.Restoran;
+import beans.TipKupca;
+import beans.TipKupca.ImeTipa;
 import beans.Porudzbina.Status;
 import dao.KorisnikDAO;
 import dao.PorudzbinaDAO;
@@ -95,15 +97,27 @@ public class PorudzbineService {
 				}
 			}
 		}
-
+		
 		Porudzbina p = new Porudzbina(UUID.randomUUID().toString().replace("-", "").substring(0, 10), artikli,
 				r.getId(), new Date(System.currentTimeMillis()), korpa.cena, korpa.korisnik, Porudzbina.Status.OBRADA);
-
+		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
+		TipKupca prethodni = korisnici.nadjiTipKupca(idKorisnika);
 		if (!korisnici.dodajPorudzbinu(p)) {
 			return Response.status(400).build();
 		}
 		porudzbine.dodajPorudzbinu(p);
-		return Response.status(200).build();
+		TipKupca novi = korisnici.nadjiTipKupca(idKorisnika);
+		
+		if(prethodni.getImeTipa() == novi.getImeTipa()) {
+			Response.status(200).entity(0).build();
+		}else if(prethodni.getImeTipa() == ImeTipa.BRONZANI && novi.getImeTipa() == ImeTipa.SREBRNI ) {
+			return Response.status(200).entity("Čestitamo! Postali ste srebrni član!").build();
+		}else if(prethodni.getImeTipa() == ImeTipa.SREBRNI && novi.getImeTipa() == ImeTipa.ZLATNI ) {
+			return Response.status(200).entity("Čestitamo! Postali ste zlatni član!").build();
+		}else if(prethodni.getImeTipa() == ImeTipa.BRONZANI && novi.getImeTipa() == ImeTipa.ZLATNI ) {
+			return Response.status(200).entity("Čestitamo! Postali ste zlatni član!").build();
+		}
+		return Response.status(200).entity(0).build();
 	}
 
 	@POST
@@ -200,6 +214,7 @@ public class PorudzbineService {
 		if (porudzbina == null || porudzbina.getStatus() != Status.CEKA_DOSTAVU) {
 			return Response.status(400).build();
 		}
+		porudzbina.setDostavljac(idDostavljaca);
 		if (!porudzbine.promeniStatusPorudzbineTransport(id, idDostavljaca) || !korisnici.promeniStatusPorudzbineKupcuTransport(id, porudzbina.getKupac(),idDostavljaca)
 				|| !korisnici.dodeliPorudzbinuDostavljacu(porudzbina, idDostavljaca)) {
 			return Response.status(400).build();

@@ -1098,7 +1098,7 @@ Vue.component("pregledPorudzbina", {
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
 					this.komentar.tekst = "";
-					this.komentar.ocena = 1;
+					this.postaviOcenu(1);
 					$('#komentar').modal('toggle'); 
     			})
 				.catch(err => {

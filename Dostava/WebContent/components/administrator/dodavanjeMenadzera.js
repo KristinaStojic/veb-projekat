@@ -20,7 +20,10 @@ Vue.component("dodavanjeMenadzera", {
 			datum: false,
 			msg: "",
 			logo: "slike/logo_final2.png",
-			greska: ""
+			greska: "",
+			zabranjeniDatumi: {
+                from: new Date(Date.now())
+            }
 		}
 	},
 	template: ` 
@@ -95,7 +98,7 @@ Vue.component("dodavanjeMenadzera", {
 										</div>
 
 										<div class="form-wrapper">
-											<vuejs-datepicker style="padding-center:35px;" placeholder="Datum rođenja" v-model="noviKorisnik.datumRodjenja" 
+											<vuejs-datepicker :disabledDates="zabranjeniDatumi" style="padding-center:35px;" placeholder="Datum rođenja" v-model="noviKorisnik.datumRodjenja" 
 											v-on:click="datumPromena" v-bind:class="[{ invalid: datum && !this.noviKorisnik.datumRodjenja}, { 'form-control': !datum || this.noviKorisnik.datumRodjenja}]">
 											</vuejs-datepicker>
 											<i class="zmdi zmdi-calendar"></i>
