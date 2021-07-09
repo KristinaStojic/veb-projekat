@@ -508,10 +508,10 @@ Vue.component("pregledPorudzbina", {
                                   </button>                 
                                     </td>
                                     <td style="vertical-align:middle;text-align: center">
-                                    <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#odobravanje" @click="posaljiPorudzbinu(p)">
+                                    <button v-if="p.status === 'OBRADA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#odobravanje" @click="pomocnaMenadzer(p.id,p.restoran)">
                                     	Odobri
                                   	</button>  
-									<button v-if="p.status === 'PRIPREMA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#odobravanje" @click="posaljiPorudzbinu(p)">
+									<button v-if="p.status === 'PRIPREMA'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#odobravanje" @click="pomocnaMenadzer(p.id,p.restoran)">
                                     	Pripremljena
                                  	 </button> 
 									 <button v-if="p.status === 'CEKA_DOSTAVU'" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#prikaziZahteve" @click="dobaviZahteve(p.id); posaljiPorudzbinu(p.id)">
@@ -1002,6 +1002,10 @@ Vue.component("pregledPorudzbina", {
 			this.komentar.ocena = 1;
             this.komentar.idPorudzbine = this.pomocnaPorudzbina.id
         },
+		pomocnaMenadzer(id,naziv){
+            this.pomocnaPorudzbina.id = id;
+        	this.pomocnaPorudzbina.restoran = naziv;
+		},
 		dobaviZahteve : function(id){
 			
 			axios 
@@ -1125,8 +1129,6 @@ Vue.component("pregledPorudzbina", {
            })
         },
 		pregledKupaca(){
-    		
-
 			axios 
     			.get('/DostavaREST/rest/korisnici/nadjiKupce/' + window.localStorage.getItem("korisnik"))
     			.then(response => {
