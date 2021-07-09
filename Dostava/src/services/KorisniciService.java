@@ -280,7 +280,9 @@ public class KorisniciService {
 						artikli.add(new ArtikliDTO(a.getNaziv(), a.getCena().toString(), a.tipString(), a.getRestoran(),
 								a.getKolicina().toString(), a.getOpis(), a.getSlika()));
 					}
-
+				}
+				
+				for(ArtikliDTO a : artikli) {
 				}
 				return new RestoranMenadzerDTO(r.getId(), r.getNaziv(), r.tipString(), r.getLogo(),
 						l.getGeografskaDuzina(), l.getGeografskaSirina(), l.getUlica(), l.getBroj(), l.getMesto(),
@@ -321,7 +323,7 @@ public class KorisniciService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response proveraKorpe() {
 		KorisnikDAO dao = dobaviKorisnikDAO();
-		String idKupca = ((Kupac) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
+		String idKupca = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
 		if (idKupca == null)
 			return Response.status(400).build(); 
 		
