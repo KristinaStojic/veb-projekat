@@ -38,7 +38,7 @@ Vue.component("pregledKorpe", {
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
 								<div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
+								<label class="dropdown-item" v-on:click="izmenaPodataka()">Izmena podataka</label>
 								<div class="dropdown-divider"></div>
 									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
 									<div class="dropdown-divider"></div>
@@ -138,6 +138,9 @@ Vue.component("pregledKorpe", {
 				  })
     },
     methods: {
+		izmenaPodataka(){
+			this.$router.push("/izmenaPodataka/"+ window.localStorage.getItem("korisnik"));
+		  },
 		mojiPodaci(){
 			this.$router.push("/licniPodaci/"+ window.localStorage.getItem("korisnik"));
 			console.log("moji podaci")
