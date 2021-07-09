@@ -503,7 +503,9 @@ public class KorisnikDAO {
 		for (Menadzer men : menadzeri) {
 			Restoran r = men.getRestoran();
 			if (r.getId().equals(idRestorana)) {
-				r.dodajArtikal(a);
+				List<Artikal> stari = r.getArtikliUPonudi();
+				stari.add(stari.size(), a);
+				r.setArtikliUPonudi(stari);
 				sacuvajPodatke();
 				return true;
 			}

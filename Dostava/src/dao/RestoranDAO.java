@@ -114,7 +114,9 @@ public class RestoranDAO {
 					if (ar.getNaziv().equals(a.getNaziv())) return false;
 				}
 				
-				r.dodajArtikal(a);
+				List<Artikal> stari = r.getArtikliUPonudi();
+				stari.add(stari.size(), a);
+				r.setArtikliUPonudi(stari);
 				break;
 			}
 		}
