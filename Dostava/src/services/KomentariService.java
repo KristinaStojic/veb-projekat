@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -104,7 +105,7 @@ public class KomentariService {
 		String restoranMenadzera = korisnikDAO.restoranMenadzera(idMenadzera);
 		List<KomentarPrikazDTO> komentariDTO = new ArrayList<>();
 		for (Komentar komentar : komentarDAO.dobaviSve()) {
-			if(!komentar.getObradjen()) {
+			if(!komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
 				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
 				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
 				if(restoranMenadzera.equals(idRestorana)) {
@@ -161,7 +162,7 @@ public class KomentariService {
 		KorisnikDAO korisnikDAO =  dobaviKorisnikDAO();
 		List<KomentariPrikazSviDTO> komentariDTO = new ArrayList<>();
 		for (Komentar komentar : komentarDAO.dobaviSve()) {
-			if(komentar.getObradjen()) {
+			if(komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
 				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
 				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
 				
@@ -175,5 +176,28 @@ public class KomentariService {
 		}
 		System.out.println("ovoliko ima komentara koji su obradjeni: " + komentariDTO.size());
 		return komentariDTO;
+	}
+	
+	@DELETE
+	@Path("/obrisiKomentar/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obrisiRestoran(@PathParam("id") String idKomentara) {
+		System.out.println("cao ubicu se ako ne udjes ovde :D");
+		KomentarDAO komDAO = dobaviKomentarDAO();
+		RestoranDAO restDAO = dobaviRestoranDAO();
+		KorisnikDAO korDAO = dobaviKorisnikDAO();
+		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
+
+		String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komDAO.dobaviKomentar(idKomentara).getIdPorudzbine());
+		System.out.println(idRestorana);
+		if(restDAO.izmeniOcenu(komDAO.dobaviKomentar(idKomentara),idRestorana) &&
+				korDAO.ispraviOcenuRestorana(idRestorana, komDAO.dobaviKomentar(idKomentara), restDAO.dobaviRestoran(idRestorana).getUkupanBrojKomentara() + 1)
+				&& komDAO.obrisiKomentar(idKomentara)) {
+			return Response.status(200).build();
+		}
+		
+		return Response.status(400).build();
+
 	}
 }

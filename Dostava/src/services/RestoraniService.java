@@ -75,12 +75,15 @@ public class RestoraniService {
 		List<RestoranPrikazDTO> restoraniDTO = new ArrayList<RestoranPrikazDTO>();
 
 		for (Restoran r : dao.dobaviRestorane()) {
-			String lokacija = r.getLokacija().getUlica() + " " + r.getLokacija().getBroj().toString() + ", "
-					+ r.getLokacija().getMesto();
-			Lokacija l = r.getLokacija();
-			restoraniDTO.add(new RestoranPrikazDTO(r.getId(), r.getNaziv(), r.tipString(), r.statusString(), lokacija,
-					r.getLogo(), r.getOcena().toString(), l.getGeografskaDuzina(), l.getGeografskaSirina(),
-					l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj()));
+			if(r.getLogickoBrisanje() == 0) {
+				String lokacija = r.getLokacija().getUlica() + " " + r.getLokacija().getBroj().toString() + ", "
+						+ r.getLokacija().getMesto();
+				Lokacija l = r.getLokacija();
+				restoraniDTO.add(new RestoranPrikazDTO(r.getId(), r.getNaziv(), r.tipString(), r.statusString(), lokacija,
+						r.getLogo(), r.getOcena().toString(), l.getGeografskaDuzina(), l.getGeografskaSirina(),
+						l.getUlica(), l.getBroj(), l.getMesto(), l.getPostanskiBroj()));
+			}
+		
 		}
 
 		return restoraniDTO;

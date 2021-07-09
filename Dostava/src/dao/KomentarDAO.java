@@ -20,10 +20,13 @@ import dto.KomentarDTO;
 public class KomentarDAO {
 
 	private Map<String, Komentar> komentari;
+	private Map<String, Komentar> pomocniKomentari;
+
 	private String putanja;
 
 	public KomentarDAO(String putanjaDoFajla) {
 		komentari = new HashMap<>();
+		pomocniKomentari = new HashMap<>();
 		this.putanja = putanjaDoFajla;
 
 		ucitajPodatke();
@@ -47,7 +50,10 @@ public class KomentarDAO {
 				Map<String, Komentar> postojece = mapper
 						.readValue(Paths.get(this.putanja + "\\komentari.json").toFile(), typeRef);
 				for (Komentar k : postojece.values()) {
-					komentari.put(k.getId(), k);
+					if(k.getLogickoBrisanje() == 0) {
+						komentari.put(k.getId(), k);
+						pomocniKomentari.put(k.getId(), k);
+					}
 				}
 			}
 
@@ -139,4 +145,34 @@ public class KomentarDAO {
 			return "Odbijen";
 		}
 	}
+	
+	
+	public boolean obrisiKomentar(String idKom) {
+		
+		 for (Komentar r : dobaviSve()) {
+				if(r.getId().equals(idKom)) {
+					r.setLogickoBrisanje(1);
+				}
+			}
+		 
+		 sacuvajPodatke();
+		 
+		 
+		 System.out.println("obrisao se komentar");
+		 return true;
+	}
+	
+	public String nadjiRestoran(String idKom) {
+		System.out.println("id kom: " + idKom);
+		for (Komentar kom : dobaviSve()) {
+			System.out.println("idevi : " + kom.getId());
+			if(kom.getId().equals(idKom)) {
+				System.out.println(kom.getRestoran() + " oooooooo");
+				return kom.getRestoran();
+			}
+		}
+		
+		return null;
+	}
+	
 }

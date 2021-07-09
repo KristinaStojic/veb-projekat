@@ -239,27 +239,25 @@ public class KorisniciService {
 		List<KorisnikPrikazDTO> korisniciDTO = new ArrayList<KorisnikPrikazDTO>();
 
 		for (Korisnik k : korisniciDAO.dobaviSve()) {
-			String imePrz = k.getIme() + " " + k.getPrezime();
+			if(k.getLogickoBrisanje() == 0) {
+				String imePrz = k.getIme() + " " + k.getPrezime();
 
-			KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(), k.getKorisnickoIme(), imePrz,
-					korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(), korisniciDAO.nadjiUlogu(k.getUloga()),
-					k.getIme(), k.getPrezime(), k.getBlokiran());
+				KorisnikPrikazDTO korDTO = new KorisnikPrikazDTO(k.getId(), k.getKorisnickoIme(), imePrz,
+						korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(), korisniciDAO.nadjiUlogu(k.getUloga()),
+						k.getIme(), k.getPrezime(), k.getBlokiran());
 
-			if (k.getUloga().toString().equals("KUPAC")) {
-				tipKupca = korisniciDAO.nadjiTipKupca(k);
-				brojBodovaKupca = korisniciDAO.nadjiBrojBodovaKupca(k);
+				if (k.getUloga().toString().equals("KUPAC")) {
+					tipKupca = korisniciDAO.nadjiTipKupca(k);
+					brojBodovaKupca = korisniciDAO.nadjiBrojBodovaKupca(k);
 
-				korDTO.setBrojBodova(brojBodovaKupca);
-				korDTO.setTipKupca(tipKupca);
+					korDTO.setBrojBodova(brojBodovaKupca);
+					korDTO.setTipKupca(tipKupca);
 
+				}			
+
+				korisniciDTO.add(korDTO);
 			}
-			/*
-			 * korisniciDTO.add(new KorisnikPrikazDTO(k.getId(),k.getKorisnickoIme(),
-			 * imePrz, korisniciDAO.nadjiPol(k.getPol()), k.getDatumRodjenja(),
-			 * korisniciDAO.nadjiUlogu(k.getUloga()), k.getIme(), k.getPrezime()));
-			 */
-
-			korisniciDTO.add(korDTO);
+		
 		}
 
 		return korisniciDTO;

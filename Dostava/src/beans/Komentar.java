@@ -17,6 +17,7 @@ public class Komentar implements Serializable {
 	private Boolean odobren;
 	private Boolean obradjen;
 	private String idPorudzbine;
+	private Integer logickoBrisanje;
 
 	public Komentar() {
 		super();
@@ -32,6 +33,7 @@ public class Komentar implements Serializable {
 		this.odobren = false;
 		this.obradjen = false;
 		this.idPorudzbine = idPorudzbine;
+		this.logickoBrisanje = 0;
 	}
 
 	public String getId() {
@@ -96,6 +98,14 @@ public class Komentar implements Serializable {
 
 	public void setIdPorudzbine(String idPorudzbine) {
 		this.idPorudzbine = idPorudzbine;
+	}
+
+	public Integer getLogickoBrisanje() {
+		return logickoBrisanje;
+	}
+
+	public void setLogickoBrisanje(Integer logickoBrisanje) {
+		this.logickoBrisanje = logickoBrisanje;
 	}
 
 	/*public Komentar(String id, String kupac, String restoran, String tekst, Integer ocena, Boolean odobren,

@@ -283,7 +283,9 @@ Vue.component("informacijeRestoran", {
 									<div class="card">
 										<ul class="list-group list-group-flush">
 										<li class="list-group-item">
-										<b>Kupac: {{k.kupac}} </b>    			
+										<b>Kupac: {{k.kupac}} </b>  
+										<button v-if="uloga==='ADMINISTRATOR'" class="btn btn-info btn-sm" style="float: right;" @click="obrisiKomentar(k.id)">Obriši</button>
+  			
 										</li>
 										
 										<li class="ime list-group-item">Ocena: {{k.ocena}}</li>
@@ -479,6 +481,20 @@ Vue.component("informacijeRestoran", {
 					this.$router.go();
 
 					this.greska = "Uspesno ste obrisali artikal!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+
+				})
+		},
+
+		obrisiKomentar: function(idKom) {
+			axios
+				.delete('rest/komentari/obrisiKomentar/' + idKom)
+				.then(response => {
+					this.$router.go();
+
+					this.greska = "Uspesno ste obrisali komentar!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
