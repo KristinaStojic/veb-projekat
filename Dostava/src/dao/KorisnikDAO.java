@@ -583,9 +583,9 @@ public class KorisnikDAO {
 	}
 
 	public void obrisiKorisnika(String idKorisnika) {
-		if (korisnici.containsKey(idKorisnika)) {
+		/*if (korisnici.containsKey(idKorisnika)) {
 			korisnici.remove(idKorisnika);
-		}
+		}*/
 
 		for (Menadzer men : menadzeri) {
 			if (men.getId().equals(idKorisnika)) {
