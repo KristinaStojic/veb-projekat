@@ -39,7 +39,7 @@ Vue.component("dodavanjeArtikla", {
 							</li>
 							
 							<li class="nav-item nav-link active">
-								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
+								<a class="nav-link" href="#" v-on:click="pregledPorudzbina()">Porudžbine</a>
 							</li>
 							
 							<li class="nav-item nav-link active">
