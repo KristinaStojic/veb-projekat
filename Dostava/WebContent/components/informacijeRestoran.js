@@ -245,7 +245,7 @@ Vue.component("informacijeRestoran", {
 					
 			</nav>
 				<div class="scroll" v-if="this.artikalTab === true">
-					<div v-if="uloga === 'KUPAC'"><button  class="dugme2" @click="pregledKorpe">Pregled korpe</button></br></br></br></br></div>
+					<div v-if="uloga === 'KUPAC' && restoran.status === true"><button  class="dugme2" @click="pregledKorpe">Pregled korpe</button></br></br></br></br></div>
 					<div class="red">
 						<div style="margin: 10px; margin-top:10" v-for="(a, i) in this.artikli">
 							<div class="kartica" >
@@ -263,7 +263,7 @@ Vue.component("informacijeRestoran", {
 								<li class="list-group-item">Cena: {{a.cena}} dinara</li>
 								<li v-if="a.opis !== ''" class="list-group-item">{{a.opis}}</li>
 								<li v-if="a.opis === ''" class="list-group-item">Nema opisa za artikal</li></ul>
-								<li  v-if="uloga === 'KUPAC'" class="list-group-item"> 
+								<li  v-if="uloga === 'KUPAC' && restoran.status === true" class="list-group-item"> 
 									
 									<button  v-if="a.kolicinaKorpa > '1'"   @click="a.kolicinaKorpa--"  v-on:click="azurirajKorpu(a)"  style="margin-left:50px" class="okruglo">-</button>
 									<button style="margin-left:50px" v-else class="okruglo">-</button>
