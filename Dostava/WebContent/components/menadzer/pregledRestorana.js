@@ -353,6 +353,35 @@ Vue.component("pregledRestorana", {
 		  },
     	izmena(value){
     		this.$router.push("/izmenaArtikla/"+ this.restoran.id + "/" + value)
+    	},pregledKupaca(){
+    		
+
+			axios 
+    			.get('/DostavaREST/rest/korisnici/nadjiKupce/' + window.localStorage.getItem("korisnik"))
+    			.then(response => {
+					console.log(response.data.length)
+                    if(response.data.length == 0){
+                        this.greska = "Ne postoji nijedan kupac u Vašem restoranu!";
+					    var x = document.getElementById("greska");
+					    x.className = "snackbar show";
+					    setTimeout(function(){x.className = x.className.replace("show","");},1800);
+                        //this.$router.push("/")
+                    }
+                    else{
+                        this.$router.push("/pregledKupaca/"+ window.localStorage.getItem("korisnik"))
+                    }
+                   
+					
+    			})
+				.catch(err => {
+					this.greska = "Neuspesno!";
+					var x = document.getElementById("greska");
+					x.className = "snackbar show";
+					setTimeout(function(){x.className = x.className.replace("show","");},1800);
+					this.$router.push("/")
+				  })
+
+
     	},
 		pregledPorudzbina(){
     		
