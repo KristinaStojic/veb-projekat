@@ -36,8 +36,8 @@ Vue.component("pregledKorpe", {
 									<i class="zmdi zmdi-account zmdi-hc-2x"></i>
 								</div>
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/licniPodaci">Moji podaci</a>
-                                    <div class="dropdown-divider"></div>
+								<label class="dropdown-item" v-on:click="mojiPodaci()">Moji podaci</label>
+								<div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="http://localhost:8080/DostavaREST/#/izmenaPodataka">Izmena podataka</a>
 								<div class="dropdown-divider"></div>
 									<a class="dropdown-item" v-on:click="pregledPorudzbina()">Moje porudžbine</a>
@@ -138,6 +138,10 @@ Vue.component("pregledKorpe", {
 				  })
     },
     methods: {
+		mojiPodaci(){
+			this.$router.push("/licniPodaci/"+ window.localStorage.getItem("korisnik"));
+			console.log("moji podaci")
+		  },
 		brisanje(ime){
 			
 			const artikal = {naziv: ime, kolicinaKorpa : 0, cena: 0, restoran: this.korpa.restoran}
