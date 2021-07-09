@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
+import beans.Komentar;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -254,6 +255,8 @@ public class RestoranDAO {
 				}else {
 					rest.setOcena((rest.getOcena() + ocena)/2);
 				}
+				rest.setUkupanBrojKomentara(rest.getUkupanBrojKomentara() + 1);
+				System.out.println(rest.getUkupanBrojKomentara());
 				sacuvajPodatke();
 				return true;
 			}
@@ -272,6 +275,33 @@ public class RestoranDAO {
 			}
 		}
 		return null;
+	}
+	
+	public boolean izmeniOcenu(Komentar komentar, String idRestorana) {
+		System.out.println(idRestorana);
+		for (Restoran rest : dobaviRestorane()) {
+			if(rest.getId().equals(idRestorana)) {
+				System.out.println("USAO brisanje");
+
+				if(rest.getUkupanBrojKomentara() == 1) {
+					rest.setOcena(0.0);
+					rest.setUkupanBrojKomentara(rest.getUkupanBrojKomentara() - 1);
+					sacuvajPodatke();
+					return true;
+				}
+				else {
+					rest.setOcena((rest.getOcena()*rest.getUkupanBrojKomentara() - komentar.getOcena()) / (rest.getUkupanBrojKomentara() - 1));
+					rest.setUkupanBrojKomentara(rest.getUkupanBrojKomentara() - 1);
+					sacuvajPodatke();
+					System.out.println("u redu je brisanje");
+					return true;
+
+				}
+			}
+			
+		}
+		System.out.println("nije dobra izmjena ocjene kod restorana");
+		return false;
 	}
 	
 	

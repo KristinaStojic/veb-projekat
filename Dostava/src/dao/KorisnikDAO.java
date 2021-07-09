@@ -21,6 +21,7 @@ import beans.Administrator;
 import beans.Artikal;
 import beans.ArtikalKorpa;
 import beans.Dostavljac;
+import beans.Komentar;
 import beans.Korisnik;
 import beans.Korisnik.Pol;
 import beans.Korisnik.Uloga;
@@ -927,5 +928,24 @@ public class KorisnikDAO {
 				return;
 			}
 		}
+	}
+	
+	public boolean ispraviOcenuRestorana(String idRestorana,Komentar komentar, Integer brojKomentara) {
+		for (Menadzer men : menadzeri) {
+			if (men.getRestoran().getId().equals(idRestorana)) {
+				System.out.println("azuriram ocjenu menadzera");
+				if (men.getRestoran().getOcena() == 0) {
+					men.getRestoran().setOcena(0.0);
+					System.out.println("evo me mijenjam ocjenu nakon brisanja komentara");
+				} else {
+					men.getRestoran().setOcena((men.getRestoran().getOcena()*brojKomentara - komentar.getOcena()) / (brojKomentara - 1));
+				}
+				sacuvajPodatke();
+				return true;
+			}
+		}
+
+		System.out.println("nije dobra izmjena ocjene kod menadzera");
+		return false;
 	}
 }

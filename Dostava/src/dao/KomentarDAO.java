@@ -20,10 +20,13 @@ import dto.KomentarDTO;
 public class KomentarDAO {
 
 	private Map<String, Komentar> komentari;
+	private Map<String, Komentar> pomocniKomentari;
+
 	private String putanja;
 
 	public KomentarDAO(String putanjaDoFajla) {
 		komentari = new HashMap<>();
+		pomocniKomentari = new HashMap<>();
 		this.putanja = putanjaDoFajla;
 
 		ucitajPodatke();
@@ -157,7 +160,22 @@ public class KomentarDAO {
 		 if(komentari.containsKey(idKom)) {
 			 komentari.remove(idKom);
 			}
+		 
+		 System.out.println("obrisao se komentar");
 		 return true;
+	}
+	
+	public String nadjiRestoran(String idKom) {
+		System.out.println("id kom: " + idKom);
+		for (Komentar kom : dobaviSve()) {
+			System.out.println("idevi : " + kom.getId());
+			if(kom.getId().equals(idKom)) {
+				System.out.println(kom.getRestoran() + " oooooooo");
+				return kom.getRestoran();
+			}
+		}
+		
+		return null;
 	}
 	
 }

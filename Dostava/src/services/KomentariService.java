@@ -183,11 +183,17 @@ public class KomentariService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obrisiRestoran(@PathParam("id") String idKomentara) {
-
+		System.out.println("cao ubicu se ako ne udjes ovde :D");
 		KomentarDAO komDAO = dobaviKomentarDAO();
 		RestoranDAO restDAO = dobaviRestoranDAO();
-		
-		if(komDAO.obrisiKomentar(idKomentara)) {
+		KorisnikDAO korDAO = dobaviKorisnikDAO();
+		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
+
+		String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komDAO.dobaviKomentar(idKomentara).getIdPorudzbine());
+		System.out.println(idRestorana);
+		if(restDAO.izmeniOcenu(komDAO.dobaviKomentar(idKomentara),idRestorana) &&
+				korDAO.ispraviOcenuRestorana(idRestorana, komDAO.dobaviKomentar(idKomentara), restDAO.dobaviRestoran(idRestorana).getUkupanBrojKomentara() + 1)
+				&& komDAO.obrisiKomentar(idKomentara)) {
 			return Response.status(200).build();
 		}
 		
