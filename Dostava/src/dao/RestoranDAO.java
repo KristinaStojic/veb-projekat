@@ -204,12 +204,7 @@ public class RestoranDAO {
 			}
 		 
 		 sacuvajPodatke();
-		 
-		 
-		 if(restorani.containsKey(idRestorana)) {
-				restorani.remove(idRestorana);
-			}
-		 
+	
 	}
 	
 	
@@ -234,8 +229,8 @@ public class RestoranDAO {
 					for(Artikal ar : r.getArtikliUPonudi()){
 						if (ar.getNaziv().equals(nazivArtikla)) {
 							System.out.println(ar.getNaziv());
-							r.obrisiArtikalIzListe(ar);
-							break;
+							//r.obrisiArtikalIzListe(ar);
+							//break;
 						}
 					}
 					System.out.println("ovoliko ima artikala posle brisanja:" + r.getArtikliUPonudi().size());

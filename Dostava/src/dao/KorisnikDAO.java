@@ -647,7 +647,7 @@ public class KorisnikDAO {
 							Artikal zaBrisanje = menadzer.getRestoran().getArtikliUPonudi().get(i);
 							if (zaBrisanje.getNaziv().equals(nazivArtikla)) {
 								{
-									menadzer.getRestoran().obrisiArtikalIzListe(zaBrisanje);
+									//menadzer.getRestoran().obrisiArtikalIzListe(zaBrisanje);
 								}
 							}
 						}
