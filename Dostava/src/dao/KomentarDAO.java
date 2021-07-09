@@ -47,7 +47,9 @@ public class KomentarDAO {
 				Map<String, Komentar> postojece = mapper
 						.readValue(Paths.get(this.putanja + "\\komentari.json").toFile(), typeRef);
 				for (Komentar k : postojece.values()) {
-					komentari.put(k.getId(), k);
+					if(k.getLogickoBrisanje() == 0) {
+						komentari.put(k.getId(), k);
+					}
 				}
 			}
 
@@ -139,4 +141,23 @@ public class KomentarDAO {
 			return "Odbijen";
 		}
 	}
+	
+	
+	public boolean obrisiKomentar(String idKom) {
+		
+		 for (Komentar r : dobaviSve()) {
+				if(r.getId().equals(idKom)) {
+					r.setLogickoBrisanje(1);
+				}
+			}
+		 
+		 sacuvajPodatke();
+		 
+		 
+		 if(komentari.containsKey(idKom)) {
+			 komentari.remove(idKom);
+			}
+		 return true;
+	}
+	
 }

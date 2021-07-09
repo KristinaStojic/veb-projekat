@@ -2,7 +2,6 @@ package beans;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.ListIterator;
 
 public class Restoran implements Serializable {
 
@@ -25,6 +24,7 @@ public class Restoran implements Serializable {
 	private Lokacija lokacija;
 	private String logo;
 	private Double ocena;
+	private Integer ukupanBrojKomentara;
 
 	public Restoran() {
 		super();
@@ -42,6 +42,7 @@ public class Restoran implements Serializable {
 		this.lokacija = lokacija;
 		this.logo = slika;
 		this.ocena = ocena;
+		this.ukupanBrojKomentara = 0;
 	}
 
 	public String getId() {
@@ -181,4 +182,14 @@ public class Restoran implements Serializable {
 	
 	}
 	}
+
+	public Integer getUkupanBrojKomentara() {
+		return ukupanBrojKomentara;
+	}
+
+	public void setUkupanBrojKomentara(Integer ukupanBrojKomentara) {
+		this.ukupanBrojKomentara = ukupanBrojKomentara;
+	}
+	
+	
 }
