@@ -52,6 +52,7 @@ public class KomentarDAO {
 				for (Komentar k : postojece.values()) {
 					if(k.getLogickoBrisanje() == 0) {
 						komentari.put(k.getId(), k);
+						pomocniKomentari.put(k.getId(), k);
 					}
 				}
 			}
@@ -156,10 +157,6 @@ public class KomentarDAO {
 		 
 		 sacuvajPodatke();
 		 
-		 
-		 if(komentari.containsKey(idKom)) {
-			 komentari.remove(idKom);
-			}
 		 
 		 System.out.println("obrisao se komentar");
 		 return true;

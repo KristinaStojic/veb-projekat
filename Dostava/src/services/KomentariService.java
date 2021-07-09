@@ -105,7 +105,7 @@ public class KomentariService {
 		String restoranMenadzera = korisnikDAO.restoranMenadzera(idMenadzera);
 		List<KomentarPrikazDTO> komentariDTO = new ArrayList<>();
 		for (Komentar komentar : komentarDAO.dobaviSve()) {
-			if(!komentar.getObradjen()) {
+			if(!komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
 				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
 				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
 				if(restoranMenadzera.equals(idRestorana)) {
@@ -162,7 +162,7 @@ public class KomentariService {
 		KorisnikDAO korisnikDAO =  dobaviKorisnikDAO();
 		List<KomentariPrikazSviDTO> komentariDTO = new ArrayList<>();
 		for (Komentar komentar : komentarDAO.dobaviSve()) {
-			if(komentar.getObradjen()) {
+			if(komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
 				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
 				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
 				
