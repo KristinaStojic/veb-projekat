@@ -10,6 +10,7 @@ Vue.component("pregledKorpe", {
 			restoran : ""
 		},
         greska: "",
+		poruka: "",
         logo : "slike/logo_final2.png"
       }
     },
@@ -122,6 +123,23 @@ Vue.component("pregledKorpe", {
 		</div>
   		</div>
   	</div>
+
+			<div class="modal" id="promenaStanja">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+                        <div class="modal-content">
+                        <!-- Modal body -->
+                        <div class="modal-body" style="text-align: center">
+							<h5 class="modal-title">{{poruka}}</h5>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal" @click="potvrdiPorudzbinu">Potvrdi</button>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
   </div>
   `
     ,
@@ -178,6 +196,10 @@ Vue.component("pregledKorpe", {
 					this.$router.push("/")
 			}
 		},
+		potvrdiPorudzbinu(){
+			this.$router.push("/pregledPorudzbina/" + window.localStorage.getItem("korisnik"));
+		}
+		,
 		poruci : function(event) {
 			event.preventDefault();
 			
@@ -193,12 +215,15 @@ Vue.component("pregledKorpe", {
 				axios 
     			.post('/DostavaREST/rest/porudzbine/', this.korpa)
     			.then(response => {
-					
+					if(response.data != 0){
+						this.poruka = response.data;
+					$('#promenaStanja').modal('show'); 
+					}else{
 					this.greska = "Uspešno izvršena porudžbina!";
 					var x = document.getElementById("greska");
 					x.className = "snackbar show";
 					setTimeout(function(){x.className = x.className.replace("show","");},1800);
-					this.$router.push("/pregledPorudzbina/" + window.localStorage.getItem("korisnik"))
+					this.$router.push("/pregledPorudzbina/" + window.localStorage.getItem("korisnik"))}
 					
     			})
 				.catch(err => {
