@@ -1,6 +1,5 @@
 package beans;
 
-import java.awt.Image;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,25 +11,56 @@ public class Restoran implements Serializable {
 	private static final long serialVersionUID = 7705934003444955722L;
 
 	public enum TipRestorana {
-		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA
+		ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA, RAZNO // ako dodajes, dodaj dole u
+																						// metodu
 	}
 
+	private String id;
+	private Integer logickoBrisanje;
 	private String naziv;
 	private TipRestorana tipRestorana;
 	private List<Artikal> artikliUPonudi;
 	private Boolean status;
 	private Lokacija lokacija;
-	private Image logo;
+	private String logo;
+	private Double ocena;
+	private Integer ukupanBrojKomentara;
 
 	public Restoran() {
 		super();
 	}
 
-	public Restoran(String naziv) {
+	public Restoran(String id, Integer logickoBrisanje, String naziv, TipRestorana tipRestorana,
+			List<Artikal> artikliUPonudi, Boolean status, Lokacija lokacija, String slika, Double ocena) {
 		super();
+		this.id = id;
+		this.logickoBrisanje = logickoBrisanje;
 		this.naziv = naziv;
+		this.tipRestorana = tipRestorana;
+		this.artikliUPonudi = artikliUPonudi;
+		this.status = status;
+		this.lokacija = lokacija;
+		this.logo = slika;
+		this.ocena = ocena;
+		this.ukupanBrojKomentara = 0;
 	}
-	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public Integer getLogickoBrisanje() {
+		return logickoBrisanje;
+	}
+
+	public void setLogickoBrisanje(Integer logickoBrisanje) {
+		this.logickoBrisanje = logickoBrisanje;
+	}
+
 	public String getNaziv() {
 		return naziv;
 	}
@@ -71,12 +101,95 @@ public class Restoran implements Serializable {
 		this.lokacija = lokacija;
 	}
 
-	public Image getLogo() {
+	public String getLogo() {
 		return logo;
 	}
 
-	public void setLogo(Image logo) {
-		this.logo = logo;
+	public void setLogo(String putanja) {
+		this.logo = putanja;
 	}
 
+	public String statusString() {
+		if (status) {
+			return "Otvoreno";
+		}
+
+		return "Zatvoreno";
+	}
+
+	public Double getOcena() {
+		return ocena;
+	}
+
+	public void setOcena(Double ocena) {
+		this.ocena = ocena;
+	}
+
+	public String tipString() {
+		// ITALIJANSKI, KINESKI, ROSTILJ, SRPSKI, GRCKI, VEGETARIJANSKI, BRZA_HRANA,
+		// RAZNO
+		switch (tipRestorana) {
+		case ITALIJANSKI:
+			return "Italijanska hrana";
+		case KINESKI:
+			return "Kineska hrana";
+		case ROSTILJ:
+			return "Jela sa roštilja";
+		case SRPSKI:
+			return "Srpska hrana";
+		case GRCKI:
+			return "Grčka hrana";
+		case VEGETARIJANSKI:
+			return "Vegetarijanska hrana";
+		case BRZA_HRANA:
+			return "Brza hrana";
+		default:
+			return "Raznolika kuhinja";
+		}
+	}
+	
+	public void dodajArtikal(Artikal a) {
+		this.artikliUPonudi.add(a);
+	}
+	
+	public void obrisiArtikal(Artikal a) {
+		
+		for( int i = 0; i < this.artikliUPonudi.size(); i++ )
+		{
+		    Artikal zaBrisanje = this.artikliUPonudi.get(i);
+		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
+		    {
+		    	this.artikliUPonudi.get(i).setLogickoBrisanje(1);
+		    }
+		      
+		}
+	
+	}
+	}
+	
+	
+	public void obrisiArtikalIzListe(Artikal a) {
+		
+		for( int i = 0; i < this.artikliUPonudi.size(); i++ )
+		{
+		    Artikal zaBrisanje = this.artikliUPonudi.get(i);
+		    if(zaBrisanje.getNaziv().equals(a.getNaziv())) {
+		    {
+		    	this.artikliUPonudi.remove(zaBrisanje);
+		    }
+		      
+		}
+	
+	}
+	}
+
+	public Integer getUkupanBrojKomentara() {
+		return ukupanBrojKomentara;
+	}
+
+	public void setUkupanBrojKomentara(Integer ukupanBrojKomentara) {
+		this.ukupanBrojKomentara = ukupanBrojKomentara;
+	}
+	
+	
 }

@@ -15,10 +15,10 @@ public class Korisnik implements Serializable {
 	}
 
 	public enum Uloga {
-		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC
+		ADMINISTRATOR, MENADZER, DOSTAVLJAC, KUPAC, GOST
 	}
 
-	private Integer id;
+	private String id;
 	private Integer logickoBrisanje; // 1 - obrisan, 0 - nije obrisan
 	private String korisnickoIme;
 	private String lozinka;
@@ -27,6 +27,7 @@ public class Korisnik implements Serializable {
 	private Pol pol;
 	private Date datumRodjenja;
 	private Uloga uloga;
+	private Integer blokiran;
 
 	public Korisnik() {
 		super();
@@ -45,7 +46,7 @@ public class Korisnik implements Serializable {
 		this.uloga = k.uloga;
 	}
 
-	public Korisnik(Integer id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
+	public Korisnik(String id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
 			String prezime, Pol pol, Date datumRodjenja, Uloga uloga) {
 		super();
 		this.id = id;
@@ -115,11 +116,11 @@ public class Korisnik implements Serializable {
 		this.uloga = uloga;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -130,5 +131,30 @@ public class Korisnik implements Serializable {
 	public void setLogickoBrisanje(Integer logickoBrisanje) {
 		this.logickoBrisanje = logickoBrisanje;
 	}
+
+	public Integer getBlokiran() {
+		return blokiran;
+	}
+
+	public void setBlokiran(Integer blokiran) {
+		this.blokiran = blokiran;
+	}
+
+	public Korisnik(String id, Integer logickoBrisanje, String korisnickoIme, String lozinka, String ime,
+			String prezime, Pol pol, Date datumRodjenja, Uloga uloga, Integer blokiran) {
+		super();
+		this.id = id;
+		this.logickoBrisanje = logickoBrisanje;
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.blokiran = blokiran;
+	}
+	
+	
 
 }

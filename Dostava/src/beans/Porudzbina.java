@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,15 +17,31 @@ public class Porudzbina implements Serializable {
 	}
 
 	private String id;
-	private List<Artikal> poruceniArtikli;
-	private Restoran restoran;
+	private List<ArtikalKorpa> poruceniArtikli;
+	private String restoran;
 	private Date datumVreme;
 	private Double cena;
-	private Kupac kupac;
+	private String kupac;
 	private Status status;
+	private String dostavljac;
+	private List<String> dostavljaciKojiZahtevaju;
 
 	public Porudzbina() {
 		super();
+	}
+
+	public Porudzbina(String id, List<ArtikalKorpa> poruceniArtikli, String restoran, Date datumVreme, Double cena,
+			String kupac, Status status) {
+		super();
+		this.id = id;
+		this.poruceniArtikli = poruceniArtikli;
+		this.restoran = restoran;
+		this.datumVreme = datumVreme;
+		this.cena = cena;
+		this.kupac = kupac;
+		this.status = status;
+		this.dostavljaciKojiZahtevaju = new ArrayList<String>();
+		this.dostavljac = "";
 	}
 
 	public String getId() {
@@ -36,19 +53,19 @@ public class Porudzbina implements Serializable {
 		this.id = id.substring(0, idLimit);
 	}
 
-	public List<Artikal> getPoruceniArtikli() {
+	public List<ArtikalKorpa> getPoruceniArtikli() {
 		return poruceniArtikli;
 	}
 
-	public void setPoruceniArtikli(List<Artikal> poruceniArtikli) {
+	public void setPoruceniArtikli(List<ArtikalKorpa> poruceniArtikli) {
 		this.poruceniArtikli = poruceniArtikli;
 	}
 
-	public Restoran getRestoran() {
+	public String getRestoran() {
 		return restoran;
 	}
 
-	public void setRestoran(Restoran restoran) {
+	public void setRestoran(String restoran) {
 		this.restoran = restoran;
 	}
 
@@ -68,11 +85,11 @@ public class Porudzbina implements Serializable {
 		this.cena = cena;
 	}
 
-	public Kupac getKupac() {
+	public String getKupac() {
 		return kupac;
 	}
 
-	public void setKupac(Kupac kupac) {
+	public void setKupac(String kupac) {
 		this.kupac = kupac;
 	}
 
@@ -84,4 +101,25 @@ public class Porudzbina implements Serializable {
 		this.status = status;
 	}
 
+	public List<String> getDostavljaciKojiZahtevaju() {
+		return dostavljaciKojiZahtevaju;
+	}
+
+	public void setDostavljaciKojiZahtevaju(List<String> dostavljaciKojiZahtevaju) {
+		this.dostavljaciKojiZahtevaju = dostavljaciKojiZahtevaju;
+	}
+	
+	public void dodajDostavljaca(String idDostavljaca) {
+		dostavljaciKojiZahtevaju.add(idDostavljaca);
+	}
+
+	public String getDostavljac() {
+		return dostavljac;
+	}
+
+	public void setDostavljac(String dostavljac) {
+		this.dostavljac = dostavljac;
+	}
+	
+	
 }

@@ -14,6 +14,11 @@ public class Menadzer extends Korisnik implements Serializable {
 	public Menadzer() {
 		super();
 	}
+	
+	public Menadzer(Korisnik k) {
+		super(k);
+		this.restoran = null;
+	}
 
 	public Restoran getRestoran() {
 		return restoran;
@@ -22,5 +27,7 @@ public class Menadzer extends Korisnik implements Serializable {
 	public void setRestoran(Restoran restoran) {
 		this.restoran = restoran;
 	}
+	
+	
 
 }

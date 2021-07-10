@@ -1,6 +1,5 @@
 package beans;
 
-import java.awt.Image;
 import java.io.Serializable;
 
 public class Artikal implements Serializable {
@@ -13,17 +12,30 @@ public class Artikal implements Serializable {
 	public enum TipArtikla {
 		JELO, PICE
 	}
-
+	
+	private Integer logickoBrisanje;
 	private String naziv;
 	private Double cena;
 	private TipArtikla tipArtikla;
-	private Restoran restoran;
+	private String restoran;
 	private Double kolicina; // grami ili milimetri
 	private String opis;
-	private Image slika;
+	private String slika;
 
 	public Artikal() {
 		super();
+	}
+
+	public Artikal(String naziv, Double cena, TipArtikla tipArtikla, String restoran, Double kolicina, String opis,
+			String slika) {
+		super();
+		this.naziv = naziv;
+		this.cena = cena;
+		this.tipArtikla = tipArtikla;
+		this.restoran = restoran;
+		this.kolicina = kolicina;
+		this.opis = opis;
+		this.slika = slika;
 	}
 
 	public String getNaziv() {
@@ -50,11 +62,11 @@ public class Artikal implements Serializable {
 		this.tipArtikla = tipArtikla;
 	}
 
-	public Restoran getRestoran() {
+	public String getRestoran() {
 		return restoran;
 	}
 
-	public void setRestoran(Restoran restoran) {
+	public void setRestoran(String restoran) {
 		this.restoran = restoran;
 	}
 
@@ -74,12 +86,45 @@ public class Artikal implements Serializable {
 		this.opis = opis;
 	}
 
-	public Image getSlika() {
+	public String getSlika() {
 		return slika;
 	}
 
-	public void setSlika(Image slika) {
+	public void setSlika(String slika) {
 		this.slika = slika;
 	}
+
+	public String tipString() {
+		if (this.tipArtikla == TipArtikla.JELO) {
+			return "Jelo";
+		} else {
+			return "Piće";
+		}
+	}
+
+	
+	
+	public Integer getLogickoBrisanje() {
+		return logickoBrisanje;
+	}
+
+	public void setLogickoBrisanje(Integer logickoBrisanje) {
+		this.logickoBrisanje = logickoBrisanje;
+	}
+
+	public Artikal(Integer logickoBrisanje, String naziv, Double cena, TipArtikla tipArtikla, String restoran,
+			Double kolicina, String opis, String slika) {
+		super();
+		this.logickoBrisanje = logickoBrisanje;
+		this.naziv = naziv;
+		this.cena = cena;
+		this.tipArtikla = tipArtikla;
+		this.restoran = restoran;
+		this.kolicina = kolicina;
+		this.opis = opis;
+		this.slika = slika;
+	}
+	
+	
 
 }

@@ -12,13 +12,26 @@ public class Lokacija implements Serializable {
 	private Double geografskaDuzina;
 	private Double geografskaSirina;
 	private String ulica;
-	private Integer broj;
+	private String broj;
 	private String mesto;
 	private Integer postanskiBroj;
 
 	public Lokacija() {
 		super();
 	}
+
+	
+	public Lokacija(Double geografskaDuzina, Double geografskaSirina, String ulica, String broj, String mesto,
+			Integer postanskiBroj) {
+		super();
+		this.geografskaDuzina = geografskaDuzina;
+		this.geografskaSirina = geografskaSirina;
+		this.ulica = ulica;
+		this.broj = broj;
+		this.mesto = mesto;
+		this.postanskiBroj = postanskiBroj;
+	}
+
 
 	public Double getGeografskaDuzina() {
 		return geografskaDuzina;
@@ -44,11 +57,11 @@ public class Lokacija implements Serializable {
 		this.ulica = ulica;
 	}
 
-	public Integer getBroj() {
+	public String getBroj() {
 		return broj;
 	}
 
-	public void setBroj(Integer broj) {
+	public void setBroj(String broj) {
 		this.broj = broj;
 	}
 
