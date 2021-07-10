@@ -97,9 +97,11 @@ public class PorudzbineService {
 				}
 			}
 		}
-
+		Date prvi = new Date(System.currentTimeMillis());
+		long HOUR = 3600*1000;
+		Date konacni = new Date(prvi.getTime() + 2 * HOUR);
 		Porudzbina p = new Porudzbina(UUID.randomUUID().toString().replace("-", "").substring(0, 10), artikli,
-				r.getId(), new Date(System.currentTimeMillis()), korpa.cena, korpa.korisnik, Porudzbina.Status.OBRADA);
+				r.getId(), konacni, korpa.cena, korpa.korisnik, Porudzbina.Status.OBRADA);
 		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
 		TipKupca prethodni = korisnici.nadjiTipKupca(idKorisnika);
 		if (!korisnici.dodajPorudzbinu(p)) {
