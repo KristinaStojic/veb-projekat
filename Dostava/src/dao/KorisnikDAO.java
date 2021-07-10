@@ -799,6 +799,7 @@ public class KorisnikDAO {
 			if (d.getId().equals(idDostavljaca)) {
 				d.ukloniPorudzbinu(id);
 				sacuvajPodatke();
+				ucitajPodatke();
 				return true;
 			}
 		}
