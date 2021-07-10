@@ -932,8 +932,8 @@ public class KorisnikDAO {
 	public boolean ispraviOcenuRestorana(String idRestorana,Komentar komentar, Integer brojKomentara) {
 		for (Menadzer men : menadzeri) {
 			if (men.getRestoran().getId().equals(idRestorana)) {
-				System.out.println("azuriram ocjenu menadzera");
-				if (men.getRestoran().getOcena() == 0) {
+				System.out.println("broj komentara: " + brojKomentara);
+				if (brojKomentara == 1) {
 					men.getRestoran().setOcena(0.0);
 					System.out.println("evo me mijenjam ocjenu nakon brisanja komentara");
 				} else {
