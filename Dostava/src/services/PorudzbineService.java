@@ -146,6 +146,7 @@ public class PorudzbineService {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Porudzbina porudzbina = porudzbine.dobaviPorudzbinu(id);
 		Status status = Status.PRIPREMA;
+
 		if (porudzbina.getStatus() == status) {
 			status = Status.CEKA_DOSTAVU;
 		}
