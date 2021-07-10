@@ -115,7 +115,6 @@ Vue.component("sviKorisnici", {
                     <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Kupac')">Kupac</button>
                     <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Administrator')">Administrator</button>
                     <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Menadžer')">Menadžer</button>
-                    <button class="btn-info btn-sm dropdown-item" @click="postaviFilter('Dostavljač')">Dostavljač</button>
 
                 
                   </div>
