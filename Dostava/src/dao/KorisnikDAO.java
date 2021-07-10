@@ -242,6 +242,7 @@ public class KorisnikDAO {
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
+		ucitajPodatke();
 	}
 
 	public void dodajKorisnika(Korisnik korisnik) {
@@ -252,7 +253,7 @@ public class KorisnikDAO {
 
 	public boolean daLiPostojiKorIme(String korisnickoIme) {
 
-		if (dobaviPoKorisnickomImenu(korisnickoIme) != null) {
+		if (dobaviPoKorisnickomImenu(korisnickoIme) != null && dobaviPoKorisnickomImenu(korisnickoIme).getLogickoBrisanje() != 1) {
 			return true;
 		}
 		return false;
@@ -341,14 +342,8 @@ public class KorisnikDAO {
 		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		menadzeri.add(noviMenadzer);
 
-		ObjectMapper maper = new ObjectMapper();
-		try {
-			maper.writeValue(Paths.get(this.putanja + "\\menadzeri.json").toFile(), menadzeri);
-		} catch (IOException e) {
-			System.out.println("Greska");
-			return null;
-		}
-
+		sacuvajPodatke();
+		ucitajPodatke();
 		return noviMenadzer;
 	}
 
@@ -375,13 +370,7 @@ public class KorisnikDAO {
 		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		dostavljaci.add(noviDostavljac);
 
-		ObjectMapper maper = new ObjectMapper();
-		try {
-			maper.writeValue(Paths.get(this.putanja + "\\dostavljaci.json").toFile(), dostavljaci);
-		} catch (IOException e) {
-			System.out.println("Greska");
-			return null;
-		}
+		sacuvajPodatke();
 
 		return noviDostavljac;
 	}
@@ -403,6 +392,7 @@ public class KorisnikDAO {
 			if (men.getId().equals(idMenadzera)) {
 				men.setRestoran(r);
 				sacuvajPodatke();
+				ucitajPodatke();
 				return idMenadzera;
 			}
 		}
