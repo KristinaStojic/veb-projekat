@@ -307,7 +307,7 @@ computed: {
 		  },
 		mojiPodaci(){
 			this.$router.push("/licniPodaci/"+ window.localStorage.getItem("korisnik"));
-			console.log("moji podaci")
+			console.log(window.localStorage.getItem("korisnik"))
 		  },
 		pregledPorudzbina(){
     		
