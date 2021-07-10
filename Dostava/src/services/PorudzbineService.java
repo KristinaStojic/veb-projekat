@@ -168,8 +168,10 @@ public class PorudzbineService {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		String idDostavljaca = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
 		if (!porudzbine.promeniStatusPorudzbine(id, Status.DOSTAVLJENA)
-				|| !korisnici.dostavljacDostavio(id, idDostavljaca)
-				|| !korisnici.promeniStatusPorudzbineKupcu(id, idKupca, Status.DOSTAVLJENA)) {
+				|| !korisnici.dostavljacDostavio(id, idDostavljaca) ) {	
+		}
+		
+		if(!korisnici.promeniStatusPorudzbineKupcu(id, idKupca, Status.DOSTAVLJENA)) {
 			return Response.status(400).build();
 		}
 
