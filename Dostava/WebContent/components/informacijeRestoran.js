@@ -296,10 +296,7 @@ Vue.component("informacijeRestoran", {
 										</ul>
 									</div>
 								</div>
-						
-
-
-								<div v-else style="margin: 20px;">
+								<div v-if="k.restoran === idRest && k.odobren === 'Odobren' && uloga !== 'ADMINISTRATOR' && uloga !== 'MENADZER'" style="margin: 20px;">
 									<div class="card">
 										<ul class="list-group list-group-flush">
 										<li class="list-group-item">
