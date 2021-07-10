@@ -603,7 +603,6 @@ public class KorisniciService {
 		if (!korisnici.dodajArtikal(artikal, a.restoran)) {
 			return Response.status(400).build();
 		}
-		System.out.println("dodajem artikal");
 		return Response.status(200).build();
 	}
 }

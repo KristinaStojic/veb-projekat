@@ -114,7 +114,9 @@ public class RestoranDAO {
 				}
 				
 				List<Artikal> stari = r.getArtikliUPonudi();
-				stari.add(stari.size(), a);
+				if(!stari.contains(a)) {
+					stari.add(stari.size(), a);
+				}
 				r.setArtikliUPonudi(stari);
 				break;
 			}

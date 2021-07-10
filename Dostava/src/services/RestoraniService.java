@@ -133,6 +133,10 @@ public class RestoraniService {
 		if (!restorani.dodajArtikal(a.restoran, artikal)) {
 			return Response.status(400).build();
 		}
+		
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		
+		
 		return Response.status(200).build();
 	}
 

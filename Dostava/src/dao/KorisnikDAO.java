@@ -61,7 +61,11 @@ public class KorisnikDAO {
 	}
 
 	public void ucitajPodatke() {
-
+		korisnici = new HashMap<>();
+		kupci = new ArrayList<>();
+		menadzeri = new ArrayList<>();
+		administratori = new ArrayList<>();
+		dostavljaci = new ArrayList<>();
 		ObjectMapper mapper = new ObjectMapper();
 		File file;
 
@@ -338,7 +342,7 @@ public class KorisnikDAO {
 		noviKorisnik.setBlokiran(0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
 		noviMenadzer.setBlokiran(0);
-		korisnici.put(menadzer.korisnickoIme, noviKorisnik);
+		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		menadzeri.add(noviMenadzer);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -372,7 +376,7 @@ public class KorisnikDAO {
 		noviKorisnik.setBlokiran(0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
 		noviDostavljac.setBlokiran(0);
-		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
+		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		dostavljaci.add(noviDostavljac);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -403,6 +407,7 @@ public class KorisnikDAO {
 			if (men.getId().equals(idMenadzera)) {
 				men.setRestoran(r);
 				sacuvajPodatke();
+				ucitajPodatke();
 				return idMenadzera;
 			}
 		}
@@ -504,7 +509,9 @@ public class KorisnikDAO {
 			Restoran r = men.getRestoran();
 			if (r.getId().equals(idRestorana)) {
 				List<Artikal> stari = r.getArtikliUPonudi();
-				stari.add(stari.size(), a);
+				if(!stari.contains(a)) {
+					stari.add(stari.size(), a);
+				}
 				r.setArtikliUPonudi(stari);
 				sacuvajPodatke();
 				return true;
@@ -929,10 +936,9 @@ public class KorisnikDAO {
 	public boolean ispraviOcenuRestorana(String idRestorana,Komentar komentar, Integer brojKomentara) {
 		for (Menadzer men : menadzeri) {
 			if (men.getRestoran().getId().equals(idRestorana)) {
-				System.out.println("azuriram ocjenu menadzera");
-				if (men.getRestoran().getOcena() == 0) {
+				if (brojKomentara == 1) {
 					men.getRestoran().setOcena(0.0);
-					System.out.println("evo me mijenjam ocjenu nakon brisanja komentara");
+				
 				} else {
 					men.getRestoran().setOcena((men.getRestoran().getOcena()*brojKomentara - komentar.getOcena()) / (brojKomentara - 1));
 				}
@@ -941,7 +947,6 @@ public class KorisnikDAO {
 			}
 		}
 
-		System.out.println("nije dobra izmjena ocjene kod menadzera");
 		return false;
 	}
 
