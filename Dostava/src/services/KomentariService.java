@@ -133,7 +133,7 @@ public class KomentariService {
 		Integer ocena = komentari.nadjiOcenu(idKomentara);
 		KorisnikDAO korDAO = dobaviKorisnikDAO();
 		if (!komentari.odobriKomentar(idKomentara) || !restoraniDAO.azurirajOcenuRestorana(idRestorana, ocena)
-				|| !korDAO.azurirajOcenuRestorana(idRestorana, ocena)) {
+				|| !korDAO.azurirajOcenuRestorana(idRestorana, ocena, restoraniDAO.dobaviRestoran(idRestorana).getUkupanBrojKomentara() - 1)) {
 			return Response.status(400).build();
 		}
 		return Response.status(200).build();
@@ -184,7 +184,6 @@ public class KomentariService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obrisiRestoran(@PathParam("id") String idKomentara) {
-		System.out.println("cao ubicu se ako ne udjes ovde :D");
 		KomentarDAO komDAO = dobaviKomentarDAO();
 		RestoranDAO restDAO = dobaviRestoranDAO();
 		KorisnikDAO korDAO = dobaviKorisnikDAO();

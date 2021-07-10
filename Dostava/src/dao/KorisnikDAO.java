@@ -880,14 +880,14 @@ public class KorisnikDAO {
 		return null;
 	}
 
-	public boolean azurirajOcenuRestorana(String idRestorana, Integer ocena) {
+	public boolean azurirajOcenuRestorana(String idRestorana, Integer ocena, Integer brojKomentara) {
 		for (Menadzer men : menadzeri) {
 			if (men.getRestoran().getId().equals(idRestorana)) {
 				System.out.println("azuriram ocjenu menadzera");
 				if (men.getRestoran().getOcena() == 0) {
 					men.getRestoran().setOcena(men.getRestoran().getOcena() + ocena);
 				} else {
-					men.getRestoran().setOcena((men.getRestoran().getOcena() + ocena) / 2);
+					men.getRestoran().setOcena((men.getRestoran().getOcena() * brojKomentara + ocena) / (brojKomentara + 1));
 				}
 				sacuvajPodatke();
 				return true;
