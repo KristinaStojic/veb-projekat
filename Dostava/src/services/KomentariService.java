@@ -155,7 +155,8 @@ public class KomentariService {
 	@GET
 	@Path("/nadjiSveKomentare")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<KomentariPrikazSviDTO> nadjiSveKomentare() { 
+	public List<KomentariPrikazSviDTO> nadjiSveKomentare() {
+		System.out.println("CAOOOOOOOOOOOOOOOOOOOO");
 		KomentarDAO komentarDAO = dobaviKomentarDAO();
 		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
 		KorisnikDAO korisnikDAO =  dobaviKorisnikDAO();
@@ -167,11 +168,13 @@ public class KomentariService {
 				
 				KomentariPrikazSviDTO komDTO = new KomentariPrikazSviDTO(komentar.getId(), k.getIme() + " " + k.getPrezime(), komentar.getTekst(), komentar.getOcena(),
 						komentarDAO.Odobren(komentar.getOdobren()), idRestorana);
-				komentariDTO.add(komDTO); 
+				komentariDTO.add(komDTO);
+				System.out.println(komentarDAO.Odobren(komentar.getOdobren()));
 				
 			}
 			
 		}
+		System.out.println("ovoliko ima komentara koji su obradjeni: " + komentariDTO.size());
 		return komentariDTO;
 	}
 	

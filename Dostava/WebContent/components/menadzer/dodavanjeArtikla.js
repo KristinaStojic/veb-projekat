@@ -284,7 +284,11 @@ Vue.component("dodavanjeArtikla", {
 							this.$router.push("/pregledRestorana")
 					})
 					.catch(err => {
-						this.msg = "Već postoji artikal sa ovim imenom!";
+						this.greska = "Neuspešno dodavanje!"
+						var x = document.getElementById("greska");
+						x.className = "snackbar show";
+						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+						console.log(err);
 					})
 				return true;
 			}

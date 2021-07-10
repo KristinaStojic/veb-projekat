@@ -185,7 +185,7 @@ public class KorisniciService {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Menadzer noviMenadzer = korisnici.dodajMenadzera(menadzer);
-		
+
 		if (menadzer.restoran != null) {
 			RestoranDAO restorani = dobaviRestoranDAO();
 			Restoran restoran = restorani.dobaviRestoran(menadzer.restoran);

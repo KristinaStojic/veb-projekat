@@ -116,10 +116,7 @@ public class RestoranDAO {
 				
 				List<Artikal> stari = r.getArtikliUPonudi();
 				stari.add(stari.size(), a);
-				r.setArtikliUPonudi(new ArrayList<>());
-				for (Artikal artikal : stari) {
-					System.out.println(artikal);
-				}
+				r.setArtikliUPonudi(stari);
 				break;
 			}
 		}
