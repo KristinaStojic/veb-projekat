@@ -207,6 +207,21 @@ Vue.component("dodavanjeMenadzera", {
 			event.preventDefault();
 			this.datum = true;
 		},
+		dodeliRestoranMenadzeru : function(id){
+			axios
+			.post('/DostavaREST/rest/korisnici/dodajRestoranMenadzeru/' + id, this.noviKorisnik.restoran)
+			.then(response => { window.localStorage.removeItem("restoran");
+								this.$router.push("/")
+							})
+			.catch(err => {
+						this.greska = "Neuspešno dodavanje!";
+						var x = document.getElementById("greska");
+						x.className = "snackbar show";
+						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+						console.log(err);
+					})
+					
+		},
 		proveriPodatke: function(event) {
 			event.preventDefault();
 			
@@ -234,7 +249,9 @@ Vue.component("dodavanjeMenadzera", {
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 							window.localStorage.removeItem("restoran");
 							
-						} else {
+						} else if(this.noviKorisnik.restoran != null){
+								this.dodeliRestoranMenadzeru(response.data.id);
+						}else{
 							this.greska = "Uspešna registracija!";
 							window.localStorage.removeItem("restoran");
 							var x = document.getElementById("greska");

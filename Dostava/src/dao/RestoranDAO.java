@@ -32,7 +32,7 @@ public class RestoranDAO {
 	}
 
 	public void ucitajPodatke() {
-
+		restorani = new HashMap<>();
 		ObjectMapper mapper = new ObjectMapper();
 		File file;
 
@@ -97,7 +97,6 @@ public class RestoranDAO {
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
 		return noviRestoran;
 	}
 
@@ -115,7 +114,9 @@ public class RestoranDAO {
 				}
 				
 				List<Artikal> stari = r.getArtikliUPonudi();
-				stari.add(stari.size(), a);
+				if(!stari.contains(a)) {
+					stari.add(stari.size(), a);
+				}
 				r.setArtikliUPonudi(stari);
 				break;
 			}

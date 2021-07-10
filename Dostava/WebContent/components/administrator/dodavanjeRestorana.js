@@ -265,8 +265,9 @@ Vue.component("dodavanjeRestorana", {
 							x.className = "snackbar show";
 							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 							if(this.selektovano === false){
-								window.localStorage.removeItem("restoran");
-								this.$router.push("/")
+								
+								this.dodeliRestoranMenadzeru(response.data.id);
+								
 							}else if (this.selektovano === true){
 								window.localStorage.setItem("restoran", response.data.id);
 								console.log("tu sam" + response.data.id);
@@ -275,7 +276,7 @@ Vue.component("dodavanjeRestorana", {
 						}
 					})
 					.catch(err => {
-						this.greska = "Neuspešno dodovanjae!";
+						this.greska = "Neuspešno dodavanje!";
 						var x = document.getElementById("greska");
 						x.className = "snackbar show";
 						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
@@ -283,6 +284,20 @@ Vue.component("dodavanjeRestorana", {
 					})
 				return true;
 			}
+		},
+		dodeliRestoranMenadzeru : function(id){
+			axios
+			.post('/DostavaREST/rest/korisnici/dodajRestoranMenadzeru/' + this.restoran.idMenadzera, id)
+			.then(response => { window.localStorage.removeItem("restoran");
+								this.$router.push("/")})
+			.catch(err => {
+						this.greska = "Neuspešno dodavanje!";
+						var x = document.getElementById("greska");
+						x.className = "snackbar show";
+						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+						console.log(err);
+					})
+					
 		},
 		azuriranjeAdrese : function() {
 			
