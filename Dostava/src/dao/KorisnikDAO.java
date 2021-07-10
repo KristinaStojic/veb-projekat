@@ -504,8 +504,11 @@ public class KorisnikDAO {
 			Restoran r = men.getRestoran();
 			if (r.getId().equals(idRestorana)) {
 				List<Artikal> stari = r.getArtikliUPonudi();
+				System.out.println("ovoliko mendzer ima artikala u sebi: " + r.getArtikliUPonudi().size());
 				stari.add(stari.size(), a);
 				r.setArtikliUPonudi(stari);
+				System.out.println("ovoliko mendzer ima artikala u sebi posle dodavanja novog: " + r.getArtikliUPonudi().size());
+
 				sacuvajPodatke();
 				return true;
 			}
