@@ -8,8 +8,6 @@ public class Restoran implements Serializable {
 	/**
 	 * 
 	 */
-	
-	
 	private static final long serialVersionUID = 7705934003444955722L;
 
 	public enum TipRestorana {
