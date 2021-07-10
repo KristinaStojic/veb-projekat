@@ -148,6 +148,7 @@ public class KorisniciService {
 		// Korisnik prijavljeniKorisnik = (Korisnik)
 		// request.getSession().getAttribute("prijavljeniKorisnik");
 
+		System.out.println("nasao je: " + korisnici.nadjiPoId(id));
 		return korisnici.nadjiPoId(id);
 	}
 

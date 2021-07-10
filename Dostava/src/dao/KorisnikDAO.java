@@ -338,7 +338,7 @@ public class KorisnikDAO {
 		noviKorisnik.setBlokiran(0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
 		noviMenadzer.setBlokiran(0);
-		korisnici.put(menadzer.korisnickoIme, noviKorisnik);
+		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		menadzeri.add(noviMenadzer);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -372,7 +372,7 @@ public class KorisnikDAO {
 		noviKorisnik.setBlokiran(0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
 		noviDostavljac.setBlokiran(0);
-		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
+		korisnici.put(noviKorisnik.getId(), noviKorisnik);
 		dostavljaci.add(noviDostavljac);
 
 		ObjectMapper maper = new ObjectMapper();
