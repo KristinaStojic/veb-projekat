@@ -93,8 +93,7 @@ public class RestoraniService {
 	@Path("/dodajSliku")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void dodajSliku() {
-		System.out.println("slika upisana");
+	public void dodajSliku() { 
 	}
 
 	@POST
@@ -137,10 +136,16 @@ public class RestoraniService {
 		Artikal artikal = new Artikal(0, a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
 				a.slika);
 
-		if (!restorani.dodajArtikal(a.restoran, artikal) || !korisnici.dodarArtikal(artikal, a.restoran)) {
+		if (!restorani.dodajArtikal(a.restoran, artikal)) {
+			
 			return Response.status(400).build();
 		}
-		System.out.println("dodajem artikal");
+		System.out.println("dodajem artikal restoran");
+		if(!korisnici.dodarArtikal(artikal, a.restoran)) {
+			
+			return Response.status(400).build();
+		}
+		System.out.println("dodajem artikal menadzer");
 		return Response.status(200).build();
 	}
 
