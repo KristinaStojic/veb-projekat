@@ -503,7 +503,7 @@ public class KorisniciService {
 										kupac.getDatumRodjenja(), korDAO.nadjiUlogu(kupac.getUloga()), kupac.getIme(),
 										kupac.getPrezime(), korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
 								List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
-								porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
+								porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac(), m.getRestoran().getId());
 								korDTO.setPorudzbine(porDTO);
 								sviKupci.add(korDTO);
 							}
@@ -515,7 +515,7 @@ public class KorisniciService {
 									kupac.getPrezime(), korDAO.nadjiTipKupca(kupac), kupac.getSakupljeniBodovi());
 
 							List<PorudzbinePrikazKupacaDTO> porDTO = new ArrayList<PorudzbinePrikazKupacaDTO>();
-							porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac());
+							porDTO = porDAO.nadjiPorudzbineKupca(p.getKupac(), m.getRestoran().getId());
 							korDTO.setPorudzbine(porDTO);
 							sviKupci.add(korDTO);
 						}
