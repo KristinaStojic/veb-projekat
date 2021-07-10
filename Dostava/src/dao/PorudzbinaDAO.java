@@ -149,18 +149,6 @@ public class PorudzbinaDAO {
 		return porudzbineKupca;
 	}
 	
-	public List<PorudzbinePrikazKupacaDTO> nadjiPorudzbineKupca(String idKupca, String idRestorana){
-		
-		List<PorudzbinePrikazKupacaDTO> porudzbineKupca = new ArrayList<PorudzbinePrikazKupacaDTO>();
-		for (Porudzbina por : dobaviPorudzbine()) {
-			if(por.getKupac().equals(idKupca) && por.getRestoran().equals(idRestorana)) {
-				porudzbineKupca.add(new PorudzbinePrikazKupacaDTO(por.getId(), por.getCena(), por.getDatumVreme()));
-			}
-		}
-		
-		return porudzbineKupca;
-	}
-	
 	public String nadjiRestoranPorudzbine(String idPorudzbine) {
 		for (Porudzbina por : dobaviPorudzbine()) {
 			if(por.getId().equals(idPorudzbine)) {

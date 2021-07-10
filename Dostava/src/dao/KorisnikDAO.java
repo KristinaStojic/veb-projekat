@@ -338,7 +338,7 @@ public class KorisnikDAO {
 		noviKorisnik.setBlokiran(0);
 		Menadzer noviMenadzer = new Menadzer(noviKorisnik);
 		noviMenadzer.setBlokiran(0);
-		korisnici.put(noviKorisnik.getId(), noviKorisnik);
+		korisnici.put(menadzer.korisnickoIme, noviKorisnik);
 		menadzeri.add(noviMenadzer);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -372,7 +372,7 @@ public class KorisnikDAO {
 		noviKorisnik.setBlokiran(0);
 		Dostavljac noviDostavljac = new Dostavljac(noviKorisnik);
 		noviDostavljac.setBlokiran(0);
-		korisnici.put(noviKorisnik.getId(), noviKorisnik);
+		korisnici.put(dostavljac.korisnickoIme, noviKorisnik);
 		dostavljaci.add(noviDostavljac);
 
 		ObjectMapper maper = new ObjectMapper();
@@ -504,11 +504,8 @@ public class KorisnikDAO {
 			Restoran r = men.getRestoran();
 			if (r.getId().equals(idRestorana)) {
 				List<Artikal> stari = r.getArtikliUPonudi();
-				System.out.println("ovoliko mendzer ima artikala u sebi: " + r.getArtikliUPonudi().size());
 				stari.add(stari.size(), a);
 				r.setArtikliUPonudi(stari);
-				System.out.println("ovoliko mendzer ima artikala u sebi posle dodavanja novog: " + r.getArtikliUPonudi().size());
-
 				sacuvajPodatke();
 				return true;
 			}
@@ -932,8 +929,8 @@ public class KorisnikDAO {
 	public boolean ispraviOcenuRestorana(String idRestorana,Komentar komentar, Integer brojKomentara) {
 		for (Menadzer men : menadzeri) {
 			if (men.getRestoran().getId().equals(idRestorana)) {
-				System.out.println("broj komentara: " + brojKomentara);
-				if (brojKomentara == 1) {
+				System.out.println("azuriram ocjenu menadzera");
+				if (men.getRestoran().getOcena() == 0) {
 					men.getRestoran().setOcena(0.0);
 					System.out.println("evo me mijenjam ocjenu nakon brisanja komentara");
 				} else {
