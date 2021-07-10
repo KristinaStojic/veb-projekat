@@ -443,9 +443,7 @@ Vue.component("pregledPorudzbina", {
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 
                                 <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                <label style="font-size:15px">Nedostavljene: </label>
-                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
+                             
 
                                 <label style="font-size:15px">Filtriranje: </label>
                                 <div class="btn-group">
@@ -862,16 +860,31 @@ Vue.component("pregledPorudzbina", {
                 if(this.pocCena.length > 0 && this.krajnjaCena.length > 0){
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
                     && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    && (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
                     )));
                 }else if(this.pocDatum !== "" && this.krajDatum !==""){
                     console.log(this.pocetniDatum);
                     this.pomocne.filter(el => (console.log(el.datumVreme.slice(0, 10))));
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
                     && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
+                    && (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
                     )
                     ));
                 }else{
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
+                    && (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
                 )));
                 }
                 
@@ -882,6 +895,11 @@ Vue.component("pregledPorudzbina", {
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
                     && el.tipRestorana.match(filter7)
                     && (el.cena >= this.pocCena && el.cena <= this.krajnjaCena)
+                    && (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
                     )));
                 }
                 else if(this.pocDatum !== "" && this.krajDatum !==""){
@@ -889,12 +907,22 @@ Vue.component("pregledPorudzbina", {
                     && el.tipRestorana.match(filter7)
                     && (el.datumVreme.slice(0, 10) >= this.pocetniDatum && el.datumVreme.slice(0, 10) <= this.krajnjiDatum)
                     && el.restoran.match(filter6)
+                    && (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
                     )
                     ));
                 }else{
                     return ( this.pomocne.filter(el => (el.status.match(filter8)
                     && el.tipRestorana.match(filter7)
                     && el.restoran.match(filter6)
+                    && (el.status.match(filter1) 
+                    || el.status.match(filter2)
+                    || el.status.match(filter3)
+                    || el.status.match(filter4)
+                    || el.status.match(filter5))
                 )));
                 }
                 
