@@ -94,7 +94,7 @@ Vue.component("prijava", {
                 .post('/DostavaREST/rest/korisnici/prijava', this.noviKorisnik)
                 .then(response => {
                   if(response.data.length == 0){
-                    this.greska = "Korisnik sa ovim podacima ne postoji!";
+                    this.greska = "Korisnik sa ovim podacima ne postoji ili je blokiran!";
 							      var x = document.getElementById("greska");
 							      x.className = "snackbar show";
 							      setTimeout(function(){x.className = x.className.replace("show","");},1800);
