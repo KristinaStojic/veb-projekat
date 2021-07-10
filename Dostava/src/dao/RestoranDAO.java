@@ -24,8 +24,10 @@ public class RestoranDAO {
 	private Map<String, Restoran> restorani; //pazi na logicki obrisane
 	private String putanja;
 
-	public RestoranDAO(String putanjaDoFajla) {
+	public RestoranDAO() {
 		restorani = new HashMap<>();
+		String putanjaDoFajla = System.getProperty("java.class.path");
+		putanjaDoFajla = putanjaDoFajla.split("__MACOSX")[0] + "Dostava\\WebContent\\Podaci";
 		this.putanja = putanjaDoFajla;
 		
 		ucitajPodatke();

@@ -433,8 +433,7 @@ Vue.component("pregledPorudzbina", {
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 <label style="font-size:15px">Nedostavljene: </label>
                                 <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
                                 <vuejs-datepicker style="height:36px; width:180px" placeholder="Početni datum" v-model="pocDatum">
                                 </vuejs-datepicker>
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp

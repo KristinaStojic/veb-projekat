@@ -45,7 +45,7 @@ public class PorudzbineService {
 		PorudzbinaDAO porudzbine = (PorudzbinaDAO) sc.getAttribute("porudzbine");
 
 		if (porudzbine == null) {
-			porudzbine = new PorudzbinaDAO(sc.getRealPath("."));
+			porudzbine = new PorudzbinaDAO();
 			sc.setAttribute("porudzbine", porudzbine);
 		}
 
@@ -57,7 +57,7 @@ public class PorudzbineService {
 		RestoranDAO restorani = (RestoranDAO) sc.getAttribute("restorani");
 
 		if (restorani == null) {
-			restorani = new RestoranDAO(sc.getRealPath("."));
+			restorani = new RestoranDAO();
 			sc.setAttribute("restorani", restorani);
 		}
 
@@ -69,7 +69,7 @@ public class PorudzbineService {
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
 
 		if (korisnici == null) {
-			korisnici = new KorisnikDAO(sc.getRealPath("."));
+			korisnici = new KorisnikDAO();
 			sc.setAttribute("korisnici", korisnici);
 		}
 
@@ -97,7 +97,7 @@ public class PorudzbineService {
 				}
 			}
 		}
-		
+
 		Porudzbina p = new Porudzbina(UUID.randomUUID().toString().replace("-", "").substring(0, 10), artikli,
 				r.getId(), new Date(System.currentTimeMillis()), korpa.cena, korpa.korisnik, Porudzbina.Status.OBRADA);
 		String idKorisnika = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
@@ -107,14 +107,14 @@ public class PorudzbineService {
 		}
 		porudzbine.dodajPorudzbinu(p);
 		TipKupca novi = korisnici.nadjiTipKupca(idKorisnika);
-		
-		if(prethodni.getImeTipa() == novi.getImeTipa()) {
+
+		if (prethodni.getImeTipa() == novi.getImeTipa()) {
 			Response.status(200).entity(0).build();
-		}else if(prethodni.getImeTipa() == ImeTipa.BRONZANI && novi.getImeTipa() == ImeTipa.SREBRNI ) {
+		} else if (prethodni.getImeTipa() == ImeTipa.BRONZANI && novi.getImeTipa() == ImeTipa.SREBRNI) {
 			return Response.status(200).entity("Čestitamo! Postali ste srebrni član!").build();
-		}else if(prethodni.getImeTipa() == ImeTipa.SREBRNI && novi.getImeTipa() == ImeTipa.ZLATNI ) {
+		} else if (prethodni.getImeTipa() == ImeTipa.SREBRNI && novi.getImeTipa() == ImeTipa.ZLATNI) {
 			return Response.status(200).entity("Čestitamo! Postali ste zlatni član!").build();
-		}else if(prethodni.getImeTipa() == ImeTipa.BRONZANI && novi.getImeTipa() == ImeTipa.ZLATNI ) {
+		} else if (prethodni.getImeTipa() == ImeTipa.BRONZANI && novi.getImeTipa() == ImeTipa.ZLATNI) {
 			return Response.status(200).entity("Čestitamo! Postali ste zlatni član!").build();
 		}
 		return Response.status(200).entity(0).build();
@@ -168,10 +168,10 @@ public class PorudzbineService {
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		String idDostavljaca = ((Korisnik) request.getSession().getAttribute("prijavljeniKorisnik")).getId();
 		if (!porudzbine.promeniStatusPorudzbine(id, Status.DOSTAVLJENA)
-				|| !korisnici.dostavljacDostavio(id, idDostavljaca) ) {	
+				|| !korisnici.dostavljacDostavio(id, idDostavljaca)) {
 		}
-		
-		if(!korisnici.promeniStatusPorudzbineKupcu(id, idKupca, Status.DOSTAVLJENA)) {
+
+		if (!korisnici.promeniStatusPorudzbineKupcu(id, idKupca, Status.DOSTAVLJENA)) {
 			return Response.status(400).build();
 		}
 
@@ -209,7 +209,7 @@ public class PorudzbineService {
 	@Path("/dodeliPorudzbinu/{id}/{idDostavljaca}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response dodeliPorudzbinu(@PathParam("id") String id,@PathParam("idDostavljaca") String idDostavljaca ) {
+	public Response dodeliPorudzbinu(@PathParam("id") String id, @PathParam("idDostavljaca") String idDostavljaca) {
 		PorudzbinaDAO porudzbine = dobaviPorudzbinaDAO();
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Porudzbina porudzbina = porudzbine.dobaviPorudzbinu(id);
@@ -217,7 +217,8 @@ public class PorudzbineService {
 			return Response.status(400).build();
 		}
 		porudzbina.setDostavljac(idDostavljaca);
-		if (!porudzbine.promeniStatusPorudzbineTransport(id, idDostavljaca) || !korisnici.promeniStatusPorudzbineKupcuTransport(id, porudzbina.getKupac(),idDostavljaca)
+		if (!porudzbine.promeniStatusPorudzbineTransport(id, idDostavljaca)
+				|| !korisnici.promeniStatusPorudzbineKupcuTransport(id, porudzbina.getKupac(), idDostavljaca)
 				|| !korisnici.dodeliPorudzbinuDostavljacu(porudzbina, idDostavljaca)) {
 			return Response.status(400).build();
 		}

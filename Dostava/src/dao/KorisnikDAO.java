@@ -48,13 +48,16 @@ public class KorisnikDAO {
 	private List<Dostavljac> dostavljaci;
 	private String putanja;
 
-	public KorisnikDAO(String putanjaDoFajla) {
+	public KorisnikDAO() {
 		korisnici = new HashMap<>();
 		kupci = new ArrayList<>();
 		menadzeri = new ArrayList<>();
 		administratori = new ArrayList<>();
 		dostavljaci = new ArrayList<>();
 
+		String putanjaDoFajla = System.getProperty("java.class.path");
+		putanjaDoFajla = putanjaDoFajla.split("__MACOSX")[0] + "Dostava\\WebContent\\Podaci";  
+        
 		this.putanja = putanjaDoFajla;
 
 		ucitajPodatke();

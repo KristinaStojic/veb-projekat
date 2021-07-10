@@ -39,48 +39,49 @@ public class KomentariService {
 		KomentarDAO komentari = (KomentarDAO) sc.getAttribute("komentari");
 
 		if (komentari == null) {
-			komentari = new KomentarDAO(sc.getRealPath("."));
+			komentari = new KomentarDAO();
 			sc.setAttribute("komentari", komentari);
 		}
 
 		return komentari;
 	}
+
 	private KorisnikDAO dobaviKorisnikDAO() {
 
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
 
 		if (korisnici == null) {
-			korisnici = new KorisnikDAO(sc.getRealPath("."));
+			korisnici = new KorisnikDAO();
 			sc.setAttribute("korisnici", korisnici);
 		}
 
 		return korisnici;
 	}
-	
+
 	private PorudzbinaDAO dobaviPorudzbinaDAO() {
 
 		PorudzbinaDAO porudzbine = (PorudzbinaDAO) sc.getAttribute("porudzbine");
 
 		if (porudzbine == null) {
-			porudzbine = new PorudzbinaDAO(sc.getRealPath("."));
+			porudzbine = new PorudzbinaDAO();
 			sc.setAttribute("porudzbine", porudzbine);
 		}
 
 		return porudzbine;
 	}
-	
+
 	private RestoranDAO dobaviRestoranDAO() {
 
 		RestoranDAO restorani = (RestoranDAO) sc.getAttribute("restorani");
 
 		if (restorani == null) {
-			restorani = new RestoranDAO(sc.getRealPath("."));
+			restorani = new RestoranDAO();
 			sc.setAttribute("restorani", restorani);
 		}
 
 		return restorani;
 	}
-	
+
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -93,50 +94,51 @@ public class KomentariService {
 		}
 		return Response.status(200).build();
 	}
-	
-	
+
 	@GET
 	@Path("/nadjiKomentare/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KomentarPrikazDTO> nadjiNeobradjeneKomentare(@PathParam("id") String idMenadzera) {
 		KomentarDAO komentarDAO = dobaviKomentarDAO();
 		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
-		KorisnikDAO korisnikDAO =  dobaviKorisnikDAO();
+		KorisnikDAO korisnikDAO = dobaviKorisnikDAO();
 		String restoranMenadzera = korisnikDAO.restoranMenadzera(idMenadzera);
 		List<KomentarPrikazDTO> komentariDTO = new ArrayList<>();
 		for (Komentar komentar : komentarDAO.dobaviSve()) {
-			if(!komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
+			if (!komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
 				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
 				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
-				if(restoranMenadzera.equals(idRestorana)) {
-					KomentarPrikazDTO komDTO = new KomentarPrikazDTO(komentar.getId(), k.getIme() + " " + k.getPrezime(), komentar.getTekst(), komentar.getOcena());
+				if (restoranMenadzera.equals(idRestorana)) {
+					KomentarPrikazDTO komDTO = new KomentarPrikazDTO(komentar.getId(),
+							k.getIme() + " " + k.getPrezime(), komentar.getTekst(), komentar.getOcena());
 					komentariDTO.add(komDTO);
 				}
-				
+
 			}
-			
+
 		}
-		//System.out.println("ovoliko ima komentara za odobravanje: " + komentariDTO.size());
+		// System.out.println("ovoliko ima komentara za odobravanje: " +
+		// komentariDTO.size());
 		return komentariDTO;
 	}
-	
+
 	@POST
 	@Path("/odobriKomentar/{id}/{idRestorana}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response odobriKomentar(@PathParam("id") String idKomentara,@PathParam("idRestorana") String idRestorana) {
+	public Response odobriKomentar(@PathParam("id") String idKomentara, @PathParam("idRestorana") String idRestorana) {
 		System.out.println("usao sam u odobravanje komentara: " + idKomentara);
 		KomentarDAO komentari = dobaviKomentarDAO();
 		RestoranDAO restoraniDAO = dobaviRestoranDAO();
 		Integer ocena = komentari.nadjiOcenu(idKomentara);
 		KorisnikDAO korDAO = dobaviKorisnikDAO();
-		if (!komentari.odobriKomentar(idKomentara) || !restoraniDAO.azurirajOcenuRestorana(idRestorana, ocena) || !korDAO.azurirajOcenuRestorana(idRestorana, ocena)) {
+		if (!komentari.odobriKomentar(idKomentara) || !restoraniDAO.azurirajOcenuRestorana(idRestorana, ocena)
+				|| !korDAO.azurirajOcenuRestorana(idRestorana, ocena)) {
 			return Response.status(400).build();
 		}
 		return Response.status(200).build();
 	}
-	
-	
+
 	@POST
 	@Path("/odbijKomentar/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -149,9 +151,7 @@ public class KomentariService {
 		}
 		return Response.status(200).build();
 	}
-	
-	
-	
+
 	@GET
 	@Path("/nadjiSveKomentare")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -159,25 +159,26 @@ public class KomentariService {
 		System.out.println("CAOOOOOOOOOOOOOOOOOOOO");
 		KomentarDAO komentarDAO = dobaviKomentarDAO();
 		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
-		KorisnikDAO korisnikDAO =  dobaviKorisnikDAO();
+		KorisnikDAO korisnikDAO = dobaviKorisnikDAO();
 		List<KomentariPrikazSviDTO> komentariDTO = new ArrayList<>();
 		for (Komentar komentar : komentarDAO.dobaviSve()) {
-			if(komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
+			if (komentar.getObradjen() && komentar.getLogickoBrisanje() == 0) {
 				String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komentar.getIdPorudzbine());
 				Kupac k = korisnikDAO.nadjiKupca(komentar.getKupac());
-				
-				KomentariPrikazSviDTO komDTO = new KomentariPrikazSviDTO(komentar.getId(), k.getIme() + " " + k.getPrezime(), komentar.getTekst(), komentar.getOcena(),
+
+				KomentariPrikazSviDTO komDTO = new KomentariPrikazSviDTO(komentar.getId(),
+						k.getIme() + " " + k.getPrezime(), komentar.getTekst(), komentar.getOcena(),
 						komentarDAO.Odobren(komentar.getOdobren()), idRestorana);
 				komentariDTO.add(komDTO);
 				System.out.println(komentarDAO.Odobren(komentar.getOdobren()));
-				
+
 			}
-			
+
 		}
 		System.out.println("ovoliko ima komentara koji su obradjeni: " + komentariDTO.size());
 		return komentariDTO;
 	}
-	
+
 	@DELETE
 	@Path("/obrisiKomentar/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -189,14 +190,16 @@ public class KomentariService {
 		KorisnikDAO korDAO = dobaviKorisnikDAO();
 		PorudzbinaDAO porudzbinaDAO = dobaviPorudzbinaDAO();
 
-		String idRestorana = porudzbinaDAO.nadjiRestoranPorudzbine(komDAO.dobaviKomentar(idKomentara).getIdPorudzbine());
+		String idRestorana = porudzbinaDAO
+				.nadjiRestoranPorudzbine(komDAO.dobaviKomentar(idKomentara).getIdPorudzbine());
 		System.out.println(idRestorana);
-		if(restDAO.izmeniOcenu(komDAO.dobaviKomentar(idKomentara),idRestorana) &&
-				korDAO.ispraviOcenuRestorana(idRestorana, komDAO.dobaviKomentar(idKomentara), restDAO.dobaviRestoran(idRestorana).getUkupanBrojKomentara() + 1)
+		if (restDAO.izmeniOcenu(komDAO.dobaviKomentar(idKomentara), idRestorana)
+				&& korDAO.ispraviOcenuRestorana(idRestorana, komDAO.dobaviKomentar(idKomentara),
+						restDAO.dobaviRestoran(idRestorana).getUkupanBrojKomentara() + 1)
 				&& komDAO.obrisiKomentar(idKomentara)) {
 			return Response.status(200).build();
 		}
-		
+
 		return Response.status(400).build();
 
 	}

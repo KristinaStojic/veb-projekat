@@ -25,8 +25,11 @@ public class PorudzbinaDAO {
 	private Map<String, Porudzbina> porudzbine; // pazi na logicki obrisane
 	private String putanja;
 
-	public PorudzbinaDAO(String putanjaDoFajla) {
+	public PorudzbinaDAO() {
 		porudzbine = new HashMap<>();
+		
+		String putanjaDoFajla = System.getProperty("java.class.path");
+		putanjaDoFajla = putanjaDoFajla.split("__MACOSX")[0] + "Dostava\\WebContent\\Podaci";
 		this.putanja = putanjaDoFajla;
 
 		ucitajPodatke();

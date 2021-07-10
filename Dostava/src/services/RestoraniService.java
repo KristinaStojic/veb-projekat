@@ -48,7 +48,7 @@ public class RestoraniService {
 		RestoranDAO restorani = (RestoranDAO) sc.getAttribute("restorani");
 
 		if (restorani == null) {
-			restorani = new RestoranDAO(sc.getRealPath("."));
+			restorani = new RestoranDAO();
 			sc.setAttribute("restorani", restorani);
 		}
 
@@ -60,7 +60,7 @@ public class RestoraniService {
 		KorisnikDAO korisnici = (KorisnikDAO) sc.getAttribute("korisnici");
 
 		if (korisnici == null) {
-			korisnici = new KorisnikDAO(sc.getRealPath("."));
+			korisnici = new KorisnikDAO();
 			sc.setAttribute("korisnici", korisnici);
 		}
 

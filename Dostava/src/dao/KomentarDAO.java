@@ -24,9 +24,11 @@ public class KomentarDAO {
 
 	private String putanja;
 
-	public KomentarDAO(String putanjaDoFajla) {
+	public KomentarDAO() {
 		komentari = new HashMap<>();
 		pomocniKomentari = new HashMap<>();
+		String putanjaDoFajla = System.getProperty("java.class.path");
+		putanjaDoFajla = putanjaDoFajla.split("__MACOSX")[0] + "Dostava\\WebContent\\Podaci";
 		this.putanja = putanjaDoFajla;
 
 		ucitajPodatke();
