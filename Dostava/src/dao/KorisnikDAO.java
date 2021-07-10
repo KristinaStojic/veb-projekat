@@ -509,7 +509,9 @@ public class KorisnikDAO {
 	public Boolean dodajArtikal(Artikal a, String idRestorana) {
 		System.out.println("pozvao sam dodavanje menadzera");
 		for (Menadzer men : menadzeri) {
+			if(men.getRestoran()!= null) {
 			Restoran r = men.getRestoran();
+			
 			if (r.getId().equals(idRestorana)) {
 				List<Artikal> stari = r.getArtikliUPonudi();
 				if(!stari.contains(a)) {
@@ -519,7 +521,7 @@ public class KorisnikDAO {
 				sacuvajPodatke();
 				return true;
 			}
-
+			}
 		}
 
 		return false;
@@ -539,6 +541,7 @@ public class KorisnikDAO {
 	public Boolean izmeniArtikal(String idRestorana, String stariNaziv, Artikal a) {
 
 		for (Menadzer men : menadzeri) {
+			if(men.getRestoran()!=null) {
 			Restoran r = men.getRestoran();
 			if (r.getId().equals(idRestorana)) {
 				if (r == null || r.getLogickoBrisanje() == 1)
@@ -558,7 +561,7 @@ public class KorisnikDAO {
 				sacuvajPodatke();
 				return true;
 			}
-
+			}
 		}
 
 		return false;
@@ -872,9 +875,10 @@ public class KorisnikDAO {
 
 	public String restoranMenadzera(String id) {
 		for (Menadzer m : menadzeri) {
+			if(m.getRestoran() != null) { 
 			if (m.getId().equals(id)) {
 				return m.getRestoran().getId();
-			}
+			}}
 		}
 
 		return null;
