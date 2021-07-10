@@ -498,7 +498,7 @@ public class KorisnikDAO {
 		}
 	}
 
-	public Boolean dodarArtikal(Artikal a, String idRestorana) {
+	public Boolean dodajArtikal(Artikal a, String idRestorana) {
 		System.out.println("pozvao sam dodavanje menadzera");
 		for (Menadzer men : menadzeri) {
 			Restoran r = men.getRestoran();

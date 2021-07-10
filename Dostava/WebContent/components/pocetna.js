@@ -268,7 +268,7 @@ Vue.component("pocetna", {
     	`
 	,
 	mounted() {
-		
+		window.localStorage.removeItem("restoran");
 		this.uloga = window.localStorage.getItem("uloga")
 		this.kupac = window.localStorage.getItem("korisnik");
 		axios

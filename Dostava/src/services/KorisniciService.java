@@ -35,6 +35,7 @@ import beans.TipKupca.ImeTipa;
 import dao.KorisnikDAO;
 import dao.PorudzbinaDAO;
 import dao.RestoranDAO;
+import dto.Artikli2DTO;
 import dto.ArtikliDTO;
 import dto.ArtikliKorpaDTO;
 import dto.ArtikliPorudzbineDTO;
@@ -184,22 +185,8 @@ public class KorisniciService {
 
 		KorisnikDAO korisnici = dobaviKorisnikDAO();
 		Menadzer noviMenadzer = korisnici.dodajMenadzera(menadzer);
-
-		if (menadzer.restoran != null) {
-			RestoranDAO restorani = dobaviRestoranDAO();
-			Restoran restoran = restorani.dobaviRestoran(menadzer.restoran);
-
-			String m = null;
-			if (restoran != null) {
-				m = korisnici.dodajRestoranMenadzeru(restoran, noviMenadzer.getId());
-			}
-
-			if (m == null)
-				return null;
-		}
-
 		return noviMenadzer;
-	}
+	} 
 
 	@POST
 	@Path("/dodajDostavljaca")
@@ -580,5 +567,43 @@ public class KorisniciService {
 		}
 
 		return korisniciDTO;
+	}
+
+	@POST
+	@Path("/dodajRestoranMenadzeru/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response dodajRestoranMenadzeru(@PathParam("id") String id, String idRestorana) {
+		KorisnikDAO dao = dobaviKorisnikDAO();
+		RestoranDAO restoranDAO = dobaviRestoranDAO();
+		Restoran r = restoranDAO.dobaviRestoran(idRestorana);
+		if (r == null)
+			return Response.status(400).build();
+		
+		String menadzer = dao.dodajRestoranMenadzeru(r, id);
+		if (menadzer == null)
+			return Response.status(400).build();
+		
+		return Response.status(200).build();
+
+	}
+	
+	@POST
+	@Path("/dodajArtikal")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response dodajArtikal(Artikli2DTO a) {
+
+		KorisnikDAO korisnici = dobaviKorisnikDAO();
+		Double kolicina = 0.0;
+		if (!a.kolicina.equals(""))
+			kolicina = Double.parseDouble(a.kolicina);
+		Artikal artikal = new Artikal(0, a.naziv, Double.parseDouble(a.cena), a.tip, a.restoran, kolicina, a.opis,
+				a.slika);
+
+		if (!korisnici.dodajArtikal(artikal, a.restoran)) {
+			return Response.status(400).build();
+		}
+		System.out.println("dodajem artikal");
+		return Response.status(200).build();
 	}
 }

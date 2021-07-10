@@ -32,7 +32,7 @@ public class RestoranDAO {
 	}
 
 	public void ucitajPodatke() {
-
+		restorani = new HashMap<>();
 		ObjectMapper mapper = new ObjectMapper();
 		File file;
 
@@ -97,7 +97,6 @@ public class RestoranDAO {
 		} catch (IOException e) {
 			System.out.println("Greska");
 		}
-		
 		return noviRestoran;
 	}
 

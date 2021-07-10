@@ -275,13 +275,24 @@ Vue.component("dodavanjeArtikla", {
 				axios
 					.post('/DostavaREST/rest/restorani/dodajArtikal', this.artikal)
 					.then(response => {
-							this.greska = "Uspešno dodavanje!"
-							var x = document.getElementById("greska");
-							x.className = "snackbar show";
-							setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
-							window.localStorage.removeItem("imeRestorana");
-							window.localStorage.removeItem("trenutniRestoran");
-							this.$router.push("/pregledRestorana")
+							axios
+							.post('/DostavaREST/rest/korisnici/dodajArtikal', this.artikal)
+							.then(response => {
+									this.greska = "Uspešno dodavanje!"
+									var x = document.getElementById("greska");
+									x.className = "snackbar show";
+									setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+									window.localStorage.removeItem("imeRestorana");
+									window.localStorage.removeItem("trenutniRestoran");
+									this.$router.push("/pregledRestorana")
+							})
+							.catch(err => {
+								this.greska = "Neuspešno dodavanje!"
+								var x = document.getElementById("greska");
+								x.className = "snackbar show";
+								setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
+								console.log(err);
+							})
 					})
 					.catch(err => {
 						this.greska = "Neuspešno dodavanje!"
@@ -290,7 +301,8 @@ Vue.component("dodavanjeArtikla", {
 						setTimeout(function() { x.className = x.className.replace("show", ""); }, 1800);
 						console.log(err);
 					})
-				return true;
+				
+				
 			}
 
 		}
