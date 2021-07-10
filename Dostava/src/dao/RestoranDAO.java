@@ -253,7 +253,7 @@ public class RestoranDAO {
 				if(rest.getOcena() == 0) {
 					rest.setOcena(rest.getOcena() + ocena);
 				}else {
-					rest.setOcena((rest.getOcena() + ocena)/2);
+					rest.setOcena((rest.getOcena() + ocena)/ 2.0);
 				}
 				rest.setUkupanBrojKomentara(rest.getUkupanBrojKomentara() + 1);
 				System.out.println(rest.getUkupanBrojKomentara());
