@@ -299,7 +299,7 @@ Vue.component("informacijeRestoran", {
 						
 
 
-								<div v-if="k.restoran === idRest && k.odobren === 'Odobren' && (uloga === 'KUPAC' || uloga === 'DOSTAVLJAC')" style="margin: 20px;">
+								<div v-else style="margin: 20px;">
 									<div class="card">
 										<ul class="list-group list-group-flush">
 										<li class="list-group-item">
