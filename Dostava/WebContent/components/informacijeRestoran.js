@@ -278,7 +278,8 @@ Vue.component("informacijeRestoran", {
 				</div>	
 
 				<div class="content" v-if="this.komentarTab === true">
-					<div class="row" v-for="k in this.komentari">
+					<div class="row" >
+							<div v-for="k in this.komentari">
 								<div v-if="k.restoran === idRest && (uloga === 'ADMINISTRATOR' || uloga === 'MENADZER') " style="margin: 20px;">
 									<div class="card">
 										<ul class="list-group list-group-flush">
@@ -295,7 +296,7 @@ Vue.component("informacijeRestoran", {
 										</ul>
 									</div>
 								</div>
-
+						
 
 
 								<div v-if="k.restoran === idRest && k.odobren === 'Odobren' && (uloga === 'KUPAC' || uloga === 'DOSTAVLJAC')" style="margin: 20px;">
@@ -310,7 +311,7 @@ Vue.component("informacijeRestoran", {
 										
 										</ul>
 									</div>
-								</div>
+								</div></div>
 					</div>
 
 				</div>

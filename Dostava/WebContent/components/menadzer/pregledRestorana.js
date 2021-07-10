@@ -191,7 +191,8 @@ Vue.component("pregledRestorana", {
 
 
 						<div class="scroll" v-if="this.zahteviKomTab === true">
-								<div class="row" v-for="k in this.komentari">
+								<div class="row" >
+								<div v-for="k in this.komentari">
 								<div style="margin: 20px;">
 									<div class="card">
 										<ul class="list-group list-group-flush">
@@ -211,12 +212,14 @@ Vue.component("pregledRestorana", {
 									</div>
 								</div>
 								</div>
+							</div>
 						</div>
 
 
 						<div class="scroll" v-if="this.komentarTab === true">
 						 	
-							<div class="row" v-for="k in this.sviKomentari">
+							<div class="row" >
+							<div v-for="k in this.sviKomentari">
 							<div v-if="k.restoran === restoran.id" style="margin: 20px;">
 								<div class="card">
 									<ul class="list-group list-group-flush">
@@ -229,6 +232,7 @@ Vue.component("pregledRestorana", {
 									<li class="list-group-item">Status: {{k.odobren}}</li>
 									
 									</ul>
+								</div>
 								</div>
 							</div>
 							</div>
