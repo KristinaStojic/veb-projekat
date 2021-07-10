@@ -443,10 +443,7 @@ Vue.component("pregledPorudzbina", {
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                 
                                 <button class="btn btn-primary" @click="pocDatum = '';krajDatum = ''">Obriši</button>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                <label style="font-size:15px">Nedostavljene: </label>
-                                <input type="checkbox" id="checkbox" value="Nedostavljene" v-model="checked" >
-
+                               
                                 <label style="font-size:15px">Filtriranje: </label>
                                 <div class="btn-group">
                                 <button class="btn btn-secondary dropdown-toggle dropdown"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
