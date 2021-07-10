@@ -37,10 +37,7 @@ const router = new VueRouter({
 		{ path: '/pregledKorpe/:id', component: PregledKorpe},
 		{ path: '/pregledPorudzbina/:id', component: PregledPorudzbina},
 		{ path: '/pregledKupaca/:id', component: PregledKupaca},
-		{ path: '/sumnjiviKorisnici', component: SumnjiviKorisnici}
-
-
-
+		{ path: '/sumnjiviKorisnici', component: SumnjiviKorisnici} 
 	  ]
 });
 
