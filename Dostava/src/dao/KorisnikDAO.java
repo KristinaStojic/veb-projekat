@@ -510,9 +510,12 @@ public class KorisnikDAO {
 		System.out.println("pozvao sam dodavanje menadzera");
 		for (Menadzer men : menadzeri) {
 			if(men.getRestoran()!= null) {
-			Restoran r = men.getRestoran();
-			
+			Restoran r = men.getRestoran(); 
 			if (r.getId().equals(idRestorana)) {
+				for(Artikal ar : r.getArtikliUPonudi()){
+					if (ar.getNaziv().equals(a.getNaziv())) return false;
+				}
+				
 				List<Artikal> stari = r.getArtikliUPonudi();
 				if(!stari.contains(a)) {
 					stari.add(stari.size(), a);
